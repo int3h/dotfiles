@@ -1,0 +1,5 @@
+*~
+.DS_Store
+*.pyc
+.+\.sublime-(workspace|project)$
+projects/superconductor/webcl/node_modules
