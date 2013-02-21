@@ -1,15 +1,12 @@
 alias ls='ls -lAOph'
 alias lsx='ls -lAOphe@'
 
-alias cddr='cd ~/Dropbox'
-
-alias scrcd='cd ~/Documents/parlab.local/repo/projects/superconductor'
-
-alias schcd='cd ~/Dropbox/school/'
-
-export cuda2='mtorok@cuda2.millennium.berkeley.edu'
-
 alias make='make -j 2'
 
 # Fat fingers
 alias sudp='sudo'
+
+# Directory shortcuts
+export scr='/Users/mtorok/Documents/parlab.local/repo/projects/superconductor/'
+alias cdscr='cd $scr'
+alias cdschool='cd ~/Dropbox/school/'
