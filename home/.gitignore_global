@@ -3,3 +3,4 @@
 *.pyc
 .+\.sublime-(workspace|project)$
 projects/superconductor/webcl/node_modules
+.ctrlproot

@@ -3,5 +3,6 @@ syntax: glob
 *~
 .DS_Store
 
+.ctrlproot
 syntax: regexp
 \.sublime-(workspace|project)$
