@@ -1,0 +1,5 @@
+set background=light
+colorscheme solarized
+
+" :Vimrc command will open a new MacVim window to edit ~/.vimrc.after
+command Vimrc silent !mvim ~/.vimrc.after

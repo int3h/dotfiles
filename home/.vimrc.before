@@ -1,0 +1,17 @@
+" Disabled in favor of vim-surround
+" call janus#disable_plugin('nerdcommenter')
+
+" Disabled in favor of YouCompleteMe
+call janus#disable_plugin('supertab')
+
+" Disable snipmate in favor of ultrasnip
+call janus#disable_plugin('snipmate')
+
+" Disable Vroom since we don't use Ruby often
+call janus#disable_plugin('vroom')
+
+" Enable Powerline
+if has("gui_running")
+  set encoding=utf-8
+  set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim/
+endif

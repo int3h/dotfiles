@@ -1,0 +1,192 @@
+"""""" General options
+" Set font
+set guifont=Source\ Code\ Pro\ for\ Powerline:h12
+
+" Put in a highlight at column 100
+set colorcolumn=100
+set tw=100
+
+" Highlight the line the cursor is on
+set cursorline
+
+" New splits open to the right, or bottom
+set splitright
+set splitbelow
+
+" Show (partial) command in last line of screen. No idea what it does.
+set showcmd
+
+" Don't put "--INSERT--" in command bar when going into insert mode
+set noshowmode
+
+" Don't ignore *.out files (as is the Janus default)
+set wildignore-=*.out
+" Do ignore *.tmp files
+set wildignore+=*.tmp
+
+" Map Superconductor filetypes
+au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
+" .p maps as Prolog (for cs164 project)
+au BufRead,BufNewFile *.{p} set ft=prolog
+
+
+"""""" New mappings
+" :Make -> saves all, then calls :make
+" (we could :set autowrite=1, but I don't want Vim to save on buffer changes and the like)
+function! SaveAndMake()
+  wa
+  make
+endfunction
+command Make call SaveAndMake()
+
+" <leader>hs -> disable search highlighting until next search
+nmap <silent> <leader>hs :noh<CR>
+
+" <leader>w -> Delete all buffers not currently shown on screen
+function! Wipeout()
+  " list of *all* buffer numbers
+  let l:buffers = range(1, bufnr('$'))
+
+  " what tab page are we in?
+  let l:currentTab = tabpagenr()
+  try
+    " go through all tab pages
+    let l:tab = 0
+    while l:tab < tabpagenr('$')
+      let l:tab += 1
+
+      " go through all windows
+      let l:win = 0
+      while l:win < winnr('$')
+        let l:win += 1
+        " whatever buffer is in this window in this tab, remove it from
+        " l:buffers list
+        let l:thisbuf = winbufnr(l:win)
+        call remove(l:buffers, index(l:buffers, l:thisbuf))
+      endwhile
+    endwhile
+
+    " if there are any buffers left, delete them
+    if len(l:buffers)
+      execute 'bwipeout' join(l:buffers)
+    endif
+  finally
+    " go back to our original tab page
+    execute 'tabnext' l:currentTab
+  endtry
+endfunction
+nmap <silent> <leader>w :call Wipeout()<CR>
+
+" <leader>ml -> Append modeline after last line in buffe
+function! AppendModeline()
+  " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX files.
+  let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
+        \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+  let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
+  call append(line("$"), l:modeline)
+endfunction
+nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
+
+
+"""""" NERDTree
+if janus#is_plugin_enabled("nerdtree")
+  call add(NERDTreeIgnore, '\.tmp$')
+  let NERDTreeChDirMode=2
+  let NERDTreeShowLineNumbers=0
+  let NERDTreeStatusline=' '
+
+  nmap <silent> <leader>N :NERDTreeFind<CR>
+endif
+
+
+""""""" NERDTreeTabs
+if exists("g:nerdtree_tabs_loaded")
+  " These are already handled by vim-session and Janus
+  let g:nerdtree_tabs_open_on_gui_startup=0
+  let g:nerdtree_tabs_startup_cd=0
+
+  map <Leader>n <plug>NERDTreeTabsToggle<CR>
+endif
+
+
+""""""" BufferGator
+if janus#is_plugin_enabled("buffergator")
+  " Map <leader>b to toggle, not simply open, the catalog
+  nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
+  " Open on the right, so as not to interfere with NERDTree
+  let g:buffergator_viewport_split_policy="R"
+  " Don't expand the GUI window when opening the buffer list
+  let g:buffergator_autoexpand_on_split=0
+endif
+
+
+""""""" CtrlP
+if janus#is_plugin_enabled("ctrlp")
+  " If a directory with a .ctrlproot file is found in parent directories, mark
+  " that as project root
+  let g:ctrlp_root_markers=['.ctrlproot']
+  let g:ctrlp_open_new_file = 'r'
+  " Use Cmd+P as "Open in 'search buffers' moder" ("Cmd-T" is set to "Open in
+  " 'search files' mode" by Janus already)
+  nmap <silent> <D-p> :CtrlPBuffer<CR>
+endif
+
+
+""""""" UltiSnips
+if exists('did_UltiSnips_vim')
+  " Remap expansion key to C-j so that it doesn't interfere with YouCompleteMe
+  let g:UltiSnipsExpandTrigger="<C-j>"
+endif
+
+
+""""""" buftabs
+"if janus#is_plugin_enabled("buftabs")
+"  :set hidden
+"  :let g:buftabs_in_statusline=1
+"  :let g:buftabs_active_highlight_group="Visual"
+"endif
+
+
+""""""" tagbar
+if janus#is_plugin_enabled("tagbar")
+  " Sort tags according to file order
+  let g:tagbar_sort = 0
+endif
+
+
+""""""" vim-session
+if exists("g:loaded_session")
+  let g:session_autosave="yes"
+  let g:session_autoload="yes"
+  let g:session_default_to_last=1
+
+  " After loading a session, find the active file in NERDTree, if it's open
+  augroup MTorok
+    autocmd SessionLoadPost * call s:syncNerdTree()
+  augroup END
+
+  " Reveal in NERDTree any open files within its current path
+  " This prevents it from messing up your NERDTree because of one errant file
+  function s:syncNerdTree()
+    " Only run if NERDTree is already present
+    if exists("t:NERDTreeBufName")
+
+      " This function will be called for every buffer, so filter for the ones we
+      " want
+      let s:bufPath=expand("%:p")
+
+      " If the file doesn't exist, don't try to show it
+      " (this prevents us from trying to show the NERDTree buffer)
+      if !file_readable(s:bufPath)
+        return
+      endif
+
+      " Only show files which are within the current NERDTree path
+      let s:filePath = g:NERDTreePath.New(s:bufPath)
+      if s:filePath.isUnder(g:NERDTreeFileNode.GetRootForTab().path)
+        exe "NERDTreeFind"
+      endif
+
+    endif
+  endfunction
+endif
