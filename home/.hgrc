@@ -18,3 +18,6 @@ username = Matt Torok <github@overblown.net>
 [merge-tools]
 Kaleidoscope.executable = /usr/local/bin/ksdiff
 Kaleidoscope.args = --merge --output $output --base $base -- $local $other
+
+[extensions]
+record = 
