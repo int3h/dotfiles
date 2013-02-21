@@ -1,0 +1,30 @@
+[submodule "home/.janus/YouCompleteMe"]
+	path = home/.janus/YouCompleteMe
+	url = git@github.com:Valloric/YouCompleteMe.git
+[submodule "home/.janus/delimitMate"]
+	path = home/.janus/delimitMate
+	url = git@github.com:Raimondi/delimitMate.git
+[submodule "home/.janus/editorconfig-vim"]
+	path = home/.janus/editorconfig-vim
+	url = git@github.com:editorconfig/editorconfig-vim.git
+[submodule "home/.janus/numbers.vim"]
+	path = home/.janus/numbers.vim
+	url = git@github.com:myusuf3/numbers.vim.git
+[submodule "home/.janus/sudo.vim"]
+	path = home/.janus/sudo.vim
+	url = git@github.com:vim-scripts/sudo.vim.git
+[submodule "home/.janus/tabular"]
+	path = home/.janus/tabular
+	url = git@github.com:godlygeek/tabular.git
+[submodule "home/.janus/ultisnips"]
+	path = home/.janus/ultisnips
+	url = git@github.com:SirVer/ultisnips.git
+[submodule "home/.janus/vim-latex"]
+	path = home/.janus/vim-latex
+	url = git://vim-latex.git.sourceforge.net/gitroot/vim-latex/vim-latex
+[submodule "home/.janus/vim-session"]
+	path = home/.janus/vim-session
+	url = git@github.com:int3h/vim-session.git
+[submodule "home/.janus/vim-surround"]
+	path = home/.janus/vim-surround
+	url = git@github.com:tpope/vim-surround.git
