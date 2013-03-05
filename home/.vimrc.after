@@ -9,7 +9,7 @@ set expandtab
 
 " Put in a highlight at column 100
 set colorcolumn=100
-set tw=100
+"set tw=100
 
 " Highlight the line the cursor is on
 set cursorline
