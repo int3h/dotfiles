@@ -28,3 +28,6 @@
 [submodule "home/.janus/vim-surround"]
 	path = home/.janus/vim-surround
 	url = git@github.com:tpope/vim-surround.git
+[submodule "home/.janus/vim-rename"]
+	path = home/.janus/vim-rename
+	url = git@github.com:wojtekmach/vim-rename.git
