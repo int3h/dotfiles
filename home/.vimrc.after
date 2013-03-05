@@ -2,6 +2,11 @@
 " Set font
 set guifont=Source\ Code\ Pro\ for\ Powerline:h12
 
+set softtabstop=4
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
 " Put in a highlight at column 100
 set colorcolumn=100
 set tw=100
