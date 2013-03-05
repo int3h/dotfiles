@@ -125,14 +125,31 @@ if janus#is_plugin_enabled("buffergator")
 endif
 
 
+""""""" YouCompleteMe
+if exists( "g:loaded_youcompleteme" )
+  " Close the function doc window after inserting completion
+  let g:ycm_autoclose_preview_window_after_completion = 1
+  " Only make down (rather than both tab & down) scroll down through completions
+  let g:ycm_key_list_select_completion = ['<Down>']
+  " Ditto as above for scrolling up through completions
+  let g:ycm_key_list_previous_completion = ['<Up>']
+
+  inoremap <D-a> <C-e>
+endif
+
+
 """"""" CtrlP
 if janus#is_plugin_enabled("ctrlp")
   " If a directory with a .ctrlproot file is found in parent directories, mark
   " that as project root
   let g:ctrlp_root_markers=['.ctrlproot']
   let g:ctrlp_open_new_file = 'r'
-  " Use Cmd+P as "Open in 'search buffers' moder" ("Cmd-T" is set to "Open in
-  " 'search files' mode" by Janus already)
+
+  " If file is already open in window in this tab, don't open; jump to that window instead.
+  " If <C-t> is pressed, only jumps to window if in another tab.
+  let g:ctrlp_switch_buffer = 'et'
+
+  " Use <C-p> as 'search buffers' mode (<C-t> is alreadt set to 'search files' mode by Janus)
   nmap <silent> <D-p> :CtrlPBuffer<CR>
 endif
 
