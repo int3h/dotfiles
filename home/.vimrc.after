@@ -1,6 +1,4 @@
 """""" General options
-" Set font
-set guifont=Source\ Code\ Pro\ for\ Powerline:h12
 
 set softtabstop=4
 set tabstop=4
@@ -211,4 +209,9 @@ if exists("g:loaded_session")
 
     endif
   endfunction
+endif
+
+
+if exists("g:loaded_numbers")
+  nnoremap <F3> :NumbersToggle<CR>
 endif
