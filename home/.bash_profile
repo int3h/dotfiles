@@ -33,7 +33,7 @@ then
 fi
 
 # Use SublimeText 2 as default editor
-export EDITOR='subl -w'
+export EDITOR='mvim -f'
 
 if [ -f `brew --prefix`/etc/bash_completion ]; then
   . `brew --prefix`/etc/bash_completion
@@ -42,9 +42,6 @@ fi
 if [ -f ~/.shell_aliases ]; then
   . ~/.shell_aliases
 fi
-
-# Git completions
-#source ~/.git-completion.bash
 
 if [ -f ~/.shell_commands ]; then
   source ~/.shell_commands
