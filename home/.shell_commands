@@ -16,3 +16,5 @@ function trash () {
     fi
   done
 }
+
+function fname() { find . -iname "*$@*"; }
