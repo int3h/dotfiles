@@ -1,5 +1,4 @@
 {
-	"default_module": "vimmatt",
 	"segments": {
 		"left": [
 			{
@@ -46,11 +45,6 @@
 				"highlight_group": ["background"],
 				"draw_divider": false,
 				"width": "auto"
-			},
-			{
-				"name": "win_id",
-				"draw_divider": false,
-				"width": "auto"
 			}
 		],
 		"right": [
@@ -82,17 +76,23 @@
 				"align": "r"
 			},
 			{
+				"type": "string",
+				"contents": " ",
+				"highlight_group": ["line_current_symbol", "line_current"]
+			},
+			{
 				"name": "line_current",
 				"draw_divider": false,
 				"width": 3,
 				"align": "r"
 			},
 			{
-				"name": "col_current",
+				"name": "virtcol_current",
 				"draw_divider": false,
 				"priority": 30,
 				"before": ":",
 				"width": 3,
+				"highlight_group": ["col_current"],
 				"align": "l"
 			}
 		]
