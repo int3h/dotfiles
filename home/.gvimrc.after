@@ -1,5 +1,23 @@
-set background=light
-colorscheme solarized
+"set background=light
+"colorscheme solarized
+
+" Set font
+"set guifont=Source\ Code\ Pro\ for\ Powerline:h12
+set guifont=Meslo\ LG\ S\ Regular\ for\ Powerline:h11
+"set guifont=Inconsolata:h11       " Decent font.
+
+set background=dark               " Dark background.
+colorscheme desertEx
+
+if has("gui_macvim")
+  set antialias                   " MacVim: smooth fonts.
+  set encoding=utf-8              " MacVim: use UTF-8 everywhere.
+  set guioptions-=T               " MacVim: hide toolbar.
+  set guioptions-=L               " MacVim: hide left scrollbar.
+endif
+
+" Always show tab bar
+set showtabline=2
 
 " :Vimrc command will open a new MacVim window to edit ~/.vimrc.after
 command Vimrc silent !mvim ~/.vimrc.after
