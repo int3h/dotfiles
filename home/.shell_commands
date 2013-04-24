@@ -17,4 +17,10 @@ function trash () {
   done
 }
 
+
 function fname() { find . -iname "*$@*"; }
+
+# Open a man page as a PDF in Preview.app
+pman () {
+    man -t $@ | open -f -a /Applications/Preview.app
+}
