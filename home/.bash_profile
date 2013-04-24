@@ -19,7 +19,8 @@ esac
 export HISTCONTROL=ignoredups:ignorespace;
 export HISTFILE=~/.shell_history
 shopt -s histappend;
-PROMPT_COMMAND='history -a';
+# Save each command when the prompt is re-displayed, rather than only at shell exit
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND";
 
 # Support extended pattern matching in bash (e.g., for quantifiers like "*_+([0-9])")
 shopt -s extglob
