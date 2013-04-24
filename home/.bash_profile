@@ -1,5 +1,18 @@
 export PATH="~/bin:/usr/local/bin:/usr/local/share/npm/bin:$PATH:.:~"
 
+
+# Support extended pattern matching in bash (e.g., for quantifiers like "*_+([0-9])")
+shopt -s extglob
+# Correct for minor spelling errors
+shopt -s cdspell;
+# If directory given as a command, cd to that directory
+# (Only supported in bash 4 and above)
+if [ $BASH_VERSINFO -ge 4 ]
+then
+  shopt -s autocd
+fi
+
+
 export CLICOLOR=1
 #export LSCOLORS=ExFxCxDxBxegedabagacad
 
@@ -15,24 +28,15 @@ case "$TERM" in
     ;;
 esac
 
+
 export HISTCONTROL=ignoredups:ignorespace;
 # Change the file history commands are saved to
 export HISTFILE=~/.shell_history
 # Append to the existing history file, rather than overwriting it
 shopt -s histappend;
 # Save each command when the prompt is re-displayed, rather than only at shell exit
-PROMPT_COMMAND="history -a; $PROMPT_COMMAND";
+PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
 
-# Support extended pattern matching in bash (e.g., for quantifiers like "*_+([0-9])")
-shopt -s extglob
-# Correct for minor spelling errors
-shopt -s cdspell;
-# If directory given as a command, cd to that directory
-# (Only supported in bash 4 and above)
-if [ $BASH_VERSINFO -ge 4 ]
-then
-  shopt -s autocd
-fi
 
 export EDITOR='mvim -f'
 
