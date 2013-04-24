@@ -1,0 +1,5 @@
+# Allow for searching through history by entering a command prefix and then hitting up/down arrows
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+set show-all-if-ambiguous on
+set completion-ignore-case on
