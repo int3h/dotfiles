@@ -68,8 +68,7 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 # This assumes that `brew update` is regularly run (e.g., by cron) to pull the latest package info.
 case "$-" in
 *i*)    if [[ `brew outdated` != '' ]]; then
-            echo
-            echo -e "\e[1m\e[48;5;17m\e[38;5;9mhomebrew installed packages are outdated. Run \`brew outdated\` to see outdated packages, and \`brew upgrade\` to upgrade outdated packages.\e[0m"
+            echo -e "\e[1m\e[48;5;26m\e[38;5;125mhomebrew installed packages are outdated. Run \`brew outdated\` to see outdated packages, and \`brew upgrade\` to upgrade outdated packages.\e[0m"
             echo
         fi
         ;;
