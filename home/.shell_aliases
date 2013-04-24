@@ -6,7 +6,4 @@ alias make='make -j 2'
 # Fat fingers
 alias sudp='sudo'
 
-# Directory shortcuts
-export scr='/Users/mtorok/Documents/parlab.local/repo/projects/superconductor/'
-alias cdscr='cd $scr'
-alias cdschool='cd ~/Dropbox/school/'
+export INST="sphere.cs.berkeley.edu"
