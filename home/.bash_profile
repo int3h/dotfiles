@@ -48,8 +48,8 @@ if [ -f ~/.shell_commands ]; then
   source ~/.shell_commands
 fi
 
-# Tell superconductor to compile with clang
-export USECLANG=1
+# Tell MrSync (our rsync convienance wrapper) to use ~/.rsync_exclude.conf for exlcude patterns
+export MRSYNC_EXCLUDE_FILE="~/.rsync_exclude.conf"
 
 export CLASSPATH=~/Dropbox/code/junit/junit-4.10.jar:./:$CLASSPATH
 
