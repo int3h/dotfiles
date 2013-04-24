@@ -29,3 +29,5 @@
 	trustExitCode = true
 [merge]
 	tool = Kaleidoscope
+[github]
+	user = int3h
