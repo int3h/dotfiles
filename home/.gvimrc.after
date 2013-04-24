@@ -21,3 +21,8 @@ set showtabline=2
 
 " :Vimrc command will open a new MacVim window to edit ~/.vimrc.after
 command Vimrc silent !mvim ~/.vimrc.after
+
+" Enable indent guides by default
+let g:indent_guides_enable_on_vim_startup = 1
+" Make them only 1 column wide, rather than as wide as shiftwidth
+let g:indent_guides_guide_size = 1
