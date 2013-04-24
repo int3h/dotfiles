@@ -16,7 +16,9 @@ case "$TERM" in
 esac
 
 export HISTCONTROL=ignoredups:ignorespace;
+# Change the file history commands are saved to
 export HISTFILE=~/.shell_history
+# Append to the existing history file, rather than overwriting it
 shopt -s histappend;
 # Save each command when the prompt is re-displayed, rather than only at shell exit
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND";
@@ -32,7 +34,6 @@ then
   shopt -s autocd
 fi
 
-# Use SublimeText 2 as default editor
 export EDITOR='mvim -f'
 
 if [ -f `brew --prefix`/etc/bash_completion ]; then
@@ -50,7 +51,10 @@ fi
 # Tell MrSync (our rsync convienance wrapper) to use ~/.rsync_exclude.conf for exlcude patterns
 export MRSYNC_EXCLUDE_FILE="~/.rsync_exclude.conf"
 
-export CLASSPATH=~/Dropbox/code/junit/junit-4.10.jar:./:$CLASSPATH
+# Put junit in Java classpath
+if [ -f ~/Dropbox/code/junit/junit-4.10.jar ]; then
+    export CLASSPATH=~/Dropbox/code/junit/junit-4.10.jar:./:$CLASSPATH
+fi
 
 export PYTHONPATH="$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH"
 
