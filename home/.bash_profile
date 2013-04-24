@@ -3,14 +3,13 @@ export PATH=~/bin:/usr/local/bin:/usr/local/share/npm/bin:$PATH:.:~
 export CLICOLOR=1
 #export LSCOLORS=ExFxCxDxBxegedabagacad
 
-# This version puts the path in the winodw titlebar
-# export PS1="\[\e[37;40;1m\]\u@\h (\W)\[\e[1;36;40m\]\$(vcprompt --format \" [%s:%b%m]\")\[\e[37;40;1m\]\$\[\e[0m\] "
-export PS1="\[\e[30;47m\]\u@\h (\W)\$\[\e[0m\] "
+# Prompt will be 'username (pwd)$ ', colored with white-on-green
+export PS1="\[\e[1;42m\]\u (\W)\$\[\e[0m\] "
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
   xterm*|rxvt*)
-    PS1="\[\e]0;\u@\h: \w\a\]$PS1"
+    PS1="\[\e]0;\w\a\]$PS1"
     ;;
   *)
     ;;
