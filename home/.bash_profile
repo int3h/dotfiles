@@ -52,6 +52,8 @@ export MRSYNC_EXCLUDE_FILE="~/.rsync_exclude.conf"
 
 export CLASSPATH=~/Dropbox/code/junit/junit-4.10.jar:./:$CLASSPATH
 
+export PYTHONPATH="$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH"
+
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # Display a message at login with an interactive shell if any homebrew packages need updating
