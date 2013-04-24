@@ -4,5 +4,6 @@ syntax: glob
 .DS_Store
 
 .ctrlproot
+*.ipynb
 syntax: regexp
 \.sublime-(workspace|project)$
