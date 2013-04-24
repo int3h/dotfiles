@@ -1,4 +1,4 @@
-export PATH=~/bin:/usr/local/bin:/usr/local/share/npm/bin:$PATH:.:~
+export PATH="~/bin:/usr/local/bin:/usr/local/share/npm/bin:$PATH:.:~"
 
 export CLICOLOR=1
 #export LSCOLORS=ExFxCxDxBxegedabagacad
