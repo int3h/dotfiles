@@ -32,6 +32,9 @@ au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
 " .p maps as Prolog (for cs164 project)
 au BufRead,BufNewFile *.{p} set ft=prolog
 
+" Highlight shell scripts as bash, not sh
+let g:is_posix = 1
+
 
 """""" New mappings
 " :Make -> saves all, then calls :make
