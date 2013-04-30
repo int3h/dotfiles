@@ -11,3 +11,9 @@ set completion-ignore-case on
 
 # Delete the whole line of text
 "\C-d": kill-whole-line
+
+# Pressing tab will list all completions & select the first one. Pressing it again will cycle
+# through available completions.
+TAB: menu-complete
+# Shift-TAB cycles completions backward
+"\e[Z": "\e-1\C-i"
