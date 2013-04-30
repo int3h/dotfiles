@@ -85,3 +85,9 @@ esac
 if [ -f ~/.dir_bookmark.sh ]; then
     . ~/.dir_bookmark.sh
 fi
+
+# Initialize 'autojump' utility
+[[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+
+# Initialize the 'Generic Colouriser' utility
+[[ -s `brew --prefix`/etc/grc.bashrc ]] && . `brew --prefix`/etc/grc.bashrc
