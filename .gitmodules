@@ -31,3 +31,9 @@
 [submodule "home/.janus/vim-rename"]
 	path = home/.janus/vim-rename
 	url = git@github.com:wojtekmach/vim-rename.git
+[submodule "home/.janus/IndentConsistencyCop"]
+	path = home/.janus/IndentConsistencyCop
+	url = git@github.com:vim-scripts/IndentConsistencyCop.git
+[submodule "home/.janus/vim-nerdtree-tabs"]
+	path = home/.janus/vim-nerdtree-tabs
+	url = git@github.com:jistr/vim-nerdtree-tabs.git
