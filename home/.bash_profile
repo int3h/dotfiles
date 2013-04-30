@@ -5,6 +5,12 @@ export PATH="~/bin:/usr/local/bin:/usr/local/share/npm/bin:$PATH:.:~"
 shopt -s extglob
 # Correct for minor spelling errors
 shopt -s cdspell;
+# When doing history expansion, pressing return simply loads the expanded command into the prompt,
+# rather the immediately executing it (allowing for review or editing)
+shopt -s histverify
+# If history expansion fails, reload the original command into the prompt so it can be edited
+shopt -s histreedit
+
 # If directory given as a command, cd to that directory
 # (Only supported in bash 4 and above)
 if [ $BASH_VERSINFO -ge 4 ]
