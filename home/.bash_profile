@@ -20,7 +20,10 @@ fi
 
 
 export CLICOLOR=1
+export CLICOLOR_FORCE=1
 #export LSCOLORS=ExFxCxDxBxegedabagacad
+# Tell grep to highlight matches
+export GREP_OPTIONS='--color=auto'
 
 # Prompt will be 'username (pwd)$ ', colored with white-on-green
 export PS1="\[\e[1;42m\]\u (\W)\$\[\e[0m\] "
