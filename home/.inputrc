@@ -1,5 +1,10 @@
-# Allow for searching through history by entering a command prefix and then hitting up/down arrows
-"\e[A": history-search-backward
-"\e[B": history-search-forward
+# Allow for easy searching through history completions
+# Just enter the start of a command and hit Option-Up/Option-Down to cycle through all history
+# completions starting with that prefix.
+"\e\e[A": history-search-backward
+"\e\e[B": history-search-forward
+
+# Show all completions as soon as I press tab, even if there's more than one
 set show-all-if-ambiguous on
+# Ignore case
 set completion-ignore-case on
