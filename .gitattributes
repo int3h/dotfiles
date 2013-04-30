@@ -1,0 +1,4 @@
+*   filter=email diff=email
+
+[merge]
+    renormalize=true
