@@ -17,3 +17,6 @@ set completion-ignore-case on
 TAB: menu-complete
 # Shift-TAB cycles completions backward
 "\e[Z": "\e-1\C-i"
+
+# Insert the arguments from the last command
+"\C-x\C-l": " !!*\r"
