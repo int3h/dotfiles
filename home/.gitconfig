@@ -1,6 +1,6 @@
 [user]
 	name = Matt Torok
-	email = github@overblown.net
+	email = github+cal@overblown.net
 [core]
 	excludesfile = /Users/mtorok/.gitignore_global
 [difftool "sourcetree"]
@@ -31,3 +31,8 @@
 	tool = Kaleidoscope
 [github]
 	user = int3h
+[filter "email"]
+    smudge = ~/.git-filters/email/smudge_filter_email
+    clean = ~/.git-filters/email/clean_filter_email
+[diff "email"]
+    textconv = ~/.git-filters/email/diff_filter_email
