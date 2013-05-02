@@ -24,3 +24,26 @@ function fname() { find . -iname "*$@*"; }
 pman () {
     man -t $@ | open -f -a /Applications/Preview.app
 }
+
+hman () {
+  local TMPHTML=`mktemp /tmp/hman_XXXXXXXX`.html
+  
+  groff -mandoc -Txhtml -P'-D/tmp' `man -w $@` | \
+  tidy -ashtml 2>/dev/null | \
+  sed -e 's/<\/style>/body {font-family: "Helvetica Neue", Helvetica, sans-serif; width: 800px; margin-left: auto; margin-right: auto;}\
+       .toc {position: fixed; overflow-y: scroll; overflow-x: hidden; top: 10px; height: 90%; width: 200px; text-transform: lowercase; margin-left: -200px; margin-top: 1.5em; font-size: 11pt; border-right: 1px solid black; }\
+       .toc a { line-height: 2em; }\
+       .toc p { margin-top: 0em; }\
+       .content { font-size: 10pt; margin-left: 50px; }\
+       h1 { font-weight: 300; font-size: 64px; margin-top: 0em; letter-spacing: -2px; }\
+       h2 { margin-top: 2.5em; font-weight: 300;} \
+       p { line-height: 1.25em; margin-top: 1.2em; }\
+       h2 + p { margin-top: 0em !important; }<\/style>/' \
+-e 's/<p><a href="#heading1">/<div class="toc">\
+<p><a href="#heading1">/' \
+-e 's/<hr>/<\/div>/' \
+-e 's/<h2 id="heading1">/<div class="content">\
+<h2 id="heading1">/' > "$TMPHTML"
+
+open "$TMPHTML"
+}
