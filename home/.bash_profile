@@ -48,6 +48,7 @@ PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
 
 
 export EDITOR='mvim -f'
+export VISUAL='mvim -f'
 
 if [ -f `brew --prefix`/etc/bash_completion ]; then
   . `brew --prefix`/etc/bash_completion
