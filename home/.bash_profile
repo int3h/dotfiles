@@ -20,7 +20,6 @@ fi
 
 
 export CLICOLOR=1
-export CLICOLOR_FORCE=1
 #export LSCOLORS=ExFxCxDxBxegedabagacad
 # Tell grep to highlight matches
 export GREP_OPTIONS='--color=auto'
