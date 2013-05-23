@@ -1,4 +1,5 @@
-export PATH="~/bin:/usr/local/bin:/usr/local/share/npm/bin:$PATH:.:~"
+export PATH="~/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/share/python:$PATH:.:~"
+export PYTHONPATH="$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH"
 
 
 # Support extended pattern matching in bash (e.g., for quantifiers like "*_+([0-9])")
@@ -69,8 +70,6 @@ if [ -f ~/Dropbox/code/junit/junit-4.10.jar ]; then
     export CLASSPATH=~/Dropbox/code/junit/junit-4.10.jar:./:$CLASSPATH
 fi
 
-export PYTHONPATH="$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH"
-
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # Display a message at login with an interactive shell if any homebrew packages need updating
@@ -83,11 +82,6 @@ case "$-" in
         ;;
 *)      continue ;;
 esac
-
-# Boomark and recalls functionaility
-if [ -f ~/.dir_bookmark.sh ]; then
-    . ~/.dir_bookmark.sh
-fi
 
 # Initialize 'autojump' utility
 [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
