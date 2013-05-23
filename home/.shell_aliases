@@ -6,6 +6,8 @@ alias lsx='ls -lAOphe@'
 alias make='make -j 2'
 
 alias xargs='xargs -I {}'
+alias fxargs='xargs -0 -I {}'
+alias xfind='find -print0'
 
 # Fat fingers
 alias sudp='sudo'
