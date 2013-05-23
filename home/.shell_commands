@@ -47,3 +47,11 @@ hman () {
 
 open "$TMPHTML"
 }
+
+
+# Make a tmp directory, switch to it and copy its name to the system's paste buffer
+delme () {
+    local TMPDIR="$(mktemp -d -t delme)"
+    cd "$TMPDIR"
+    pwd | tr -d "\n" | pbcopy
+}
