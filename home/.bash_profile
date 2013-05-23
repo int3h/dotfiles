@@ -1,5 +1,15 @@
-export PATH="~/bin:/usr/local/bin:/usr/local/share/npm/bin:/usr/local/share/python:$PATH:.:~"
-export PYTHONPATH="$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH"
+MYPATH="~/bin:/usr/local/bin"
+
+# Only add homebrew Python to our path if it exists
+if [ -d "$(brew --prefix)/lib/python2.7" ]; then
+    MYPATH="$MYPATH:/usr/local/share/python"
+    export PYTHONPATH="$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH"
+fi
+# Ditto npm
+[[ -d /usr/local/share/npm/bin ]] && MYPATH="$MYPATH:/usr/local/share/bin"
+
+# Removed trailing ':~' from earlier version, because why do I need home in my path???
+export PATH="$MYPATH:$PATH:."
 
 
 # Support extended pattern matching in bash (e.g., for quantifiers like "*_+([0-9])")
