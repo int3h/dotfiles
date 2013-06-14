@@ -1,28 +1,45 @@
+# Use Vi, not Emacs, style editing
 set editing-mode vi
-set keymap vi
-
-# Allow for easy searching through history completions
-# Just enter the start of a command and hit Option-Up/Option-Down to cycle through all history
-# completions starting with that prefix.
-#"\e[A": history-search-backward
-#"\e[B": history-search-forward
 
 # Show all completions as soon as I press tab, even if there's more than one
 set show-all-if-ambiguous on
 # Ignore case
 set completion-ignore-case on
+# on menu-complete, first display the common prefix, then cycle through the 
+# options when hitting TAB
+menu-complete-display-prefix on
 
-# Delete the whole line of text
-# "\C-d": kill-whole-line
+###########################################################
+# Keymaps for when we're in command mode (e.g., after hitting ESC)
+set keymap vi-command
+
+# Insert the arguments from the last command
+"p": "i !!*\r"
+
+# When hitting option-up/option-down, cycle through the previous commands
+# which start with the prefix you've entered, rather than just cycling through
+# the last entered commands.
+# In OS X's Terminal.app preferences, I have 'Use option as meta key' off, and
+# have mapped "option cursor up" to "\033\033[A" and "option cursor down" to 
+# "\033\033[B".
+# Feel free to bind to whatever you want, or delete the first '\e' in the keymap, 
+# and then plain up/down will do a history search.
+"\e\e[A": history-search-backward
+"\e\e[B": history-search-forward
+
+###########################################################
+# Keymaps for when we're in insert (i.e., typing stuff in) mode
+set keymap vi-insert
 
 # Pressing tab will list all completions & select the first one. Pressing it again will cycle
 # through available completions.
-#TAB: menu-complete
+TAB: menu-complete
 # Shift-TAB cycles completions backward
-#"\e[Z": "\e-1\C-i"
+"\e[Z": menu-complete-backward
 
-# Insert the arguments from the last command
-"\C-x\C-l": " !!*\r"
+# Option-up/option-down should also apply to insert mode
+"\e\e[A": history-search-backward
+"\e\e[B": history-search-forward
 
-# Edit options before rerunning previous command, eg: ls a b c -> ls -al a b c
-"\e-": "\C-p\C-a\M-f "
+# Needed to negate the binding of 'p' we do in command mode above
+"p": self-insert
