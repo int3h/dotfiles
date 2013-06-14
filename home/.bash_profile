@@ -29,7 +29,6 @@ then
   shopt -s autocd
 fi
 
-
 export CLICOLOR=1
 #export LSCOLORS=ExFxCxDxBxegedabagacad
 # Tell grep to highlight matches
@@ -97,4 +96,8 @@ esac
 [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
 # Initialize the 'Generic Colouriser' utility
-[[ -s `brew --prefix`/etc/grc.bashrc ]] && . `brew --prefix`/etc/grc.bashrc
+if [[ -s `brew --prefix`/etc/grc.bashrc ]]; then
+  . `brew --prefix`/etc/grc.bashrc
+  # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
+  alias make='colourify make -j 2'
+fi
