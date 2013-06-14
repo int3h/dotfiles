@@ -12,3 +12,5 @@ alias fxargs='xargs -0 -I {}'
 alias sudp='sudo'
 
 export INST="sphere.cs.berkeley.edu"
+
+alias rsync="rsync -avrtz --executability --exclude-from='~/.rsync_exclude.conf'"

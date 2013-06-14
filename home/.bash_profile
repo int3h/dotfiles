@@ -71,9 +71,6 @@ if [ -f ~/.shell_commands ]; then
   source ~/.shell_commands
 fi
 
-# Tell MrSync (our rsync convienance wrapper) to use ~/.rsync_exclude.conf for exlcude patterns
-export MRSYNC_EXCLUDE_FILE="~/.rsync_exclude.conf"
-
 # Put junit in Java classpath
 if [ -f ~/Dropbox/code/junit/junit-4.10.jar ]; then
     export CLASSPATH=~/Dropbox/code/junit/junit-4.10.jar:./:$CLASSPATH
