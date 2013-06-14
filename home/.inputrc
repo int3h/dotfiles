@@ -1,8 +1,11 @@
+set editing-mode vi
+set keymap vi
+
 # Allow for easy searching through history completions
 # Just enter the start of a command and hit Option-Up/Option-Down to cycle through all history
 # completions starting with that prefix.
-"\e\e[A": history-search-backward
-"\e\e[B": history-search-forward
+#"\e[A": history-search-backward
+#"\e[B": history-search-forward
 
 # Show all completions as soon as I press tab, even if there's more than one
 set show-all-if-ambiguous on
@@ -10,13 +13,16 @@ set show-all-if-ambiguous on
 set completion-ignore-case on
 
 # Delete the whole line of text
-"\C-d": kill-whole-line
+# "\C-d": kill-whole-line
 
 # Pressing tab will list all completions & select the first one. Pressing it again will cycle
 # through available completions.
-TAB: menu-complete
+#TAB: menu-complete
 # Shift-TAB cycles completions backward
-"\e[Z": "\e-1\C-i"
+#"\e[Z": "\e-1\C-i"
 
 # Insert the arguments from the last command
 "\C-x\C-l": " !!*\r"
+
+# Edit options before rerunning previous command, eg: ls a b c -> ls -al a b c
+"\e-": "\C-p\C-a\M-f "
