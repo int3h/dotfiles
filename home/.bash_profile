@@ -1,10 +1,10 @@
 MYPATH="~/bin:/usr/local/bin"
 
 # Only add homebrew Python to our path if it exists
-if [ -d "$(brew --prefix)/lib/python2.7" ]; then
-    MYPATH="$MYPATH:/usr/local/share/python"
-    export PYTHONPATH="$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH"
-fi
+#if [ -d "$(brew --prefix)/lib/python2.7" ]; then
+#    MYPATH="$MYPATH:/usr/local/share/python"
+#    export PYTHONPATH="$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH"
+#fi
 # Ditto npm
 [[ -d /usr/local/share/npm/bin ]] && MYPATH="$MYPATH:/usr/local/share/bin"
 
