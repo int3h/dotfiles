@@ -13,7 +13,7 @@ opts.ksdiff = --changeset --wait --filelist
 
 [ui]
 merge = Kaleidoscope
-username = Matt Torok <github@overblown.net>
+username = Matt Torok <github+cal@overblown.net>
 
 [merge-tools]
 Kaleidoscope.executable = /usr/local/bin/ksdiff
