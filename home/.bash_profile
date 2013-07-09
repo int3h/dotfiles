@@ -1,12 +1,9 @@
 MYPATH="/Users/mtorok/bin:/usr/local/bin"
 
-# Only add homebrew Python to our path if it exists
-#if [ -d "$(brew --prefix)/lib/python2.7" ]; then
-#    MYPATH="$MYPATH:/usr/local/share/python"
-#    export PYTHONPATH="$(brew --prefix)/lib/python2.7/site-packages:$PYTHONPATH"
-#fi
-# Ditto npm
-[[ -d /usr/local/share/npm/bin ]] && MYPATH="$MYPATH:/usr/local/share/npm/bin"
+# Only add npm to our path if it exists
+if [[ -d /usr/local/share/npm/bin ]]; then
+    MYPATH="$MYPATH:/usr/local/share/npm/bin"
+fi
 
 # Removed trailing ':~' from earlier version, because why do I need home in my path???
 export PATH="$MYPATH:$PATH:."
