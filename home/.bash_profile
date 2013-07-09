@@ -9,6 +9,10 @@ fi
 export PATH="$MYPATH:$PATH:."
 
 
+# Set the default mode of new files to u=rwx,g=rx,o=
+umask 0027
+
+
 # Support extended pattern matching in bash (e.g., for quantifiers like "*_+([0-9])")
 shopt -s extglob
 # Correct for minor spelling errors
