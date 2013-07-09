@@ -86,7 +86,7 @@ if [ -t 0 ] && [ -f ~/.brew-outdated ]; then
   cat ~/.brew-outdated
   echo -e -n "\e[0m"
   rm ~/.brew-outdated
-        fi
+fi
 
 
 # Initialize 'autojump' utility
