@@ -82,11 +82,16 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 # Display a message at login with an interactive shell if any homebrew packages need updating
 # This assumes that `brew update` is regularly run (e.g., by cron) to pull the latest package info.
 if [ -t 0 ] && [ -f ~/.brew-outdated ]; then
-  echo -n "\e[1m\e[48;5;26m\e[38;5;125mThe following homebrew packages are in need of an upgrade: "
-  cat ~/.brew-outdated
-  echo -e -n "\e[0m"
-  rm ~/.brew-outdated
-        fi
+  OUTDATED=$(brew outdated)
+  if [ -z $OUTDATED ]; then
+    # If brew is reporting that there are no more outdated packages, then delete ~/.brew-outdated
+    rm ~/.brew-outdated
+  else
+    echo -e "\e[1m\e[48;5;26m\e[38;5;125mhomebrew installed packages are outdated. Run \`brew outdated\` to see outdated packages, and \`brew upgrade\` to upgrade outdated packages.\e[0m"
+    echo "$OUTDATED"
+    echo
+  fi
+fi
 
 
 # Initialize 'autojump' utility
