@@ -81,9 +81,9 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # Display a message at login with an interactive shell if any homebrew packages need updating
 # This assumes that `brew update` is regularly run (e.g., by cron) to pull the latest package info.
-if [ -t 0 ] && [ -f ~/.brew-outdated ]; then
+if [ -t 0  -a  -f ~/.brew-outdated ]; then
   OUTDATED=$(brew outdated)
-  if [ -z $OUTDATED ]; then
+  if [ -z "$OUTDATED" ]; then
     # If brew is reporting that there are no more outdated packages, then delete ~/.brew-outdated
     rm ~/.brew-outdated
   else
