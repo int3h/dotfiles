@@ -52,7 +52,7 @@ c = get_config()
 # connection, or for offline use of the notebook.
 # 
 # When disabled, equations etc. will appear as their untransformed TeX source.
-# c.NotebookApp.enable_mathjax = True
+c.NotebookApp.enable_mathjax = True
 
 # Whether to open in a browser after starting. The specific browser used is
 # platform dependent and determined by the python standard library `webbrowser`
