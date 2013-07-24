@@ -26,10 +26,17 @@ pman () {
 }
 
 hman () {
-  local TMPHTML=`mktemp /tmp/hman_XXXXXXXX`.html
+  # Create a tmp file with prefix 'hman', then rename it to have a .html extension
+  local TMPHTML=`mktemp -t hman`
+  mv $TMPHTML "$TMPHTML".html
+  TMPHTML="$TMPHTML".html
   
-  groff -mandoc -Txhtml -P'-D/tmp' `man -w $@` | \
-  tidy -ashtml 2>/dev/null | \
+  RAWHTML="$(groff -mandoc -Txhtml -P'-D$TMPDIR' $(man -w $@))"
+  if [ $? -ne 0 ]; then
+      echo "Error generating HTML from man page" >&2
+      return
+  fi
+  echo "$RAWHTML" | tidy -ashtml 2>/dev/null | \
   sed -e 's/<\/style>/body {font-family: "Helvetica Neue", Helvetica, sans-serif; width: 800px; margin-left: auto; margin-right: auto;}\
        .toc {position: fixed; overflow-y: scroll; overflow-x: hidden; top: 10px; height: 90%; width: 200px; text-transform: lowercase; margin-left: -200px; margin-top: 1.5em; font-size: 11pt; border-right: 1px solid black; }\
        .toc a { line-height: 2em; }\
