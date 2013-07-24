@@ -37,13 +37,6 @@ let g:is_posix = 1
 
 
 """""" New mappings
-" :Make -> saves all, then calls :make
-" (we could :set autowrite=1, but I don't want Vim to save on buffer changes and the like)
-function! SaveAndMake()
-  wa
-  make
-endfunction
-command Make call SaveAndMake()
 
 " <leader>hs -> disable search highlighting until next search
 nmap <silent> <leader>hs :noh<CR>
