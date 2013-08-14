@@ -101,5 +101,5 @@ fi
 if [[ -s `brew --prefix`/etc/grc.bashrc ]]; then
   . `brew --prefix`/etc/grc.bashrc
   # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
-  alias make='colourify make -j 2'
+  alias make='colourify make -j 8'
 fi
