@@ -30,7 +30,10 @@ export CLICOLOR=1
 export GREP_OPTIONS='--color=auto'
 
 # Prompt will be 'username (pwd)$ ', colored with white-on-green
-export PS1="\[\e[1;42m\]\u (\W)\$\[\e[0m\] "
+# The below version adds more '$' for every level deeper the shell is nested
+export PS1="\[\e[1;42m\]\u (\W)$(eval "printf '\\$%.0s' {1..$SHLVL}")\[\e[0m\] "
+# The below version adds '[n]' before the '$' if the shell is nested, where n is the nesting level
+#export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
