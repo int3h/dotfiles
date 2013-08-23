@@ -1,13 +1,7 @@
-MYPATH="/Users/mtorok/bin:/usr/local/bin"
-
 # Only add npm to our path if it exists
-if [[ -d /usr/local/share/npm/bin ]]; then
-    MYPATH="$MYPATH:/usr/local/share/npm/bin"
-fi
+[[ -d /usr/local/share/npm/bin ]] && PATH="/usr/local/share/npm/bin:$PATH"
 
-# Removed trailing ':~' from earlier version, because why do I need home in my path???
-export PATH="$MYPATH:$PATH:."
-
+PATH="/Users/mtorok/bin:/usr/local/bin:$PATH:."
 
 # Set the default mode of new files to u=rwx,g=rx,o=
 umask 0027
@@ -103,3 +97,4 @@ if [[ -s `brew --prefix`/etc/grc.bashrc ]]; then
   # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
   alias make='colourify make -j 8'
 fi
+
