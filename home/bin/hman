@@ -2,34 +2,41 @@
 
 MANFILE="$(man -w $@)"
 if [ $? -ne 0 ]; then 
-  exit -1
-fi
-
-# Enable ALL the pre-processors! (Except grap, that gave me an error.)
-RAWHTML="$(groff -mman -t -p -k -e -g -R -s -Txhtml -P"-D$TMPDIR" $(man -w $@))"
-if [ $? -ne 0 ]; then
-  echo "Error generating HTML from man page" >&2
-  exit -1
+  exit 1
 fi
 
 TMPHTML=`mktemp -t hman`
 mv $TMPHTML "$TMPHTML".html
 TMPHTML="$TMPHTML".html
 
-echo "$RAWHTML" | tidy -ashtml 2>/dev/null | \
-sed -e 's/<\/style>/body {font-family: "Helvetica Neue", Helvetica, sans-serif; width: 800px; margin-left: auto; margin-right: auto;}\
-   .toc {position: fixed; overflow-y: scroll; overflow-x: hidden; top: 10px; height: 90%; width: 200px; text-transform: lowercase; margin-left: -200px; margin-top: 1.5em; font-size: 11pt; border-right: 1px solid black; }\
-   .toc a { line-height: 2em; }\
-   .toc p { margin-top: 0em; }\
-   .content { font-size: 10pt; margin-left: 50px; }\
-   h1 { font-weight: 300; font-size: 64px; margin-top: 0em; letter-spacing: -2px; }\
-   h2 { margin-top: 2.5em; font-weight: 300;} \
-   p { line-height: 1.25em; margin-top: 1.2em; }\
-   h2 + p { margin-top: 0em !important; }<\/style>/' \
+
+# Enable ALL the pre-processors! (Except grap, that gave me an error.)
+# -t -p -k -e -g -R -s : preprocess with gtbl, gpic, preconv, geqn, ggrn, grefer, gsoelim
+RAWHTML="$(groff -mman -t -p -k -e -g -R -s -Txhtml -N -P"-D$(dirname $TMPHTML)" $MANFILE)"
+if [ $? -ne 0 ]; then
+  echo "Error generating HTML from man page" >&2
+  exit -1
+fi
+
+echo "$RAWHTML" | tidy -ashtml 2>/dev/null | sed \
+    -e 's/<\/style>/body {font-family: "Helvetica Neue", Helvetica, sans-serif; width: 800px; margin-left: auto; margin-right: auto;}\
+        .toc {position: fixed; overflow-y: scroll; overflow-x: hidden; top: 10px; height: 90%; width: 200px; text-transform: lowercase; margin-left: -200px; margin-top: 1.5em; font-size: 11pt; border-right: 1px solid black; }\
+        .toc a { line-height: 2em; display: block; margin-left: 1em; text-indent: -1em;}\
+        .toc p { margin-top: 0em; }\
+        .toc p br { display: none} \
+        .content { font-size: 10pt; margin-left: 50px; }\
+        h1 { font-weight: 300; font-size: 64px; margin-top: 0em; letter-spacing: -2px; }\
+        h2 { margin-top: 2.5em; font-weight: 300;} \
+        p { line-height: 1.25em; margin-top: 1.2em; }\
+        h2 + p { margin-top: 0em !important; }<\/style>/' \
     -e 's/<p><a href="#heading1">/<div class="toc">\
-    <p><a href="#heading1">/' \
+        <p><a href="#heading1">/' \
     -e 's/<hr>/<\/div>/' \
     -e 's/<h2 id="heading1">/<div class="content">\
-    <h2 id="heading1">/' > "$TMPHTML"
+       <h2 id="heading1">/'\
+    -e "s/<title><\/title>/<title>$@<\/title>/"\
+    -e 's/<title>/<title> man: /' \
+> "$TMPHTML"
+
 
 open "$TMPHTML"
