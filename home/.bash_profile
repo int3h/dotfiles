@@ -35,6 +35,13 @@ export PS1="\[\e[1;42m\]\u (\W)$(eval "printf '\\$%.0s' {1..$SHLVL}")\[\e[0m\] "
 # The below version adds '[n]' before the '$' if the shell is nested, where n is the nesting level
 #export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
 
+# These are a hacky trick s.t. $PS{2,3,4} will be indented the same as $PS1: we simply have the
+# other PS' print exactly the same thing as PS1, but we just make the first part (the user and PWD)
+# print in black-on-black color.
+export PS2="\[\e[1m\e[48;5;0m\e[38;5;0m\]\u (\W)\[\e[0m\e[1;42m\]$(eval "printf '>%.0s' {1..$SHLVL}")\[\e[0m\] "
+export PS3="\[\e[1m\e[48;5;0m\e[38;5;0m\]\u (\W)\[\e[0m\e[1;42m\]$(eval "printf '|%.0s' {1..$SHLVL}")\[\e[0m\] "
+export PS4="\[\e[1m\e[48;5;0m\e[38;5;0m\]\u (\W)\[\e[0m\e[1;42m\]$(eval "printf '+%.0s' {1..$SHLVL}")\[\e[0m\] "
+
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
   xterm*|rxvt*)
