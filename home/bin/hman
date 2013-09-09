@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+if [ $# -eq 1 ]; then
+    NAME="$1"
+elif [ $# -eq 2 ]; then
+    NAME="($1) $2"
+else
+    echo "Usage: hman [section] name" >&2
+    exit 1
+fi
+
 MANFILE="$(man -w $@)"
 if [ $? -ne 0 ]; then 
   exit 1
@@ -39,7 +48,7 @@ echo "$RAWHTML" | tidy -ashtml 2>/dev/null | sed \
     -e 's/<hr>/<\/div>/' \
     -e 's/<h2 id="heading1">/<div class="content">\
         <h2 id="heading1">/'\
-    -e "s/<title><\/title>/<title>$@<\/title>/"\
+    -e "s/<title><\/title>/<title>$NAME<\/title>/"\
     -e 's/<title>/<title> man: /' \
 > "$TMPHTML"
 
