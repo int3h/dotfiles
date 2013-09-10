@@ -20,9 +20,7 @@ git submodule update --recursive --init
 echo
 
 echo "## Rebuilding YouCompleteMet"
-cd ./YouCompleteMe
+popd
+pushd ./YouCompleteMe
 ./install.sh --clang-completer
-cd ..
-
-
 popd
