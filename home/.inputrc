@@ -9,6 +9,9 @@ set completion-ignore-case on
 # options when hitting TAB
 set menu-complete-display-prefix on
 
+# Append a '/' to completed symlinks to directories
+set mark-symlinked-directories on
+
 ###########################################################
 # Keymaps for when we're in command mode (e.g., after hitting ESC)
 set keymap vi-command
