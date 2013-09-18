@@ -36,3 +36,9 @@
     clean = ~/.git-filters/email/clean_filter_email
 [diff "email"]
     textconv = ~/.git-filters/email/diff_filter_email
+[alias]
+    l = log --pretty=format:'%C(yellow)%h %C(green)%ad %C(red)%d%C(reset)%s %C(blue)[%an]%C(reset)' --decorate --date=relative
+    ld = log --pretty=format:'%C(yellow)%h %C(red)%d%C(reset)%s %C(blue)[%an]%C(reset)' --decorate --numstat --date=relative
+    graph = log --pretty=format:'%C(yellow)%h %C(green)%ad %C(red)%d%C(reset)%s %C(blue)[%an]%C(reset)' --decorate --date=relative --graph
+	s = status -sb
+    amend = commit --amend
