@@ -1,0 +1,14 @@
+ adding a.txt
+A a.txt
+### hg ci -m "commit message"
+### hg log --template "{rev} {desc} {files}\n"
+0 commit message a.txt
+### hg ci
+### hg log --template "{rev} {desc} {files}\n"
+1 commit message 3 a.txt
+0 commit message a.txt
+### hg ci -m "commit message 5"
+### hg log --template "{rev} {desc} {files}\n"
+2 commit message 5 a.txt
+1 commit message 3 a.txt
+0 commit message a.txt

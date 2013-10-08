@@ -1,0 +1,13 @@
+ ### echo a > a.txt
+### call hg addrem
+adding a.txt
+### call hg shelve a
+patch a shelved
+### echo b > b.txt
+### call hg addrem
+adding b.txt
+### call hg shelve a (should fail)
+abort: attempting to overwrite existing patch
+### call hg attic
+ C a
+

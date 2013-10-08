@@ -1,0 +1,59 @@
+ adding a.txt
+adding b.txt
+### hg st
+### hg unshelve
+patch b unshelved
+### hg st
+A b.txt
+### hg unshelve a
+patch a unshelved
+### hg st
+A a.txt
+### hg unshelve b (should fail)
+abort: cannot apply a patch over an already active patch
+### hg unshelve -f b (should pass)
+patch b unshelved
+### hg st
+A a.txt
+A b.txt
+### current applied patch
+b
+### hg shelve c (should fail)
+abort: a different patch is active
+### hg shelve -f c (should pass)
+patch c shelved
+### hg st
+### contents of c
+# HG changeset patch
+# User Fred Widget <fred@example.com>
+# Date 0 0
+diff --git a/a.txt b/a.txt
+new file mode 100644
+--- /dev/null
++++ b/a.txt
+@@ -0,0 +1,1 @@
++a 
+diff --git a/b.txt b/b.txt
+new file mode 100644
+--- /dev/null
++++ b/b.txt
+@@ -0,0 +1,1 @@
++b 
+### files in attic
+.hg\attic\.applied
+.hg\attic\.current
+.hg\attic\a
+.hg\attic\b
+.hg\attic\c
+### call hg unshelve --delete b
+patch b unshelved
+patch removed
+### call hg unshelve --delete a (should fail)
+abort: local changes found
+### call hg unshelve --delete -f a
+patch a unshelved
+patch removed
+### files in attic
+.hg\attic\.applied
+.hg\attic\.current
+.hg\attic\c

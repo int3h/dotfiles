@@ -1,0 +1,134 @@
+Thanks for grabbing the hgattic extension. I hope you find it useful.
+
+To enable this extension add the following to your hgrc:
+
+    [extensions]
+    hgattic = /path/to/hgattic/repo/attic.py
+
+If you need any help, feel free to contact me via email: after.fallout@gmail.com
+(english please :-), my french and german aren't very good yet). I live in
+Montana, USA (GMT -7) and most days I frequently check my email between 7am and
+10pm.
+
+Patches/contributions are welcome, preferably (in no order):
+1. create a fork/queue on bitbucket
+2. email patch (attachments please, Thunderbird and Gmail both mess with
+   whitespace)
+3. just ask for write access to the repository on bitbucket
+4. create a patch repository that I can pull directly into my attic (by far the
+   easiest way for me; right now with a queue I grab the patches and put them in
+   my attic anyways)
+
+If you choose to email a patch, you can add the following to your hgrc for patchbomb:
+    [defaults]
+    email = -a
+    
+    [email]
+    from = your name <your@email>
+    to = after.fallout@gmail.com
+
+#plans
+
+1.0 - stablization, plan to tag around Jan 30
+
+1.1, 1.2:
+  - overlays
+  - mq-like toolkit
+
+future thoughts (possibly unnecessary, thoughts incomplete):
+  - allow multiple queues to be active at once as if they were branches
+  - create merge-patches signifying a merge between a queue and either another
+    queue or a changeset
+  - attempt to eliminate reasoning for the pbranch extension
+  - not sure yet why merge-patches are a good idea (why not just allow multiple
+    queues and easy rebasing of queues)
+
+## overlays
+
+new command: hg attic-overlay [--remove] name
+alias overlay
+
+adds an overlay to the current repository
+
+    An overlay is a patch that applies and unapplies cleanly and doesn't
+    interact with any other changes. When an overlay is added, it will be
+    transparently be removed before any working copy changing commands run
+    and immediately added back on after the command finishes.
+options:
+    --remove  removes an overlay
+
+overlay will:
+1. add the patch name to .overlays
+2. apply the overlay
+
+any command that modifies the status of the working copy (update, shelve,
+unshelve, commit, qnew, record, ...) will be wrapped to ensure (plan on handling
+bundled extensions and core commands):
+1. all overlays are removed from the working copy before the command executes
+2. overlays are reapplied after the command executes
+
+attic-display will be modified:
+1. include 'O' status alongside '*' and 'C'
+
+overlay --remove
+1. remove the patch name from .overlays
+
+## mq-like toolkit
+
+intended to potentially replace mq itself
+1. compacted commandset (go over existing commands to decide necessity)
+2. use .hg/attic/[queue name] for folder instead of .hg/patches
+3. allow interactive splitting of queues using an editor
+4. allow interactive joining of queues using an editor
+5. allow interactive reordering of queues using an editor
+6. allow non-interactive splitting of queues (split on applied/unapplied
+   boundary)
+7. allow non-interactive joining of queues
+8. allow user to pull single patches out of queues and make them shelves on
+   their own
+9. allow user to insert a shelve into a queue
+
+thoughts for splitting, joining and reordering from an editor:
+executing hg qeditor queuename1 queuename2 (command name TBD)
+editor would open with a file in the following syntax:
+queuename1:
+    queuename1.patch1
+    queuename1.patch2
+    queuename1.patch3
+queuename2:
+    queuename2.patch1
+    queuename2.patch2
+    queuename2.patch3
+    queuename2.patch4
+    queuename2.patch5
+
+which you could then shuffle around to eg:
+queuename2:
+    queuename1.patch1
+    queuename1.patch3
+    queuename2.patch1
+    queuename2.patch3
+    queuename2.patch5
+newqueue:
+    queuename1.patch2
+    queuename2.patch2
+queuename2.patch4
+
+and it would take care of all the details of:
+1. moving q1p1 and q1p3 to the top of the q2 series file
+2. creating a new queue containg q1p2 and q2p2
+3. moving q2p4 out to a patch in the shelving area
+
+# Potential future work
+
+* fix bugs
+* regex/glob option to attic-display to filter out files from the list 
+* create commands to do basic work with the attic repo (commit, push, 
+  pull, addrem, init, ...)
+* override import to provide default path for patches from attic (so
+  you don't have to unshelve before finishing them or manually provide
+  the path to import)
+* some kind of patchbomb integration would be nice
+* provide new commands for dealing with patches like qimport (don't
+  know if this is really necessary), also consider mbox-import or something like
+  it
