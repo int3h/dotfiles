@@ -51,6 +51,9 @@ fi
 
 # The code that is run by the LaunchAgent nightly:
 
+# We probably aren't running in normal bash shell, so source my ~/.bash_profile
+. ~/.bash_profile
+echo $PATH
 brew update
 OUTDATED=$(brew outdated)
 if [ -n "$OUTDATED" ]; then
