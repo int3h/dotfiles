@@ -14,6 +14,7 @@ if has("gui_macvim")
   set encoding=utf-8              " MacVim: use UTF-8 everywhere.
   set guioptions-=T               " MacVim: hide toolbar.
   set guioptions-=L               " MacVim: hide left scrollbar.
+  set vb                          " MacVim: disable audible bell
 endif
 
 " Always show tab bar

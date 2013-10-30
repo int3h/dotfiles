@@ -84,12 +84,12 @@ case $- in
 *i*)
     export CLICOLOR=1
     #export LSCOLORS=ExFxCxDxBxegedabagacad
-    
+
     # Tell grep to highlight matches
     export GREP_OPTIONS='--color=auto'
 
     ########## Prompt config
-    
+
     # Prompt will be 'username (pwd)$ ', colored with white-on-green
     PROMPT_COLOR="\e[1m\e[48;5;2;38;5;256m"
 
