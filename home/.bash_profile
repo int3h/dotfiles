@@ -2,11 +2,14 @@
 ##### PATH setup (dependency of most other commands)
 #################################
 
+# Add my personal 'bin' directory
+PATH="/Users/mtorok/bin:$PATH"
 # Only add npm to our path if it exists
-[[ -d /usr/local/share/npm/bin ]] && PATH="/usr/local/share/npm/bin:$PATH"
-
-PATH="/Users/mtorok/bin:/usr/local/bin:$PATH:."
-
+[[ -d /usr/local/share/npm/bin ]] && PATH="$PATH:/usr/local/share/npm/bin"
+# Add in Araxis Merge command line utilities if they're installed
+[[ -d /Users/mtorok/bin/araxis ]] && PATH="$PATH:/Users/mtorok/bin/araxis"
+# With the lowest weight, execute binaries in the CWD
+PATH="$PATH:."
 
 #################################
 ##### Shell options
