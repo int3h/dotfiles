@@ -1,6 +1,6 @@
 [user]
 	name = Matt Torok
-	email = github+cal@overblown.net
+	email = github+mtgmail@overblown.net
 [core]
 	excludesfile = /Users/mtorok/.gitignore_global
 [difftool "sourcetree"]
