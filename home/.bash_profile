@@ -9,14 +9,6 @@ PATH="/Users/mtorok/bin:/usr/local/bin:$PATH:."
 
 
 #################################
-##### Source secondary config files
-#################################
-
-[ -f ~/.shell_aliases ] && . ~/.shell_aliases
-[ -f ~/.shell_commands ] && source ~/.shell_commands
-
-
-#################################
 ##### Shell options
 #################################
 
@@ -75,6 +67,14 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # Initialize 'autojump' utility
 [[ -s $BREW_PREFIX/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+
+
+#################################
+##### Source secondary config files
+#################################
+
+[ -f ~/.shell_aliases ] && . ~/.shell_aliases
+[ -f ~/.shell_commands ] && source ~/.shell_commands
 
 
 #################################
