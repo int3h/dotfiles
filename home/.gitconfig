@@ -4,10 +4,10 @@
 [core]
 	excludesfile = /Users/mtorok/.gitignore_global
 [difftool "sourcetree"]
-	cmd = /usr/local/bin/ksdiff -w \"$LOCAL\" \"$REMOTE\"
+	cmd = /Applications/SourceTree.app/Contents/Resources/araxiscompare-w.sh -2 \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
-	cmd = /usr/local/bin/ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	cmd = /Applications/SourceTree.app/Contents/Resources/araxisgitmerge-w.sh \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\"
 	trustExitCode = true
 [mergetool]
 	keepBackup = true
@@ -21,14 +21,14 @@
 [difftool "Kaleidoscope"]
 	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [diff]
-	tool = Kaleidoscope
+	tool = araxis
 [difftool]
 	prompt = false
 [mergetool "Kaleidoscope"]
 	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
 [merge]
-	tool = Kaleidoscope
+	tool = araxis
 [github]
 	user = int3h
 [filter "email"]
