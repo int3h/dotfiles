@@ -111,16 +111,10 @@ case $- in
     export PS2="\[$PROMPT_COLOR\]\u (\W)\[$(tput el1)$PROMPT_COLOR\]$(eval "printf '>%.0s' {1..$SHLVL}")\[\e[0m\] "
     unset PROMPT_COLOR
 
-    # If this is an xterm set the title to user@host:dir
-    case "$TERM" in
-        xterm*|rxvt*)
-            #export PS1="\[\e]0;\w\a\]$PS1"
-            # The below version avoids the use of '\w', which crashes BASH in OS X Mavericks (Oct '13)
-            export PS1="\[\e]0;"'${PWD/#$HOME/~}'$PS1_1"\a\]$PS1"
-            ;;
-        *)
-            ;;
-    esac
+    # Set terminal title to user@host:dir
+    #export PS1="\[\e]0;\w\a\]$PS1"
+    # The below version avoids the use of '\w', which crashes BASH in OS X Mavericks (Oct '13)
+    export PS1="\[\e]0;"'$PWD'"\a\]$PS1"
 
     # Display a message at login with an interactive shell if any homebrew packages need updating
     # This assumes that `brew update` is regularly run (e.g., by cron) to pull the latest package info.
