@@ -9,6 +9,7 @@ alias xargs='xargs -I {}'
 alias fxargs='xargs -0 -I {}'
 
 alias fgrep='grep -Fi'
+alias fg='fgrep'
 
 # Fat fingers
 alias sudp='sudo'
