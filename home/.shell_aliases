@@ -19,6 +19,7 @@ export INST="sphere.cs.berkeley.edu"
 alias rsync="rsync -avrtz --executability --exclude-from='~/.rsync_exclude.conf'"
 
 alias brew-clean="brew cleanup && brew prune && brew linkapps --local && trash $(brew --cache)"
+alias brew-graph="brew graph | dot -Tpdf > ~/Desktop/brew.pdf"
 
 # List all the preferences domains currently available
 alias domains='defaults domains | sed "s:, :\\`echo -e "\n\r"`:g"'
