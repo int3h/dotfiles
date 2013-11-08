@@ -122,19 +122,7 @@ case $- in
     # The below version avoids the use of '\w', which crashes BASH in OS X Mavericks (Oct '13)
     export PS1="\[\e]0;"'$PWD'"\a\]$PS1"
 
-    # Display a message at login with an interactive shell if any homebrew packages need updating
-    # This assumes that `brew update` is regularly run (e.g., by cron) to pull the latest package info.
-    if [ -t 0  -a  -f ~/.brew-outdated ]; then
-      OUTDATED=$(brew outdated)
-      if [ -z "$OUTDATED" ]; then
-        # If brew is reporting that there are no more outdated packages, then delete ~/.brew-outdated
-        rm ~/.brew-outdated
-      else
-        echo -e "\e[1m\e[48;5;26m\e[38;5;125mhomebrew installed packages are outdated. Run \`brew outdated\` to see outdated packages, and \`brew upgrade\` to upgrade outdated packages.\e[0m"
-        echo "$OUTDATED"
-        echo
-      fi
-    fi
+    [ -x ~/bin/update-homebrew.sh ] && ~/bin/update-homebrew.sh display
 
     # Initialize the 'Generic Colouriser' utility
     if [[ -s $BREW_PREFIX/etc/grc.bashrc ]]; then
@@ -142,5 +130,5 @@ case $- in
       # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
       alias make='colourify make -j 8'
     fi
-
+    ;;
 esac
