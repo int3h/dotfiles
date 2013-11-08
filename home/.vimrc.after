@@ -32,6 +32,9 @@ au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
 " .p maps as Prolog (for cs164 project)
 au BufRead,BufNewFile *.{p} set ft=prolog
 
+" Turn on spellchecking for vim commit messages
+au FileType gitcommit setlocal spell spelllang=en_us
+
 " Highlight shell scripts as bash, not sh
 let g:is_posix = 1
 
