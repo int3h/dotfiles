@@ -44,3 +44,4 @@
     graph = log --pretty=format:'%C(yellow)%h %C(green)%ad %C(red)%d%C(reset)%s %C(blue)[%an]%C(reset)' --decorate --date=relative --graph
 	s = status -sb
     amend = commit --amend
+    hash = rev-parse --short --verify HEAD
