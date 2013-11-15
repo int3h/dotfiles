@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# This script is a quick hack around the fact that Kaleidoscope does not like something in my
+# normal bash environment and will have bash crash repeatedly in the background if launched from
+# the terminal. This is true using `ksdiff`, `git difftool`, and even with `open` and `osascript`.
+
+if [ ! $(pgrep Kaleidoscope) ]; then
+	# We first launch a new login session that launches the shell but does NOT inherit its environment
+	# from this shell.
+	# We then execute a simple `open` command to launch Kaleidoscope from that shell.
+	login -fql $USER $SHELL -c "open -g -a Kaleidoscope"
+	
+	sleep 1
+fi
+# Now run ksdiff, proxying in our own options
+ksdiff $@
+
+exit $?
