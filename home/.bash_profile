@@ -100,14 +100,7 @@ case $- in
     PROMPT_COLOR="\e[1m\e[48;5;2;38;5;256m"
 
     # The below version adds more '$' for every level deeper the shell is nested
-    export PS1="\[$PROMPT_COLOR\]\u (\W)$(eval "printf '\\$%.0s' {1..$SHLVL}")\[\e[0m\] "
-
-    # This version avoids \W, which can cause crashes on OS X Mavericks as of Oct 25, 2013.
-    # TODO: To properly emulate \W, we want just `basename $PWD`, but that won't respect '~'. We should
-    #   create a function to set $MYPWD to '~' if $PWD == $HOME, and to `basename $PWD` otherwise.
-    #   We should then add a call to this function to $PROMPT_COMMAND, and use $MYPWD in $PS1.
-    #export PS1="\[$PROMPT_COLOR\]\u"' (${PWD/#$HOME/~})'"$(eval "printf '\\$%.0s' {1..$SHLVL}")\[\e[0m\] "
-
+    export PS1="\[$PROMPT_COLOR\]\u (\w)$(eval "printf '\\$%.0s' {1..$SHLVL}")\[\e[0m\] "
     # The below version adds '[n]' before the '$' if the shell is nested, where n is the nesting level
     #export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
 
@@ -118,9 +111,7 @@ case $- in
     unset PROMPT_COLOR
 
     # Set terminal title to user@host:dir
-    #export PS1="\[\e]0;\w\a\]$PS1"
-    # The below version avoids the use of '\w', which crashes BASH in OS X Mavericks (Oct '13)
-    export PS1="\[\e]0;"'$PWD'"\a\]$PS1"
+    export PS1="\[\e]0;\w\a\]$PS1"
 
     [ -x ~/bin/update-homebrew.sh ] && ~/bin/update-homebrew.sh display
 
