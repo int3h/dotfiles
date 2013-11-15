@@ -113,7 +113,7 @@ case $- in
     # Set terminal title to user@host:dir
     export PS1="\[\e]0;\w\a\]$PS1"
 
-    [ -x ~/bin/update-homebrew.sh ] && ~/bin/update-homebrew.sh display
+    [ -x ~/mac-scripts/launchd-update-homebrew.sh ] && ~/mac-scripts/launchd-update-homebrew.sh display
 
     # Initialize the 'Generic Colouriser' utility
     if [[ -s $BREW_PREFIX/etc/grc.bashrc ]]; then
