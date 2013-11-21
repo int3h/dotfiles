@@ -3,6 +3,7 @@
 	email = github+mtgmail@overblown.net
 [core]
 	excludesfile = /Users/mtorok/.gitignore_global
+    editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
 [difftool "sourcetree"]
 	cmd = /usr/local/bin/ksdiff -w \"$LOCAL\" \"$REMOTE\"
 	path = 
