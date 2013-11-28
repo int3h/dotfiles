@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+
+######### Messages and error checking 
+if [ $# -lt 2 ]; then
+    echo -e "MrSync: rsync with sane defaults (verbose, recruse, preserve time and executability, \
+use exclude patterns from ~/.rsync_exclude.conf)
+
+Usage: `basename $0` [RSYNC_OPTIONS] source target "
+    exit 1
+fi
+
+######### rsync command
+# Sane default options for rsync:
+#   -v             : verbose
+#   -r             : recurse
+#   -t             : preserve timestamp
+#   --executability: preserve +x flag (note: we specifically don't ask to preserver owner/group)
+#   --z            : compress the transfer
+#   --exlude-from  : read this file for pattern rules for excluding files
+ARGS='-avrtz --executability'
+
+if [[ -f $HOME/.rsync_exclude.conf ]]; then
+    ARGS="$ARGS --exclude-from=$HOME/.rsync_exclude.conf"
+fi
+
+rsync $ARGS $@
