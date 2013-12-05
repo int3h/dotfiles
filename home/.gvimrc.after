@@ -7,7 +7,7 @@ set guifont=Meslo\ LG\ S\ Regular\ for\ Powerline:h11
 "set guifont=Inconsolata:h11       " Decent font.
 
 set background=dark               " Dark background.
-colorscheme desertEx
+colorscheme jellybeans+
 
 if has("gui_macvim")
   set antialias                   " MacVim: smooth fonts.
