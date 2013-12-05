@@ -16,8 +16,11 @@ alias sudp='sudo'
 
 export INST="sphere.cs.berkeley.edu"
 
-alias brew-clean="brew cleanup && brew prune && brew linkapps --local && trash $(brew --cache)"
-alias brew-graph="brew graph | dot -Tpdf > ~/Desktop/brew.pdf"
+# Homebrew's `brew` command is a single monolithic binary that processes all homebrew commands, so
+# we can't modify/add commands via aliases. This script wraps brew and allows us to do so.
+if [[ -x ${HOME}/bin/brew-wrapper ]]; then
+    alias brew="$HOME/bin/brew-wrapper"
+fi
 
 # List all the preferences domains currently available
 alias domains='defaults domains | sed "s:, :\\`echo -e "\n\r"`:g"'

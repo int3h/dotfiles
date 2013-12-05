@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# This script provides a wrapper around homebrew's `brew` command, allowing much the same function
+# as bash aliases would in non-monolithic apps (add new commands, modify existing commands, etc.)
+# Because all of homebrew's commands are processed with the `brew` binary, bash's aliases can't
+# modify individual commands. This fixes that.
+
+prime=/usr/local/bin/brew
+
+case $1 in
+    # Modified to automatically run the output through GraphViz and save the resulting PDF to the
+    # desktop (previously, would just output a GraphViz source file to stdout.)
+    graph)
+        $prime graph | dot -Tpdf > ~/Desktop/brew.pdf
+        ;;
+
+    # Defaults to linking apps to ~/Applications (previously, the default was /Applications)
+    linkapps)
+        $prime linkapps --local
+        ;;
+
+    # A command to try to get rid of all of the files brew no longer needs (plus do a linkapps.)
+    clean)
+        $prime cleanup
+        $prime prune
+        trash /Library/Caches/Homebrew
+        $prime linkapps --local
+        ;;
+
+    # Any commands not modified or added above are passed to brew unmolested.
+    *)
+        $prime $@
+esac
