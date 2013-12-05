@@ -27,6 +27,13 @@ case $1 in
         $prime linkapps --local
         ;;
 
+    # This now will do a `brew update` right before doing an upgrade, so that you always have the
+    # most up-to-date version
+    upgrade)
+        $prime update
+        $prime $@
+        ;;
+
     # Any commands not modified or added above are passed to brew unmolested.
     *)
         $prime $@
