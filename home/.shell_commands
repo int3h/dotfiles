@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 
-
-function fname() { find . -iname "*$@*"; }
+# Search for files in <path> (defaults to '.') whose filename includes <name>
+# Usage: findfiles <name> [<path>]
+function findfiles() {
+    if [[ $# -gt 1 ]]; then
+        local search_path=$2
+    else
+        local search_path='.'
+    fi
+    find $search_path -iname "*$1*"
+}
 
 
 # Open a man page as a PDF in Preview.app
