@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# Lists all the installed Vim color themes
+
+# It may be useful to pipe the output to `column` to display it as a nice table, or to just
+# redirect output to a file.
+
+# Algorithm:
+# Vim's method is to search $VIMRUNTIME/colors/{name}.vim for a color scheme. This script therefore
+# looks in '~/.vim/' and (if it exists) '~/.janus./' and finds all the files with the path matching
+# '*/colors/*.vim'. It then prints the filenames (without the .vim) in sorted order.
+
+search_path="$HOME/.vim/"
+if [[ -d $HOME/.janus ]]; then
+    search_path="$search_path $HOME/.janus/"
+fi
+
+# `rev | cut -c 5- | rev` is a Bash trick to delete the last 4 letters from a line (`rev` reverses
+# the line, `cut -c 5-` prints the fifth-last characters in a line, and `rev` again reverses the
+# line back into its original order.)
+find $search_path -wholename "*/colors/*.vim" | grep -P -o '(?<=/)[^/]+\.vim$' | rev | cut -c 5- | rev | sort -u -f
+
+
+# This old method looked in all *.vim files in ~/.vim ~/.janus and looked for the pattern
+# 'colors_name = ".+"' and printed \1. This would accurately find the name the color scheme set
+# for itself, but that's not how Vim finds color schemes, so this isn't preferred to the above
+# method.
+
+#grep -F -r --include='*.vim' "colors_name" ~/.vim/* ~/.janus/* | grep -P -o '=\s*"[^"]+"' | tr -d '"= ' | sort -u -f
