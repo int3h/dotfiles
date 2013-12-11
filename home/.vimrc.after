@@ -43,8 +43,14 @@ let g:is_posix = 1
 
 """""" New mappings
 
+" Opens a new MacVim instance with all the various vimrc files loaded into
+" tabs.
+command VimRC exec "!mvim -c 'edit ~/.vimrc.before' -c 'tabedit ~/.vimrc.after' -c 'tabedit ~/.gvimrc.before' -c 'tabedit ~/.gvimrc.after' -c 'tabnext 2'"
+
+
 " <leader>hs -> disable search highlighting until next search
 nmap <silent> <leader>hs :noh<CR>
+
 
 " <leader>w -> Delete all buffers not currently shown on screen
 function! Wipeout()
