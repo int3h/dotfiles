@@ -24,4 +24,10 @@ if [[ -f $HOME/.rsync_exclude.conf ]]; then
     ARGS="$ARGS --exclude-from=$HOME/.rsync_exclude.conf"
 fi
 
+if [[ -x /usr/local/bin/rsync ]]; then
+    binary=/usr/local/bin/rsync
+else
+    binary=rsync
+fi
+
 rsync $ARGS $@
