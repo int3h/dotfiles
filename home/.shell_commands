@@ -34,7 +34,6 @@ else
     alias notify-success='say'
     alias notify-failure='say'
 fi
-
 notify () {
     if [[ ! "$@" ]]; then
         echo "Usage: notify <command>" >&2
@@ -47,3 +46,4 @@ notify () {
     local CMDMSG="${@//$SEARCH/$REPLACE}"
     (eval "$@" && notify-success "Command '$CMDMSG' completed successfully") || notify-failure "Command '$CMDMSG' failed"
 }
+
