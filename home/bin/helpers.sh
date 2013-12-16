@@ -30,6 +30,12 @@ get_script_path() {
 }
 
 
+# Echoes its arguments to stdout, word-wrapped to the width of the terminal
+echo_wrapped() {
+    echo -n "$@" | fold -s -w $(tput cols)
+}
+
+
 # Checks if the URL passed in $1 can be fetched (with cURL) without errors. Returns 0 if so,
 # and a non-zero cURL return code otherwise (see `man curl` for meaning of specific values.)
 check_url() {
@@ -48,3 +54,37 @@ check_url() {
     curl --silent --fail --max-time 5 --head --output /dev/null "$1" 2>&1 >/dev/null
 }
 
+
+# TODO: generate_launchagent(): function for creating a LaunchAgent
+#   command: list of program + arguments to run
+#   extra: a string of additional plist data to add to the launch_agent
+# should echo the plist to stdout
+
+# TODO: write_launchagent(): writes out the launchd plist to the proper location
+# Takes a string representing the plist content. (Optionally, the name of the plist? Would allow for
+# a descriptive filename, but if we wanted to set the label, we'd have to modify the plist content.
+# We could also take the name from the existing plist label.)
+# If the user is not root, writes out the agent to ~/Library/LaunchAgents/.
+# If the user is root, writes out the daemon to /Library/LaunchDaemons/, `chown root:wheel`, and
+# `chmod 600` the file.
+
+# TODO: run_after_reboot(): function for creating a 'run at next boot' Launch Daemon
+# Calls generate_launchagent(), with the following changes:
+#   The command to be run is modified to be a call with `bash -c 'rm $plist; $cmd'`, where $cmd
+#       is the original command, and $plist is the location of the LaunchAgent .plist file.
+#   In the extra options, "LaunchOnlyOnce" is set to true
+# FIXME: we need to know the path of the plist when we modify the command (so we can delete it
+# after running) but if we seperate the writing of the plist into a stand-alone function, we won't
+# know the path until after we've written it.
+# We could create another function whose job is to just to create a filename and/or job label. This
+# would be used by both write_launchagent(), and anybody who needs to know the filename ahead of
+# time.
+
+# TODO: run_at(): create a launchagent which runs at a calendar interval
+# run_at minute [hour [weekday]]
+# Calls generate_launchagent() sets extra to add the StartCalendarInterval dict, then loads
+# the job into launchctl.
+
+# TODO: run_every(): create a launchagent which runs every n minutes.
+# Call generate_launchagent() with the extra set to add the key StartInterval, with an integer
+# value. Then loads the job into launchctl.
