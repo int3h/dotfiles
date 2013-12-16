@@ -1,4 +1,17 @@
 #!/usr/bin/env bash
+. ~/bin/helpers.sh
+
+################################################################################
+# hman: like `man` but opens an HTML version of the manpage in the browser.
+#
+# First tries to open the file on Apple's website and, if that fails, creates a HTML version of the
+# manpage in a local temp directory and opens that.
+#
+# Requires a version of `groff` that supports the xhtml backend (the built-in version in OS X does
+# not, as of OS X 10.9.) Install it from homebrew after tapping the 'homebrew-dupes' keg (be sure
+# to use the '--with-grohtml' install option to install ghostscript, netpbm and psutils, which are
+# needed to get the xhtml backend fully working.)
+################################################################################
 
 if [ $# -eq 1 ]; then
     NAME="$1"
@@ -9,21 +22,37 @@ else
     exit 1
 fi
 
+
+# Get the filename of the manfile
 MANFILE="$(man -w $@)"
 if [ $? -ne 0 ]; then 
   exit 1
 fi
 
+
+# If the command is a builtin, display `help` instead of a HTML manpage
 if [[ "$(basename $MANFILE)" == 'builtin.1' ]]; then
     help "$@"
     exit
 fi
 
+
+# If the manfile is a built-in Mac OS X man file, open it on the Apple website instead of
+# generating a new HTML file locally.
+if [[ $MANFILE =~ ^/usr/share/man/.* ]]; then
+    URL="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/${MANFILE#/usr/share/man/}.html"
+    check_url $URL
+    if [[ $? -eq 0 ]]; then open "$URL" && exit; fi
+fi
+
+
+# Create a new temp file for the HTML manpage
 TMPHTML=`mktemp -t hman`
 mv $TMPHTML "$TMPHTML".html
 TMPHTML="$TMPHTML".html
 
 
+# Use groff 
 # Enable ALL the pre-processors! (Except grap, that gave me an error.)
 # -t -p -k -e -g -R -s : preprocess with gtbl, gpic, preconv, geqn, ggrn, grefer, gsoelim
 RAWHTML="$(groff -mman -t -p -k -e -g -R -s -Txhtml -N -P"-D$(dirname $TMPHTML)" $MANFILE)"
@@ -32,6 +61,7 @@ if [ $? -ne 0 ]; then
   exit -1
 fi
 
+# Fix up the HTML `groff` produces (using lots of `sed` commands) so it sucks much less.
 echo "$RAWHTML" | tidy -ashtml 2>/dev/null | sed \
     -e 's/<\/style>/body {font-family: "Helvetica Neue", Helvetica, sans-serif; width: 800px; margin-left: auto; margin-right: auto;}\
         .toc {position: fixed; overflow-y: scroll; overflow-x: hidden; top: 10px; height: 90%; width: 200px; text-transform: lowercase; margin-left: -200px; margin-top: 1.5em; font-size: 11pt; border-right: 1px solid black; }\
