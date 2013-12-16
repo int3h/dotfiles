@@ -41,6 +41,29 @@ au FileType gitcommit setlocal spell spelllang=en_us
 let g:is_posix = 1
 
 
+"""""" Startup commands
+
+" If more than one file is passed to Vim on startup, open each in its own tab
+function! Open_all_files_in_tabs()
+    if len(argv()) > 1
+        " Save the current tab
+        let l:currentTab = tabpagenr()
+        " `tab`: run the following command and create tabs when it creates windows
+        " `sball`: create a window for each buffer
+        execute "tab sball"
+        " Restore the original tab we opened
+        execute 'tabnext' l:currentTab
+    endif
+endfunction
+
+
+augroup VimrcStartup
+    " 'nested' allows autocmds that run on opening a buffer (such as detecting 
+    " filetype) run. Otherwise, all further autocmds prevented from running.
+    autocmd VimEnter * nested call Open_all_files_in_tabs()
+augroup end
+
+
 """""" New mappings
 
 " Opens a new MacVim instance with all the various vimrc files loaded into
