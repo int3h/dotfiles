@@ -2,7 +2,7 @@
 
 # Search for files in <path> (defaults to '.') whose filename includes <name>
 # Usage: findfiles <name> [<path>]
-function findfiles() {
+findfiles() {
     if [[ $# -gt 1 ]]; then
         local search_path=$2
     else
