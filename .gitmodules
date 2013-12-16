@@ -24,7 +24,7 @@
 	url = git://vim-latex.git.sourceforge.net/gitroot/vim-latex/vim-latex
 [submodule "home/.janus/vim-session"]
 	path = home/.janus/vim-session
-	url = git@github.com:int3h/vim-session.git
+	url = git@github.com:xolox/vim-session.git
 [submodule "home/.janus/vim-surround"]
 	path = home/.janus/vim-surround
 	url = git@github.com:tpope/vim-surround.git

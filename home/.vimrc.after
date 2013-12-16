@@ -22,7 +22,7 @@ set splitbelow
 set showcmd
 
 " Don't put "--INSERT--" in command bar when going into insert mode
-set noshowmode
+"set noshowmode
 
 " Don't ignore *.out files (as is the Janus default)
 set wildignore-=*.out
