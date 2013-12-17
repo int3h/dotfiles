@@ -36,6 +36,14 @@ echo_wrapped() {
 }
 
 
+# Runs the command given as arguments with administrator privileges, prompting the user via a GUI
+# dialog for their password. Useful if your script is running outside a terminal session, but you
+# still need to get the user's password to elevate privileges.
+sudo_gui() {
+    osascript -e "do shell script \"$@\" with administrator privileges"
+}
+
+
 # Checks if the URL passed in $1 can be fetched (with cURL) without errors. Returns 0 if so,
 # and a non-zero cURL return code otherwise (see `man curl` for meaning of specific values.)
 check_url() {
