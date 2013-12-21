@@ -7,8 +7,8 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
-" Put in a highlight at column 100
-set colorcolumn=100
+" Put in a highlight after column 100
+set colorcolumn=101
 "set tw=100
 
 " Highlight the line the cursor is on
@@ -22,7 +22,7 @@ set splitbelow
 set showcmd
 
 " Don't put "--INSERT--" in command bar when going into insert mode
-"set noshowmode
+set noshowmode
 
 " Don't ignore *.out files (as is the Janus default)
 set wildignore-=*.out
