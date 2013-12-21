@@ -31,8 +31,8 @@ get_script_path() {
 
 
 # Echoes its arguments to stdout, word-wrapped to the width of the terminal
-echo_wrapped() {
-    echo -n "$@" | fold -s -w $(tput cols)
+wrap() {
+    echo -n "$@" | expand | fold -s -w $(tput cols)
 }
 
 
@@ -59,7 +59,7 @@ check_url() {
     #   --max-time 5        Limit the maximim time for the whole operation to 5 second
     #   --head              Only fetch the headers (saves time if the file at the URL is large)
     #   --output /dev/null  Write output to /dev/null
-    curl --silent --fail --max-time 5 --head --output /dev/null "$1" 2>&1 >/dev/null
+    curl --silent --fail --max-time 3 --head --output /dev/null "$1" 2>&1 >/dev/null
 }
 
 
