@@ -31,3 +31,5 @@ defaults read /Library/Preferences/com.apple.TimeMachine.plist SkipPaths | grep 
 defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist ContentsExcluded | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\
 defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist FileContentsExcluded | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\
 defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist PathsExcluded | grep -oP --color=never -e '^\\W*\"\\K[^\"]+';"
+
+alias castle='cd $(homesick show_path)'
