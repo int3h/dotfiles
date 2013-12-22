@@ -37,3 +37,6 @@
 [submodule "home/.janus/vim-nerdtree-tabs"]
 	path = home/.janus/vim-nerdtree-tabs
 	url = git@github.com:jistr/vim-nerdtree-tabs.git
+[submodule "home/.janus/vim-misc"]
+	path = home/.janus/vim-misc
+	url = git@github.com:xolox/vim-misc.git
