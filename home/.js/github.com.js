@@ -52,23 +52,6 @@
 	}
 
 
-	// Observer that watches the pjax content area and detects when the content has been reloaded.
-	// It does this by looking for the addition of #readme and #files nodes, which only are added
-	// when GitHub is totally changing the page.
-	var observer = new MutationObserver(function(mutations) {
-		mutations.forEach(function(mutation) {
-			if(mutation.addedNodes != null && mutation.addedNodes.length > 0) {
-				for(var i = 0; i < mutation.addedNodes.length; i++) {
-					if(mutation.addedNodes[i].id == "readme" || mutation.addedNodes[i].id == "files") {
-						addToc();
-					}
-				}	
-			}
-		});
-	});
-	observer.observe($("#js-repo-pjax-container")[0], {childList: true, subtree: true});
-
-
 	function addToc() {
 		// Try to find MarkDown content on this page. If there is none, then stop.
 		if($(".markdown-body").length < 1) { return false; }
@@ -131,5 +114,40 @@
 		$("#js-repo-pjax-container").prepend(toc);
 	}
 
-	$(document).on("ready", function() { addToc(); });
+
+	function setup() {
+		// Observer that watches the pjax content area and detects when the content has been reloaded.
+		// It does this by looking for the addition of #readme and #files nodes, which only are added
+		// when GitHub is totally changing the page.
+		var observer = new MutationObserver(function(mutations) {
+			mutations.forEach(function(mutation) {
+				if(mutation.addedNodes != null && mutation.addedNodes.length > 0) {
+					for(var i = 0; i < mutation.addedNodes.length; i++) {
+						if(mutation.addedNodes[i].id == "readme" || mutation.addedNodes[i].id == "files") {
+							addToc();
+						}
+					}
+				}
+			});
+		});
+
+		// Make sure this page has a repo-style pjax area, which we'll watch for MarkDown content
+		// with the above observer.
+		// My testing indicates that there can only be pjax content area per page. If we don't find
+		// a repo-style one, then only a whole new, regular page load (<a href='...'>) will cause
+		// this to change; GH can't or won't change the pjax content area via pjax content.
+		// Therefore, it's sufficient to check for this container once on page load.
+		var pjaxArea = $("#js-repo-pjax-container");
+		if(pjaxArea.length > 0) {
+			addToc();
+			observer.observe(pjaxArea[0], {childList: true, subtree: true});
+		}
+	}
+
+
+	if(document.readyState != "complete") {
+		$(document).on("ready", setup);
+	} else {
+		setup();
+	}
 })();
