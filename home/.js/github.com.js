@@ -141,13 +141,18 @@
 		if(pjaxArea.length > 0) {
 			addToc();
 			observer.observe(pjaxArea[0], {childList: true, subtree: true});
+		} else {
+			//console.log("No repo-style pjax content area found. Not adding a TOC.")
 		}
 	}
 
 
-	if(document.readyState != "complete") {
+	if(document.readyState != "complete" && document.readyState != "interactive") {
+		//console.log("TOC: running later because readyState is " + document.readyState)
 		$(document).on("ready", setup);
 	} else {
+		//console.log("TOC: running now")
 		setup();
 	}
+	//console.log("TOC: end of script file executed");
 })();
