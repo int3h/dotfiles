@@ -11,6 +11,20 @@
 //	will require a way to scroll the TOC itself if it's longer than the browser height.
 
 (function() {
+	// A bunch of logic in this script deals with the fact that GitHub's links mainly don't use the
+	// regular <a href='...'> HTML links. Instead, it uses the pjax library
+	// (https://github.com/defunkt/jquery-pjax), which fetches page content with AJAX and
+	// and dynamically replaces some predefined content area with the new content.
+	// This means we can't just run this script once on page load. We instead have to watch the
+	// content of the page with DOM Mutation Observers and try to detect when new content of
+	// interest has been loaded, then re-run our 'add a table-of-contents' code.
+	//
+	// I should note that there's no way to directly interact with pjax via a Chrome content script.
+	// Chrome sandboxes the content script, meaning it doesn't see anything the JavaScript on the
+	// page does. Normally, I'd be able to watch for the custom jquery event "pjax:end", but that
+	// doesn't work. It's also impossible to hook page-based JS functions, or do anything else
+	// sophisticated. About all I can do is receive standard DOM events.
+
 	// Create the <style> element for all our new content
 	$("head").append(
 		'<style type="text/css">\
@@ -108,11 +122,11 @@
 
 		toc.css("position", "absolute");
 
-		// Ugly hack to make sure the TOC is position next to the top of the MarkDown body.
-		// After a pjax load, the position of the markdown-body may change after the new MarkDown
+		// Ugly hack to make sure the TOC is positioned next to the top of the MarkDown body.
+		// After a pjax load, the position of the markdown-body may change, even after the new MarkDown
 		// body element has been added. I can't figure out a clean way to watch for this change
 		// directly (a DOM observer of the MarkDown body element's attributes doesn't work,) so I
-		// just set timers to run soon after we add the TOC.
+		// just set some timers to run soon after we add the TOC.
 		function setPositition() {
 			var markdownTop = mdBody.offset()["top"];
 			toc.css("top", markdownTop);
@@ -145,7 +159,7 @@
 
 		// Make sure this page has a repo-style pjax area, which we'll watch for MarkDown content
 		// with the above observer.
-		// My testing indicates that there can only be pjax content area per page. If we don't find
+		// My testing indicates that there can only be 1 pjax content area per page. If we don't find
 		// a repo-style one, then only a whole new, regular page load (<a href='...'>) will cause
 		// this to change; GH can't or won't change the pjax content area via pjax content.
 		// Therefore, it's sufficient to check for this container once on page load.
