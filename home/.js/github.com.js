@@ -29,12 +29,24 @@
 			}\
 		\
 			#mdTOC > ul li {\
-				margin-left: 1.25em;\
-				text-indent: -1.25em;\
+				margin-left: 1em;\
+				text-indent: -1em;\
 			}\
 		\
 			#mdTOC > ul ul {\
+				margin-left: 1.50em;\
 				font-size: 0.8em;\
+				margin-bottom: 0.5em;\
+			}\
+		\
+			#mdTOC > ul li:only-child {\
+				margin-left: 0em;\
+				text-indent: 0em;\
+			}\
+		\
+			#mdTOC > ul li.empty:only-child ul {\
+				margin-left: 1em;\
+				font-size: 1em;\
 				margin-bottom: 0.5em;\
 			}\
 		</style>');
@@ -83,7 +95,7 @@
 				// an empty list element as a placeholder for the non-existent h1, and then create a
 				// new list for this h2, and append it to the placeholder h1 li.
 				if(h1li == null) {
-					h1li = $("<li></li>");
+					h1li = $("<li class='empty'></li>");
 					h1List.append(h1li);
 					h2List = $("<ul><ul>");
 					h1li.append(h2List);
