@@ -54,7 +54,8 @@
 
 	function addToc() {
 		// Try to find MarkDown content on this page. If there is none, then stop.
-		if($(".markdown-body").length < 1) { return false; }
+		var mdBody = $(".markdown-body").not(".comment-body");
+		if(mdBody.length < 1) { return false; }
 
 		// Create a new DIV to hold our TOC
 		var toc = $("<div id='mdTOC'></div>");
@@ -66,7 +67,7 @@
 		var h1li = null;
 		var h2List = null;
 
-		$(".markdown-body > h1, .markdown-body > h2").each(function(index, headingEl) {
+		mdBody.find("h1, h2").each(function(index, headingEl) {
 			var heading = $(headingEl);
 
 			if(heading.is("h1")) {
@@ -94,7 +95,6 @@
 		});
 
 		toc.css("position", "absolute");
-		var mdBody = $(".markdown-body");
 
 		// Ugly hack to make sure the TOC is position next to the top of the MarkDown body.
 		// After a pjax load, the position of the markdown-body may change after the new MarkDown
