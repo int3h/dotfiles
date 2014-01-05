@@ -66,7 +66,8 @@
 	// sub-headings, etc. for each top-level anchor.
 	var h1List = $("<ul></ul>");
 	toc.append(h1List);
-	var h1li = null, h2List = null;
+	var h1li = null;
+	var h2List = null;
 
 	$(".markdown-body > h1, .markdown-body > h2").each(function(index, headingEl) {
 		var heading = $(headingEl);
@@ -83,7 +84,7 @@
 			// If h1li is null, that means there is not an h1 element before this h2 element. Create
 			// an empty list element as a placeholder for the non-existent h1, and then create a
 			// new list for this h2, and append it to the placeholder h1 li.
-			if(h1List == null) {
+			if(h1li == null) {
 				h1li = $("<li></li>");
 				h1List.append(h1li);
 				h2List = $("<ul><ul>");
