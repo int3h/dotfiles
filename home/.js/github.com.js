@@ -6,18 +6,11 @@
 //	look into the fact that the page is unbalanced now; the main content *and* the right repo menu
 //	are what is centered in the a normal GitHub page. This makes the MarkDown content be a little
 //	off center to the left naturally, and then the TOC hangs way off to the left on top of that.
+
 // TODO: (maybe) have the TOC scroll with the page after scrolling past its normal position. This
 //	will require a way to scroll the TOC itself if it's longer than the browser height.
-// TODO: Make this script more reslient to running before the page is loaded. This hasn't been a
-//	problem so far, but if it were to run before the .markdown-body element is loaded, it wouldn't
-//	run at all; and if it runs before all the headers are loaded, the TOC will be missing items. We
-//	want to run ASAP (not when the page finishes fully loading) to appear snappy to the user, but we
-//	might then want to put event watchers when new items are added to the page.
 
 (function() {
-	// Try to find MarkDown content on this page. If there is none, then stop.
-	if($(".markdown-body").length < 1) { return false; }
-
 	// Create the <style> element for all our new content
 	$("head").append(
 		'<style type="text/css">\
@@ -59,43 +52,84 @@
 	}
 
 
-	// Create a new DIV to hold our TOC
-	var toc = $("<div id='mdTOC'></div>");
-
-	// Find all top-level anchors to the MD and add them to the TOC. Also recurse and add
-	// sub-headings, etc. for each top-level anchor.
-	var h1List = $("<ul></ul>");
-	toc.append(h1List);
-	var h1li = null;
-	var h2List = null;
-
-	$(".markdown-body > h1, .markdown-body > h2").each(function(index, headingEl) {
-		var heading = $(headingEl);
-
-		if(heading.is("h1")) {
-			// Is a h1
-			var h1Content = extractAnchor(heading);
-			h1li = $("<li><a href='" + h1Content["url"] + "'>" + h1Content["text"] + "</a></li>");
-			h1List.append(h1li);
-
-			h2List = $("<ul></ul>");
-			h1li.append(h2List);
-		} else { // Is a h2
-			// If h1li is null, that means there is not an h1 element before this h2 element. Create
-			// an empty list element as a placeholder for the non-existent h1, and then create a
-			// new list for this h2, and append it to the placeholder h1 li.
-			if(h1li == null) {
-				h1li = $("<li></li>");
-				h1List.append(h1li);
-				h2List = $("<ul><ul>");
-				h1li.append(h2List);
+	// Observer that watches the pjax content area and detects when the content has been reloaded.
+	// It does this by looking for the addition of #readme and #files nodes, which only are added
+	// when GitHub is totally changing the page.
+	var observer = new MutationObserver(function(mutations) {
+		mutations.forEach(function(mutation) {
+			if(mutation.addedNodes != null && mutation.addedNodes.length > 0) {
+				for(var i = 0; i < mutation.addedNodes.length; i++) {
+					if(mutation.addedNodes[i].id == "readme" || mutation.addedNodes[i].id == "files") {
+						addToc();
+					}
+				}	
 			}
-			
-			var h2Content = extractAnchor(heading);
-			h2List.append($("<li><a href='" + h2Content["url"] + "'>" + h2Content["text"] + "</a></li>"));
-		}
+		});
 	});
+	observer.observe($("#js-repo-pjax-container")[0], {childList: true, subtree: true});
 
 
-	$(".md").before(toc);
+	function addToc() {
+		// Try to find MarkDown content on this page. If there is none, then stop.
+		if($(".markdown-body").length < 1) { return false; }
+
+		// Create a new DIV to hold our TOC
+		var toc = $("<div id='mdTOC'></div>");
+
+		// Find all top-level anchors to the MD and add them to the TOC. Also recurse and add
+		// sub-headings, etc. for each top-level anchor.
+		var h1List = $("<ul></ul>");
+		toc.append(h1List);
+		var h1li = null;
+		var h2List = null;
+
+		$(".markdown-body > h1, .markdown-body > h2").each(function(index, headingEl) {
+			var heading = $(headingEl);
+
+			if(heading.is("h1")) {
+				// Is a h1
+				var h1Content = extractAnchor(heading);
+				h1li = $("<li><a href='" + h1Content["url"] + "'>" + h1Content["text"] + "</a></li>");
+				h1List.append(h1li);
+
+				h2List = $("<ul></ul>");
+				h1li.append(h2List);
+			} else { // Is a h2
+				// If h1li is null, that means there is not an h1 element before this h2 element. Create
+				// an empty list element as a placeholder for the non-existent h1, and then create a
+				// new list for this h2, and append it to the placeholder h1 li.
+				if(h1li == null) {
+					h1li = $("<li></li>");
+					h1List.append(h1li);
+					h2List = $("<ul><ul>");
+					h1li.append(h2List);
+				}
+				
+				var h2Content = extractAnchor(heading);
+				h2List.append($("<li><a href='" + h2Content["url"] + "'>" + h2Content["text"] + "</a></li>"));
+			}
+		});
+
+		toc.css("position", "absolute");
+		var mdBody = $(".markdown-body");
+
+		// Ugly hack to make sure the TOC is position next to the top of the MarkDown body.
+		// After a pjax load, the position of the markdown-body may change after the new MarkDown
+		// body element has been added. I can't figure out a clean way to watch for this change
+		// directly (a DOM observer of the MarkDown body element's attributes doesn't work,) so I
+		// just set timers to run soon after we add the TOC.
+		function setPositition() {
+			var markdownTop = mdBody.offset()["top"];
+			toc.css("top", markdownTop);
+		}
+		setPositition();
+		window.setTimeout(setPositition, 100);
+		window.setTimeout(setPositition, 200);
+		window.setTimeout(setPositition, 500);
+		window.setTimeout(setPositition, 1000);
+
+		$("#js-repo-pjax-container").prepend(toc);
+	}
+
+	$(document).on("ready", function() { addToc(); });
 })();
