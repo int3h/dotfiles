@@ -5,7 +5,7 @@ colorscheme jellybeans+
 set softtabstop=4
 set tabstop=4
 set shiftwidth=4
-set expandtab
+set noexpandtab
 
 " Put in a highlight after column 100
 set colorcolumn=101
@@ -28,17 +28,6 @@ set noshowmode
 set wildignore-=*.out
 " Do ignore *.tmp files
 set wildignore+=*.tmp
-
-" Map Superconductor filetypes
-au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
-" .p maps as Prolog (for cs164 project)
-au BufRead,BufNewFile *.{p} set ft=prolog
-
-" Turn on spellchecking for vim commit messages
-au FileType gitcommit setlocal spell spelllang=en_us
-
-" Highlight shell scripts as bash, not sh
-let g:is_posix = 1
 
 
 """""" Startup commands
@@ -64,7 +53,7 @@ augroup VimrcStartup
 augroup end
 
 
-"""""" New mappings
+"""""" New commands & shortcuts
 
 " Opens a new MacVim instance with all the various vimrc files loaded into
 " tabs.
@@ -75,7 +64,7 @@ command VimRC exec "!mvim -c 'edit ~/.vimrc.before' -c 'tabedit ~/.vimrc.after' 
 nmap <silent> <leader>hs :noh<CR>
 
 
-" <leader>w -> Delete all buffers not currently shown on screen
+" <leader>w : Delete all buffers not currently shown on screen
 function! Wipeout()
   " list of *all* buffer numbers
   let l:buffers = range(1, bufnr('$'))
@@ -110,7 +99,8 @@ function! Wipeout()
 endfunction
 nmap <silent> <leader>w :call Wipeout()<CR>
 
-" <leader>ml -> Append modeline after last line in buffe
+
+" <leader>ml : Append modeline after last line in buffe
 function! AppendModeline()
   " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX files.
   let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
@@ -119,6 +109,23 @@ function! AppendModeline()
   call append(line("$"), l:modeline)
 endfunction
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
+
+
+"""""" Filetype settings
+
+" Map Superconductor filetypes
+au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
+" .p maps as Prolog (for cs164 project)
+au BufRead,BufNewFile *.{p} set ft=prolog
+
+" Turn on spellchecking for vim commit messages
+au FileType gitcommit setlocal spell spelllang=en_us
+
+" Highlight shell scripts as bash, not sh
+let g:is_posix = 1
+
+" Turn on HTML/DOM highlighting in JavaScript files
+let javascript_enable_domhtmlcss = 1
 
 
 """""" NERDTree
