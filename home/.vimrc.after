@@ -55,52 +55,77 @@ augroup end
 
 """""" New commands & shortcuts
 
-" Opens a new MacVim instance with all the various vimrc files loaded into
-" tabs.
-command VimRC exec "!mvim -c 'edit ~/.vimrc.before' -c 'tabedit ~/.vimrc.after' -c 'tabedit ~/.gvimrc.before' -c 'tabedit ~/.gvimrc.after' -c 'tabnext 2'"
-
-
-" <leader>hs -> disable search highlighting until next search
-nmap <silent> <leader>hs :noh<CR>
-
-
-" <leader>w : Delete all buffers not currently shown on screen
-function! Wipeout()
-  " list of *all* buffer numbers
-  let l:buffers = range(1, bufnr('$'))
-
-  " what tab page are we in?
-  let l:currentTab = tabpagenr()
-  try
-    " go through all tab pages
-    let l:tab = 0
-    while l:tab < tabpagenr('$')
-      let l:tab += 1
-
-      " go through all windows
-      let l:win = 0
-      while l:win < winnr('$')
-        let l:win += 1
-        " whatever buffer is in this window in this tab, remove it from
-        " l:buffers list
-        let l:thisbuf = winbufnr(l:win)
-        call remove(l:buffers, index(l:buffers, l:thisbuf))
-      endwhile
-    endwhile
-
-    " if there are any buffers left, delete them
-    if len(l:buffers)
-      execute 'bwipeout' join(l:buffers)
-    endif
-  finally
-    " go back to our original tab page
-    execute 'tabnext' l:currentTab
-  endtry
-endfunction
-nmap <silent> <leader>w :call Wipeout()<CR>
-
-
+" `:VimRC[!]` : Opens all vimrc in separate tabs. If ! is present, will open
+" the tabs in the current Vim instance. Otherwise, runs a new MacVim instance
+" with the tabs open on startup.
+command -bang VimRC call VimEditRC("<bang>")
+" <leader>db : Delete buffers not currently loaded in a window
+nmap <leader>db :call BufDeleteInvisible()<CR>
 " <leader>ml : Append modeline after last line in buffe
+nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
+
+
+"" Functions supporting the above commands
+
+function VimEditRC(bBang)
+	" If the command is not proceeded by a '!', open a new MacVim instance
+	" and execute commands to load the vimrc files into tabs on startup.
+	if a:bBang != "!"
+		exec "silent !mvim -c 'edit ~/.vimrc.before' -c 'tabedit ~/.vimrc.after' -c 'tabedit ~/.gvimrc.before' -c 'tabedit ~/.gvimrc.after' -c 'tabnext 2'"
+	else
+		" If the command is proceeded by a '!', create new tabs directly in
+		" this instance of Vim with the vimrc files.
+		
+		" If the current buffer is empty (only has one buffer, that buffer has
+		" a blank filename, is one line long, and that line has no content),
+		" load the first file into the current tab.
+		if len(tabpagebuflist()) == 1 && bufname("%") == "" && line('$') == 1 && getline(1) == ''
+			exec "e ~/.vimrc.before"
+		else
+			exec "tabedit ~/.vimrc.before"
+		endif
+		exec "tabedit ~/.vimrc.after"
+		let l:vimrcafter = tabpagenr()
+		exec "tabedit ~/.gvimrc.before"
+		exec "tabedit ~/.gvimrc.after"
+		exec "tabnext " . l:vimrcafter
+	endif
+endfunction
+
+function! BufDeleteInvisible()
+  " For each tab page, finds the visible buffers and sets the appropriate key
+  " in the dictionary.
+  let l:visiblebufs = {}
+  for i in range(1, tabpagenr('$'))
+	  for b in tabpagebuflist(i)
+		  let l:visiblebufs[b] = 1
+	  endfor
+  endfor
+
+  " Keeps tracks of the buffers we delete so we can show the user a message
+  " about what we did when we're done.
+  let l:closed = []
+  " Iterates through each possible buffer number. If that buffer is in the
+  " buffer list, but not marked as visible in our dictionary, delete it.
+  for b in range(1, bufnr('$'))
+	  if buflisted(b) && !has_key(l:visiblebufs, b)
+		  call extend(l:closed, [bufname(b)])
+		  exe 'bdelete ' . b
+	  endif
+  endfor
+
+  if len(l:closed) < 1
+	  echon "No buffers deleted"
+  "elseif len(l:closed) == 1
+	  "echon "Deleted buffer " . l:closed[0]
+  else
+	  "echon "Deleted " . len(l:closed) . " buffers: " . join(l:closed, ', ')
+	  echon "Deleted " . join(l:closed, ', ')
+  endif
+  "echon "Deleted " . len(l:closed) . " buffer" . (len(l:closed) == 1 ? '' : 's')
+endfunction
+
+
 function! AppendModeline()
   " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX files.
   let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
@@ -108,7 +133,6 @@ function! AppendModeline()
   let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
   call append(line("$"), l:modeline)
 endfunction
-nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 
 """""" Filetype settings
