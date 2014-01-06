@@ -34,16 +34,16 @@ set wildignore+=*.tmp
 
 " If more than one file is passed to Vim on startup, open each in its own tab
 function! Open_all_files_in_tabs()
-		if len(argv()) > 1
-				" Save the current tab
-				let l:currentTab = tabpagenr()
-				" `tab`: run the following command and create tabs when it
-				" creates windows
-				" `sball`: create a window for each buffer
-				execute "tab sball"
-				" Restore the original tab we opened
-				execute 'tabnext' l:currentTab
-		endif
+	if len(argv()) > 1
+		" Save the current tab
+		let l:currentTab = tabpagenr()
+		" `tab`: run the following command and create tabs when it
+		" creates windows
+		" `sball`: create a window for each buffer
+		execute "tab sball"
+		" Restore the original tab we opened
+		execute 'tabnext' l:currentTab
+	endif
 endfunction
 
 
@@ -129,13 +129,71 @@ function! BufDeleteInvisible()
 endfunction
 
 
+" Checks the file for possible modelines and returns the line number of the
+" first match. If no modeline is found, returns -1
+function GetModelineNumber()
+	" Match lines of the following two forms, taken from Vim's help
+	"	[text]{white}{vi:|vim:|ex:}[white]{options}
+	"	[text]{white}{vi:|vim:|Vim:|ex:}[white]se[t] {options}:[text]
+	" Note that we do not verify the options themselves. We basically assume
+	" the first form for 'vi:', 'vim:' and 'ex:', and then ignore everything
+	" after the ':'. If we see 'Vim:', we assume the latter form, but only go
+	" so far as to check that 'set' is there (for the second form, 'Vim:' must
+	" use 'set', not 'se'.) This makes this regex a little more lenient than
+	" Vim's actual checking.
+	let l:form1 = '\C^.*[ \t]\+\(vim\=\|ex\):\s*'
+	let l:form2 = '^.*[ \t]\+Vim:\s*set '
+
+	" A list of the content of the lines Vim will check for modelines
+	let l:lines = getline(1, &modelines)
+
+	let l:match = match(l:lines, l:form1)
+	if l:match != -1
+		return l:match + 1
+	endif
+	let l:match = match(l:lines, l:form2)
+	if l:match != -1
+		return l:match + 1
+	endif
+
+	" To read the last &modelines line, figure out the start of the range of
+	" lines (last line - &modelines.) Make sure the value we calculate is
+	" valid (i.e., greater than 1.)
+	let l:lastlineno = (line('$') - &modelines) > 0 ? (line('$') - &modelines) : 1
+	let l:lines = getline(l:lastlineno, line('$'))
+
+	let l:match = match(l:lines, l:form1)
+	if l:match != -1
+		return l:lastlineno + l:match
+	endif
+	let l:match = match(l:lines, l:form2)
+	if l:match != -1
+		return l:lastlineno + l:match
+	endif
+	
+	return -1
+endfunction
+
 function! AppendModeline()
 	" Use substitute() instead of printf() to handle '%%s' modeline in LaTeX
 	" files.
-	let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
+	let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set:",
 				\ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
 	let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
-	call append(line("$"), l:modeline)
+
+	let l:existing = GetModelineNumber()
+	if l:existing != -1
+		call setline(l:existing, l:modeline)
+		echom "Modeline on line " . l:existing . " updated"
+	else
+		" Add a blank line between the last line and modeline, if one doesn't
+		" already exist.
+		if getline(line('$')) != ''
+			call append(line('$'), '')
+		endif
+		call append(line("$"), l:modeline)
+		echom "Modeline added to end of file"
+	endif
 endfunction
 
 
