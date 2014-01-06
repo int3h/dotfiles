@@ -29,38 +29,41 @@
 	$("head").append(
 		'<style type="text/css">\
 			#mdTOC {\
-				 width: 230px;\
+				 width: 170px;\
 				 float: left;\
-				 margin-left: -270px;\
+				 margin-left: -220px;\
 				 padding: 10px;\
 				 border-right: 1px solid black;\
 				 font-weight: bold;\
-				 font-size: 1.3em;\
+				 font-size: 1.2em;\
+				 line-height: 1.1;\
 			}\
 		\
-			#mdTOC ul{\
+			#mdTOC ul {\
 				list-style-type: none;\
 			}\
 		\
-			#mdTOC > ul li {\
-				margin-left: 1em;\
-				text-indent: -1em;\
+			#mdTOC > ul > li {\
+				margin-bottom: 0.5em;\
 			}\
 		\
 			#mdTOC > ul ul {\
 				margin-left: 1.50em;\
 				font-size: 0.8em;\
 				margin-bottom: 0.5em;\
+				margin-top: 0.25em;\
 			}\
 		\
-			#mdTOC > ul li:only-child {\
-				margin-left: 0em;\
-				text-indent: 0em;\
+			#mdTOC > ul ul > li {\
+				margin-bottom: 0.3em;\
 			}\
 		\
 			#mdTOC > ul li.empty:only-child ul {\
-				margin-left: 1em;\
 				font-size: 1em;\
+				margin-left: 0;\
+			}\
+		\
+			#mdTOC > ul li.empty:only-child ul li {\
 				margin-bottom: 0.5em;\
 			}\
 		</style>');
