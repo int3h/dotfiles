@@ -1,4 +1,4 @@
 " Disable the D-p mapping to MacVim's "Print" command
 if has("gui_macvim") && has("gui_running")
-  macm File.Print key=<nop>
+	macm File.Print key=<nop>
 endif

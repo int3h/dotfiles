@@ -34,22 +34,24 @@ set wildignore+=*.tmp
 
 " If more than one file is passed to Vim on startup, open each in its own tab
 function! Open_all_files_in_tabs()
-    if len(argv()) > 1
-        " Save the current tab
-        let l:currentTab = tabpagenr()
-        " `tab`: run the following command and create tabs when it creates windows
-        " `sball`: create a window for each buffer
-        execute "tab sball"
-        " Restore the original tab we opened
-        execute 'tabnext' l:currentTab
-    endif
+		if len(argv()) > 1
+				" Save the current tab
+				let l:currentTab = tabpagenr()
+				" `tab`: run the following command and create tabs when it
+				" creates windows
+				" `sball`: create a window for each buffer
+				execute "tab sball"
+				" Restore the original tab we opened
+				execute 'tabnext' l:currentTab
+		endif
 endfunction
 
 
 augroup VimrcStartup
-    " 'nested' allows autocmds that run on opening a buffer (such as detecting 
-    " filetype) run. Otherwise, all further autocmds prevented from running.
-    autocmd VimEnter * nested call Open_all_files_in_tabs()
+		" 'nested' allows autocmds that run on opening a buffer (such as
+		" detecting " filetype) run. Otherwise, all further autocmds prevented
+		" from running.
+		autocmd VimEnter * nested call Open_all_files_in_tabs()
 augroup end
 
 
@@ -93,45 +95,47 @@ function VimEditRC(bBang)
 endfunction
 
 function! BufDeleteInvisible()
-  " For each tab page, finds the visible buffers and sets the appropriate key
-  " in the dictionary.
-  let l:visiblebufs = {}
-  for i in range(1, tabpagenr('$'))
-	  for b in tabpagebuflist(i)
-		  let l:visiblebufs[b] = 1
-	  endfor
-  endfor
+	" For each tab page, finds the visible buffers and sets the appropriate
+	" key
+	" in the dictionary.
+	let l:visiblebufs = {}
+	for i in range(1, tabpagenr('$'))
+		for b in tabpagebuflist(i)
+			let l:visiblebufs[b] = 1
+		endfor
+	endfor
 
-  " Keeps tracks of the buffers we delete so we can show the user a message
-  " about what we did when we're done.
-  let l:closed = []
-  " Iterates through each possible buffer number. If that buffer is in the
-  " buffer list, but not marked as visible in our dictionary, delete it.
-  for b in range(1, bufnr('$'))
-	  if buflisted(b) && !has_key(l:visiblebufs, b)
-		  call extend(l:closed, [bufname(b)])
-		  exe 'bdelete ' . b
-	  endif
-  endfor
+	" Keeps tracks of the buffers we delete so we can show the user a message
+	" about what we did when we're done.
+	let l:closed = []
+	" Iterates through each possible buffer number. If that buffer is in the
+	" buffer list, but not marked as visible in our dictionary, delete it.
+	for b in range(1, bufnr('$'))
+		if buflisted(b) && !has_key(l:visiblebufs, b)
+			call extend(l:closed, [bufname(b)])
+			exe 'bdelete ' . b
+		endif
+	endfor
 
-  if len(l:closed) < 1
-	  echon "No buffers deleted"
-  "elseif len(l:closed) == 1
-	  "echon "Deleted buffer " . l:closed[0]
-  else
-	  "echon "Deleted " . len(l:closed) . " buffers: " . join(l:closed, ', ')
-	  echon "Deleted " . join(l:closed, ', ')
-  endif
-  "echon "Deleted " . len(l:closed) . " buffer" . (len(l:closed) == 1 ? '' : 's')
+	if len(l:closed) < 1
+		echon "No buffers deleted"
+	"elseif len(l:closed) == 1
+		"echon "Deleted buffer " . l:closed[0]
+	else
+		"echon "Deleted " . len(l:closed) . " buffers: " . join(l:closed, ',')
+		echon "Deleted " . join(l:closed, ', ')
+	endif
+	"echon "Deleted " . len(l:closed) . " buffer" . (len(l:closed) == 1 ? '' : 's')
 endfunction
 
 
 function! AppendModeline()
-  " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX files.
-  let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
-        \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
-  let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
-  call append(line("$"), l:modeline)
+	" Use substitute() instead of printf() to handle '%%s' modeline in LaTeX
+	" files.
+	let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
+				\ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+	let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
+	call append(line("$"), l:modeline)
 endfunction
 
 
@@ -154,69 +158,73 @@ let javascript_enable_domhtmlcss = 1
 
 """""" NERDTree
 if janus#is_plugin_enabled("nerdtree")
-  call add(NERDTreeIgnore, '\.tmp$')
-  let NERDTreeChDirMode=2
-  let NERDTreeShowLineNumbers=0
-  let NERDTreeStatusline=' '
+	call add(NERDTreeIgnore, '\.tmp$')
+	let NERDTreeChDirMode=2
+	let NERDTreeShowLineNumbers=0
+	let NERDTreeStatusline=' '
 
-  nmap <silent> <leader>N :NERDTreeFind<CR>
+	nmap <silent> <leader>N :NERDTreeFind<CR>
 endif
 
 
 """"""" NERDTreeTabs
 if exists("g:nerdtree_tabs_loaded")
-  " These are already handled by vim-session and Janus
-  let g:nerdtree_tabs_open_on_gui_startup=0
-  let g:nerdtree_tabs_startup_cd=0
+	" These are already handled by vim-session and Janus
+	let g:nerdtree_tabs_open_on_gui_startup=0
+	let g:nerdtree_tabs_startup_cd=0
 
-  map <Leader>n <plug>NERDTreeTabsToggle<CR>
+	map <Leader>n <plug>NERDTreeTabsToggle<CR>
 endif
 
 
 """"""" BufferGator
 if janus#is_plugin_enabled("buffergator")
-  " Map <leader>b to toggle, not simply open, the catalog
-  nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
-  " Open on the right, so as not to interfere with NERDTree
-  let g:buffergator_viewport_split_policy="R"
-  " Don't expand the GUI window when opening the buffer list
-  let g:buffergator_autoexpand_on_split=0
+	" Map <leader>b to toggle, not simply open, the catalog
+	nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
+	" Open on the right, so as not to interfere with NERDTree
+	let g:buffergator_viewport_split_policy="R"
+	" Don't expand the GUI window when opening the buffer list
+	let g:buffergator_autoexpand_on_split=0
 endif
 
 
 """"""" YouCompleteMe
 if exists( "g:loaded_youcompleteme" )
-  " Close the function doc window after inserting completion
-  let g:ycm_autoclose_preview_window_after_completion = 1
-  " Only make down (rather than both tab & down) scroll down through completions
-  let g:ycm_key_list_select_completion = ['<Down>']
-  " Ditto as above for scrolling up through completions
-  let g:ycm_key_list_previous_completion = ['<Up>']
+	" Close the function doc window after inserting completion
+	let g:ycm_autoclose_preview_window_after_completion = 1
+	" Only make down (rather than both tab & down) scroll down through
+	" completions
+	let g:ycm_key_list_select_completion = ['<Down>']
+	" Ditto as above for scrolling up through completions
+	let g:ycm_key_list_previous_completion = ['<Up>']
 
-  inoremap <D-a> <C-e>
+	inoremap <D-a> <C-e>
 endif
 
 
 """"""" CtrlP
 if janus#is_plugin_enabled("ctrlp")
-  " If a directory with a .ctrlproot file is found in parent directories, mark
-  " that as project root
-  let g:ctrlp_root_markers=['.ctrlproot']
-  let g:ctrlp_open_new_file = 'r'
+	" If a directory with a .ctrlproot file is found in parent directories,
+	" mark that as project root
+	let g:ctrlp_root_markers=['.ctrlproot']
+	let g:ctrlp_open_new_file = 'r'
 
-  " If file is already open in window in this tab, don't open; jump to that window instead.
-  " If <C-t> is pressed, only jumps to window if in another tab.
-  let g:ctrlp_switch_buffer = 'et'
+	" If file is already open in window in this tab, don't open; jump to that
+	" window instead.
+	" If <C-t> is pressed, only jumps to window if in another tab.
+	let g:ctrlp_switch_buffer = 'et'
 
-  " Use <C-p> as 'search buffers' mode (<C-t> is alreadt set to 'search files' mode by Janus)
-  nmap <silent> <D-p> :CtrlPBuffer<CR>
+	" Use <C-p> as 'search buffers' mode (<C-t> is alreadt set to 'search
+	" files' mode by Janus)
+	nmap <silent> <D-p> :CtrlPBuffer<CR>
 endif
 
 
 """"""" UltiSnips
 if exists('did_UltiSnips_vim')
-  " Remap expansion key to C-j so that it doesn't interfere with YouCompleteMe
-  let g:UltiSnipsExpandTrigger="<C-j>"
+	" Remap expansion key to C-j so that it doesn't interfere with
+	" YouCompleteMe
+	let g:UltiSnipsExpandTrigger="<C-j>"
 endif
 
 
@@ -230,49 +238,51 @@ endif
 
 """"""" tagbar
 if janus#is_plugin_enabled("tagbar")
-  " Sort tags according to file order
-  let g:tagbar_sort = 0
+	" Sort tags according to file order
+	let g:tagbar_sort = 0
 endif
 
 
 """"""" vim-session
 if exists("g:loaded_session")
-  let g:session_autosave="yes"
-  let g:session_autoload="yes"
-  let g:session_default_to_last=1
+	let g:session_autosave="yes"
+	let g:session_autoload="yes"
+	let g:session_default_to_last=1
 
-  " After loading a session, find the active file in NERDTree, if it's open
-  augroup MTorok
-    autocmd SessionLoadPost * call s:syncNerdTree()
-  augroup END
+	" After loading a session, find the active file in NERDTree, if it's open
+	augroup MTorok
+		autocmd SessionLoadPost * call s:syncNerdTree()
+	augroup END
 
-  " Reveal in NERDTree any open files within its current path
-  " This prevents it from messing up your NERDTree because of one errant file
-  function s:syncNerdTree()
-    " Only run if NERDTree is already present
-    if exists("t:NERDTreeBufName")
+	" Reveal in NERDTree any open files within its current path This prevents
+	" it from messing up your NERDTree because of one errant file.
+	function s:syncNerdTree()
+		" Only run if NERDTree is already present
+		if exists("t:NERDTreeBufName")
 
-      " This function will be called for every buffer, so filter for the ones we
-      " want
-      let s:bufPath=expand("%:p")
+			" This function will be called for every buffer, so filter for the
+			" ones we want
+			let s:bufPath=expand("%:p")
 
-      " If the file doesn't exist, don't try to show it
-      " (this prevents us from trying to show the NERDTree buffer)
-      if !file_readable(s:bufPath)
-        return
-      endif
+			" If the file doesn't exist, don't try to show it (this prevents
+			" us from trying to show the NERDTree buffer)
+			if !file_readable(s:bufPath)
+				return
+			endif
 
-      " Only show files which are within the current NERDTree path
-      let s:filePath = g:NERDTreePath.New(s:bufPath)
-      if s:filePath.isUnder(g:NERDTreeFileNode.GetRootForTab().path)
-        exe "NERDTreeFind"
-      endif
+			" Only show files which are within the current NERDTree path
+			let s:filePath = g:NERDTreePath.New(s:bufPath)
+			if s:filePath.isUnder(g:NERDTreeFileNode.GetRootForTab().path)
+				exe "NERDTreeFind"
+			endif
 
-    endif
-  endfunction
+		endif
+	endfunction
 endif
 
 
 if exists("g:loaded_numbers")
-  nnoremap <F3> :NumbersToggle<CR>
+	nnoremap <F3> :NumbersToggle<CR>
 endif
+
+" vim: set ts=4 sw=4 tw=78 noet :

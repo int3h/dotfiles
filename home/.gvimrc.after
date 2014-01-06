@@ -1,18 +1,18 @@
 " Set font
 "set guifont=Source\ Code\ Pro\ for\ Powerline:h12
 set guifont=Meslo\ LG\ S\ Regular\ for\ Powerline:h11
-"set guifont=Inconsolata:h11       " Decent font.
+"set guifont=Inconsolata:h11			 " Decent font.
 
 colorscheme jellybeans+
 "set background=light
 "colorscheme solarized
 
 if has("gui_macvim")
-  set antialias                   " MacVim: smooth fonts.
-  set encoding=utf-8              " MacVim: use UTF-8 everywhere.
-  set guioptions-=T               " MacVim: hide toolbar.
-  set guioptions-=L               " MacVim: hide left scrollbar.
-  set vb                          " MacVim: disable audible bell
+	set antialias					" MacVim: smooth fonts.
+	set encoding=utf-8				" MacVim: use UTF-8 everywhere.
+	set guioptions-=T				" MacVim: hide toolbar.
+	set guioptions-=L				" MacVim: hide left scrollbar.
+	set vb							" MacVim: disable audible bell
 endif
 
 " Always show tab bar
