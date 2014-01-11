@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+. ~/bin/helpers.sh
+
 # This script provides a wrapper around homebrew's `brew` command, allowing much the same function
 # as bash aliases would in non-monolithic apps (add new commands, modify existing commands, etc.)
 # Because all of homebrew's commands are processed with the `brew` binary, bash's aliases can't
@@ -33,6 +35,29 @@ case $1 in
         $prime update
         $prime $@
         ;;
+	
+	# A command to shew any new formula since a given date (where date is any date format git
+	# supports, like relative dates like "1 month ago" or absolute dates like "1/1/2013")
+	new)
+		if [[ $# != 2 || $2 == -h || $2 == --help ]]; then
+			echo "  Usage: brew new <date>"
+			wrap 'Shows new formula since <date> (where <date> is a Git date, like "1 week ago" or "1/1/2012")'
+			echo
+			exit
+		fi
+		
+		formulas=""
+		for repo in $(brew --repository)/Library/Taps/* $(brew --repository)/Library/Formula; do
+			cd "${repo}"
+			oldrev=$(git log --pretty='%H'  --since="$2" --reverse | head -n 1)
+			currentrev=$(git rev-parse -q --verify HEAD)
+			# By changing the '--diff-filter=' line to 'M' for modified or 'R' for removed, we can
+			# control which files we get back. We can use this to create a more full-features
+			# change report, if we wanted.
+			formulas="$formulas$(git diff-tree --name-only -r -M85% --diff-filter=A --relative ${oldrev} ${currentrev} | grep -P -o '^[^.]+')\n"
+		done
+		echo -e "$formulas" | column
+		;;
 
     # Any commands not modified or added above are passed to brew unmolested.
     *)
