@@ -99,6 +99,7 @@ generate_html() {
         <h2 id="heading1">/'\
     -e "s/<title><\/title>/<title>$displayname<\/title>/"\
     -e 's/<\/title>/ \&mdash; hman<\/title>/'\
+	-e 's/\&minus\;/-/g'\
     -e "s:$2/:$(basename $1).:"
     # That last line removes the path component of any linked temporary files, and replaces it
     # with a prefix matching the manfile name (since we will be moving all temp files into the same
