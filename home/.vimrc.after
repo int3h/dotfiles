@@ -61,6 +61,9 @@ augroup end
 
 " Mappings {{{2
 
+" Open a new tab with Cmd-T (remaps Janus' mapping of Ctrl-T to :CtrlP
+map <D-t> :tabnew <CR>
+imap <D-t> <ESC>:tabnew<CR>
 " `:VimRC[!]` : Opens all vimrc in separate tabs. If ! is present, will open
 " the tabs in the current Vim instance. Otherwise, runs a new MacVim instance
 " with the tabs open on startup.
@@ -271,14 +274,16 @@ if janus#is_plugin_enabled("ctrlp")
 	let g:ctrlp_root_markers=['.ctrlproot']
 	let g:ctrlp_open_new_file = 'r'
 
-	" If file is already open in window in this tab, don't open; jump to that
-	" window instead.
-	" If <C-t> is pressed, only jumps to window if in another tab.
-	let g:ctrlp_switch_buffer = 'et'
-
 	" Use <C-p> as 'search buffers' mode (<C-t> is alreadt set to 'search
 	" files' mode by Janus)
-	nmap <silent> <D-p> :CtrlPBuffer<CR>
+	map <silent> <D-p> :CtrlPMixed <CR>
+	imap <silent> <D-p> <ESC>:CtrlPMixed <CR>
+
+	map <silent> <D-P> :CtrlPMRU <CR>
+	imap <silent> <D-P> <ESC>:CtrlPBuffer <CR>
+
+	map <silent> π :CtrlPMRU <CR>
+	imap <silent> π <ESC>:CtrlPMRU <CR>
 endif
 
 
