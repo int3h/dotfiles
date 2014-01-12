@@ -1,4 +1,4 @@
-"""""" General options
+""""""" General options {{{1
 
 colorscheme jellybeans+
 
@@ -29,8 +29,10 @@ set wildignore-=*.out
 " Do ignore *.tmp files
 set wildignore+=*.tmp
 
+set number
 
-"""""" Startup commands
+
+""""""" Startup commands {{{1
 
 " If more than one file is passed to Vim on startup, open each in its own tab
 function! Open_all_files_in_tabs()
@@ -55,7 +57,9 @@ augroup VimrcStartup
 augroup end
 
 
-"""""" New commands & shortcuts
+""""""" New commands & shortcuts {{{1
+
+" Mappings {{{2
 
 " `:VimRC[!]` : Opens all vimrc in separate tabs. If ! is present, will open
 " the tabs in the current Vim instance. Otherwise, runs a new MacVim instance
@@ -67,7 +71,7 @@ nmap <leader>db :call BufDeleteInvisible()<CR>
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 
-"" Functions supporting the above commands
+" Functions supporting the above commands {{{2
 
 function VimEditRC(bBang)
 	" If the command is not proceeded by a '!', open a new MacVim instance
@@ -197,7 +201,7 @@ function! AppendModeline()
 endfunction
 
 
-"""""" Filetype settings
+""""""" Filetype settings {{{1
 
 " Map Superconductor filetypes
 au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
@@ -214,7 +218,7 @@ let g:is_posix = 1
 let javascript_enable_domhtmlcss = 1
 
 
-"""""" NERDTree
+""""""" NERDTree {{{1
 if janus#is_plugin_enabled("nerdtree")
 	call add(NERDTreeIgnore, '\.tmp$')
 	let NERDTreeChDirMode=2
@@ -225,7 +229,7 @@ if janus#is_plugin_enabled("nerdtree")
 endif
 
 
-""""""" NERDTreeTabs
+""""""" NERDTreeTabs {{{1
 if exists("g:nerdtree_tabs_loaded")
 	" These are already handled by vim-session and Janus
 	let g:nerdtree_tabs_open_on_gui_startup=0
@@ -235,7 +239,7 @@ if exists("g:nerdtree_tabs_loaded")
 endif
 
 
-""""""" BufferGator
+""""""" BufferGator {{{1
 if janus#is_plugin_enabled("buffergator")
 	" Map <leader>b to toggle, not simply open, the catalog
 	nnoremap <silent> <Leader>b :BuffergatorToggle<CR>
@@ -246,7 +250,7 @@ if janus#is_plugin_enabled("buffergator")
 endif
 
 
-""""""" YouCompleteMe
+""""""" YouCompleteMe {{{1
 if exists( "g:loaded_youcompleteme" )
 	" Close the function doc window after inserting completion
 	let g:ycm_autoclose_preview_window_after_completion = 1
@@ -260,7 +264,7 @@ if exists( "g:loaded_youcompleteme" )
 endif
 
 
-""""""" CtrlP
+""""""" CtrlP {{{1
 if janus#is_plugin_enabled("ctrlp")
 	" If a directory with a .ctrlproot file is found in parent directories,
 	" mark that as project root
@@ -278,7 +282,7 @@ if janus#is_plugin_enabled("ctrlp")
 endif
 
 
-""""""" UltiSnips
+""""""" UltiSnips {{{1
 if exists('did_UltiSnips_vim')
 	" Remap expansion key to C-j so that it doesn't interfere with
 	" YouCompleteMe
@@ -286,7 +290,7 @@ if exists('did_UltiSnips_vim')
 endif
 
 
-""""""" buftabs
+""""""" buftabs {{{1
 "if janus#is_plugin_enabled("buftabs")
 "  :set hidden
 "  :let g:buftabs_in_statusline=1
@@ -294,14 +298,14 @@ endif
 "endif
 
 
-""""""" tagbar
+""""""" tagbar {{{1
 if janus#is_plugin_enabled("tagbar")
 	" Sort tags according to file order
 	let g:tagbar_sort = 0
 endif
 
 
-""""""" vim-session
+""""""" vim-session {{{1
 if exists("g:loaded_session")
 	let g:session_autosave="yes"
 	let g:session_autoload="yes"
@@ -339,8 +343,9 @@ if exists("g:loaded_session")
 endif
 
 
+""""""" numbers.vim {{{1
 if exists("g:loaded_numbers")
 	nnoremap <F3> :NumbersToggle<CR>
 endif
 
-" vim: set ts=4 sw=4 tw=78 noet :
+" vim: set tabstop=4 shiftwidth=4 textwidth=78 noexpandtab foldmethod=marker :
