@@ -184,8 +184,8 @@ endfunction
 function! AppendModeline()
 	" Use substitute() instead of printf() to handle '%%s' modeline in LaTeX
 	" files.
-	let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set:",
-				\ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+	let l:modeline = printf(" vim: set tabstop=%d shiftwidth=%d textwidth=%d %sexpandtab foldmethod=%s :",
+				\ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no', &foldmethod)
 	let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
 
 	let l:existing = GetModelineNumber()
@@ -351,6 +351,7 @@ endif
 """"""" numbers.vim {{{1
 if exists("g:loaded_numbers")
 	nnoremap <F3> :NumbersToggle<CR>
+	let g:numbers_exclude += ["help"]
 endif
 
 " vim: set tabstop=4 shiftwidth=4 textwidth=78 noexpandtab foldmethod=marker :
