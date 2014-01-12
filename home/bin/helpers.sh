@@ -32,7 +32,7 @@ get_script_path() {
 
 # Echoes its arguments to stdout, word-wrapped to the width of the terminal
 wrap() {
-    echo -n "$@" | expand | fold -s -w $(tput cols)
+    echo -ne "$@" | expand | fold -s -w $(tput cols)
 }
 
 
