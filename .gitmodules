@@ -9,7 +9,7 @@
 	url = git@github.com:editorconfig/editorconfig-vim.git
 [submodule "home/.janus/numbers.vim"]
 	path = home/.janus/numbers.vim
-	url = git@github.com:myusuf3/numbers.vim.git
+	url = git@github.com:int3h/numbers.vim.git
 [submodule "home/.janus/sudo.vim"]
 	path = home/.janus/sudo.vim
 	url = git@github.com:vim-scripts/sudo.vim.git
