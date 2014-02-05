@@ -59,6 +59,13 @@ display_www() {
             open "$URL"
             return 0
         fi
+	elif [[ $1 =~ git-[^\/]+\.[0-9]+ ]]; then 
+		local URL="http://git-scm.com/docs/$(echo "$1" | sed 's/.*\(git-[^\/]\{1,\}\)\.[0-9]\{1,\}/\1/')"
+        check_url $URL
+        if [[ $? -eq 0 ]]; then 
+            open "$URL"
+            return 0
+        fi
     fi
     return 1
 }
