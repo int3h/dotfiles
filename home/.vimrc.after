@@ -211,8 +211,9 @@ au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
 " .p maps as Prolog (for cs164 project)
 au BufRead,BufNewFile *.{p} set ft=prolog
 
-" Turn on spellchecking for vim commit messages
+" Turn on spellchecking for text-like files
 au FileType gitcommit setlocal spell spelllang=en_us
+au FileType markdown setlocal spell spelllang=en_us
 
 " Highlight shell scripts as bash, not sh
 let g:is_posix = 1
@@ -307,6 +308,8 @@ endif
 if janus#is_plugin_enabled("tagbar")
 	" Sort tags according to file order
 	let g:tagbar_sort = 0
+	"let g:tagbar_type_javascript = {'ctagsbin' : '/Users/mtorok/bin/jsctags'}
+	let g:tagbar_compact = 0
 endif
 
 
