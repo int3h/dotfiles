@@ -33,3 +33,7 @@ defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/Std
 defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist PathsExcluded | grep -oP --color=never -e '^\\W*\"\\K[^\"]+';"
 
 alias castle='cd $(homesick show_path)'
+
+# Check an OpenCL file for compilation errors. (Preprocesses, compiles, and assembles the file, with
+# all warnings, and discards the generated file.)
+alias opencl-check='/System/Library/Frameworks/OpenCL.framework/Versions/A/Libraries/openclc -c -x cl -cl-std=CL1.1 -Weverything -o /dev/null'
