@@ -7,18 +7,9 @@ bitbucket.org = 24:9c:45:8b:9c:aa:ba:55:4e:01:6d:58:ff:e4:28:7d:2a:14:ae:3b
 [extensions]
 hgext.extdiff=
 hgext.hgattic=~/.hgext/hgattic/attic.py
+record =
 
-[extdiff]
-cmd.ksdiff = /usr/local/bin/ksdiff
-opts.ksdiff = --changeset --wait --filelist
 
 [ui]
-merge = Kaleidoscope
 username = Matt Torok <github+cal@overblown.net>
 
-[merge-tools]
-Kaleidoscope.executable = /usr/local/bin/ksdiff
-Kaleidoscope.args = --merge --output $output --base $base -- $local $other
-
-[extensions]
-record = 
