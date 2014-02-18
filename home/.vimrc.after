@@ -1,5 +1,6 @@
 """"""" General options {{{1
 
+set t_Co=256
 colorscheme jellybeans+
 
 set softtabstop=4
