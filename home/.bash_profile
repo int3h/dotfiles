@@ -3,14 +3,12 @@
 #################################
 
 # Only add npm to our path if it exists
-[[ -d /usr/local/share/npm/bin ]] && PATH="$PATH:/usr/local/share/npm/bin"
-# Add in Araxis Merge command line utilities if they're installed
-[[ -d /Users/mtorok/bin/araxis ]] && PATH="$PATH:/Users/mtorok/bin/araxis"
+# [[ -d /usr/local/share/npm/bin ]] && PATH="$PATH:/usr/local/share/npm/bin"
 # Add homebrew's path (it's already in the PATH by default, but we need to add
 # it earlier so that its tools overrides the system's tools.)
-PATH="/usr/local/bin:$PATH"
+# PATH="/usr/local/bin:$PATH"
 # Add my personal 'bin' directory
-PATH="/Users/mtorok/bin:$PATH"
+PATH=~/bin:$PATH
 # With the lowest weight, execute binaries in the CWD
 PATH="$PATH:."
 
@@ -19,7 +17,7 @@ PATH="$PATH:."
 #################################
 
 # Set the default mode of new files to u=rwx,g=rx,o=
-umask 0027
+# umask 0027
 
 # Support extended pattern matching in bash (e.g., for quantifiers like "*_+([0-9])")
 shopt -s extglob
@@ -41,6 +39,7 @@ export HISTCONTROL=ignoredups:ignorespace;
 export HISTFILE=~/.shell_history
 # Append to the existing history file, rather than overwriting it
 shopt -s histappend;
+
 # Save each command when the prompt is re-displayed, rather than only at shell exit
 PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
 
@@ -49,30 +48,22 @@ PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
 ##### Setup installed tools
 #################################
 
-# Homebrew-installed programs are in the homebrew directory
-if hash brew 2>/dev/null; then
-    BREW_PREFIX=$(brew --prefix)
-else
-    # If homebrew isn't installed, set this to a value that will guarantee
-    # failure when checking if a homebrew-installed program exists
-    BREW_PREFIX=/dev/null/brew
 fi
 
-# Put junit in Java classpath
-[ -f ~/Dropbox/code/junit/junit-4.10.jar ] && export CLASSPATH=~/Dropbox/code/junit/junit-4.10.jar:./:$CLASSPATH
 
-if hash mvim 2>/dev/null; then
-    export EDITOR='mvim -f'
-    export VISUAL='mvim -f'
+#################################
+##### Setup installed tools
+#################################
+
+
+if hash vim 2>/dev/null; then
+    export EDITOR='vim -f'
+    export VISUAL='vim -f'
 fi
 
-[ -f $BREW_PREFIX/etc/bash_completion ] &&. $BREW_PREFIX/etc/bash_completion
 
 export RBENV_ROOT=/usr/local/var/rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-# Initialize 'autojump' utility
-[[ -s $BREW_PREFIX/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
 
 #################################
@@ -106,7 +97,7 @@ case $- in
     #export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
 
     # Kinda hacky way to indent PS2 to the same level as PS1: we make PS2 virtually the same as PS1,
-    # however we insert a command to clear the printed text ('tput el1') right before we print the 
+    # however we insert a command to clear the printed text ('tput el1') right before we print the
     # prompt seperator character ('>') so that we erase the username+PWD but retain the cursor position
     export PS2="\[$PROMPT_COLOR\]\u (\W)\[$(tput el1)$PROMPT_COLOR\]$(eval "printf '>%.0s' {1..$SHLVL}")\[\e[0m\] "
     unset PROMPT_COLOR
@@ -114,13 +105,5 @@ case $- in
     # Set terminal title to user@host:dir
     export PS1="\[\e]0;\w\a\]$PS1"
 
-    [ -x ~/mac-scripts/launchd-update-homebrew.sh ] && ~/mac-scripts/launchd-update-homebrew.sh display
-
-    # Initialize the 'Generic Colouriser' utility
-    if [[ -s $BREW_PREFIX/etc/grc.bashrc ]]; then
-      . $BREW_PREFIX/etc/grc.bashrc
-      # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
-      alias make='colourify make -j 8'
-    fi
     ;;
 esac
