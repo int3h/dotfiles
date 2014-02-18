@@ -100,6 +100,13 @@ if [[ -x ~/.rbenv/bin/rbenv ]]; then
 fi
 
 
+# If the `keychain` utility is installed, alias `ssh` and `git` so that they trigger it before
+# running (the alternative is to run `keychain` during login, but this method means that we'll
+# only be prompted for our SSH key password if we use ssh/git, not indicriminately during login.)
+if [[ -x /usr/bin/keychain ]]; then
+    alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/*_rsa) && ssh'
+    alias git='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/*_rsa) && git'
+fi
 
 #################################
 ##### Source secondary config files
