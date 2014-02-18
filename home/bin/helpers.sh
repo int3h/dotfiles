@@ -36,13 +36,6 @@ wrap() {
 }
 
 
-# Runs the command given as arguments with administrator privileges, prompting the user via a GUI
-# dialog for their password. Useful if your script is running outside a terminal session, but you
-# still need to get the user's password to elevate privileges.
-sudo_gui() {
-    osascript -e "do shell script \"$@\" with administrator privileges"
-}
-
 
 # Given a filename, prints a version which does not conflict with any existing files by appending
 # a number to the filename. If the original filename doesn't conflict to begin with, returns the
@@ -58,7 +51,7 @@ unique_filename() {
 	# Split the filename into parts
 	local olfIFS="$IFS"
 	IFS=$'\n'
-	local filename_split=($(~/mac-scripts/split_path "$filename"))
+	local filename_split=($(split_path "$filename"))
 	IFS="$olfIFS"
 	local file_path="${filename_split[0]}"
 	local file_base="${filename_split[1]}"
@@ -92,38 +85,3 @@ check_url() {
     #   --output /dev/null  Write output to /dev/null
     curl --silent --fail --max-time 3 --head --output /dev/null "$1" 2>&1 >/dev/null
 }
-
-
-# TODO: generate_launchagent(): function for creating a LaunchAgent
-#   command: list of program + arguments to run
-#   extra: a string of additional plist data to add to the launch_agent
-# should echo the plist to stdout
-
-# TODO: write_launchagent(): writes out the launchd plist to the proper location
-# Takes a string representing the plist content. (Optionally, the name of the plist? Would allow for
-# a descriptive filename, but if we wanted to set the label, we'd have to modify the plist content.
-# We could also take the name from the existing plist label.)
-# If the user is not root, writes out the agent to ~/Library/LaunchAgents/.
-# If the user is root, writes out the daemon to /Library/LaunchDaemons/, `chown root:wheel`, and
-# `chmod 600` the file.
-
-# TODO: run_after_reboot(): function for creating a 'run at next boot' Launch Daemon
-# Calls generate_launchagent(), with the following changes:
-#   The command to be run is modified to be a call with `bash -c 'rm $plist; $cmd'`, where $cmd
-#       is the original command, and $plist is the location of the LaunchAgent .plist file.
-#   In the extra options, "LaunchOnlyOnce" is set to true
-# FIXME: we need to know the path of the plist when we modify the command (so we can delete it
-# after running) but if we seperate the writing of the plist into a stand-alone function, we won't
-# know the path until after we've written it.
-# We could create another function whose job is to just to create a filename and/or job label. This
-# would be used by both write_launchagent(), and anybody who needs to know the filename ahead of
-# time.
-
-# TODO: run_at(): create a launchagent which runs at a calendar interval
-# run_at minute [hour [weekday]]
-# Calls generate_launchagent() sets extra to add the StartCalendarInterval dict, then loads
-# the job into launchctl.
-
-# TODO: run_every(): create a launchagent which runs every n minutes.
-# Call generate_launchagent() with the extra set to add the key StartInterval, with an integer
-# value. Then loads the job into launchctl.
