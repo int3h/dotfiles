@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-######### Messages and error checking 
+######### Messages and error checking
 if [ $# -lt 2 ]; then
     echo -e "MrSync: rsync with sane defaults (verbose, recruse, preserve time and executability, \
 use exclude patterns from ~/.rsync_exclude.conf)
@@ -24,8 +24,8 @@ if [[ -f $HOME/.rsync_exclude.conf ]]; then
     ARGS="$ARGS --exclude-from=$HOME/.rsync_exclude.conf"
 fi
 
-if [[ -x /usr/local/bin/rsync ]]; then
-    binary=/usr/local/bin/rsync
+if [[ -x /usr/bin/rsync ]]; then
+    binary=/usr/bin/rsync
 else
     binary=rsync
 fi

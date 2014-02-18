@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-alias ls='ls -lAOph'
-alias lsx='ls -lAOphe@'
+alias ls='ls -lAph --color=auto'
 
-alias make='make -j 2'
+# alias make='make -j 1'
 
 alias xargs='xargs -I {}'
 
@@ -12,28 +11,26 @@ alias fg='fgrep -i'
 # Fat fingers
 alias sudp='sudo'
 
-export INST="sphere.cs.berkeley.edu"
-
-# Homebrew's `brew` command is a single monolithic binary that processes all homebrew commands, so
-# we can't modify/add commands via aliases. This script wraps brew and allows us to do so.
-if [[ -x ${HOME}/bin/brew-wrapper ]]; then
-    alias brew="$HOME/bin/brew-wrapper"
-fi
-
-# List all the preferences domains currently available
-alias domains='defaults domains | sed "s:, :\\`echo -e "\n\r"`:g"'
-
-# Show all items currently excluded from backup by their HFS+ extended attributes
-alias backup-excluded="sudo mdfind \"com_apple_backup_excludeItem = 'com.apple.backupd'\";\
-defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist UserPathsExcluded | grep -oE --color=never -e '\"[^\"]+\"' | xargs -I {} printf \"$HOME/{}\n\";\
-defaults read /Library/Preferences/com.apple.TimeMachine.plist ExcludeByPath | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\
-defaults read /Library/Preferences/com.apple.TimeMachine.plist SkipPaths | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\
-defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist ContentsExcluded | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\
-defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist FileContentsExcluded | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\
-defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist PathsExcluded | grep -oP --color=never -e '^\\W*\"\\K[^\"]+';"
 
 alias castle='cd $(homesick show_path)'
 
-# Check an OpenCL file for compilation errors. (Preprocesses, compiles, and assembles the file, with
-# all warnings, and discards the generated file.)
-alias opencl-check='/System/Library/Frameworks/OpenCL.framework/Versions/A/Libraries/openclc -c -x cl -cl-std=CL1.1 -Weverything -o /dev/null'
+
+#################################
+##### Ubuntu default setup
+#################################
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
