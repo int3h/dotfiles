@@ -8,7 +8,7 @@
 # it earlier so that its tools overrides the system's tools.)
 # PATH="/usr/local/bin:$PATH"
 # Add my personal 'bin' directory
-PATH=~/bin:$PATH
+[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 # With the lowest weight, execute binaries in the CWD
 PATH="$PATH:."
 
