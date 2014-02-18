@@ -87,8 +87,8 @@ fi
 
 
 if hash vim 2>/dev/null; then
-    export EDITOR='vim -f'
-    export VISUAL='vim -f'
+    export EDITOR='vim'
+    export VISUAL='vim'
 fi
 
 
@@ -110,19 +110,17 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 #################################
 case $- in
 *i*)
-    export CLICOLOR=1
-    #export LSCOLORS=ExFxCxDxBxegedabagacad
-
     # Tell grep to highlight matches
     export GREP_OPTIONS='--color=auto'
 
     ########## Prompt config
 
     # Prompt will be 'username (pwd)$ ', colored with white-on-green
-    PROMPT_COLOR="\e[1m\e[48;5;2;38;5;256m"
+    # PROMPT_COLOR="\e[1m\e[48;5;2;38;5;256m"
+    PROMPT_COLOR="\e[1m\e[48;5;6m\e[38;5;256m"
 
     # The below version adds more '$' for every level deeper the shell is nested
-    export PS1="\[$PROMPT_COLOR\]\u (\w)$(eval "printf '\\$%.0s' {1..$SHLVL}")\[\e[0m\] "
+    export PS1="\[$PROMPT_COLOR\]\u@\H (\w)$(eval "printf '\\$%.0s' {1..$SHLVL}")\[\e[0m\] "
     # The below version adds '[n]' before the '$' if the shell is nested, where n is the nesting level
     #export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
 
