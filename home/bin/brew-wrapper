@@ -13,7 +13,26 @@ case $1 in
     # Modified to automatically run the output through GraphViz and save the resulting PDF to the
     # desktop (previously, would just output a GraphViz source file to stdout.)
     graph)
-        $prime graph | dot -Tpdf > ~/Desktop/brew.pdf
+		if [[ $2 == -h || $2 == --help ]]; then
+			echo "Usage: brew graph [<Out File>]" >&2
+			echo "Draw a graph of installed formula and their dependencies and save it as a PDF." >&2
+			echo >&2
+			echo "If <Out File> is specified, then the PDF is written to that file. Otherwise, it" >&2
+			echo "is written to ~/Desktop/brew.pdf." >&2
+			exit 0
+		fi
+		outfile=${2:-$(unique_filename ~/Desktop/brew.pdf)}
+		echo "Writing graph to '$outfile'"
+
+		messages=$($prime graph | dot -Tpdf -o${outfile} 2>&1)
+		if [[ $messages ]]; then
+			echo "Errors or warnings occured during graph generation. Not opening PDF." >&2
+			echo "Output:" >&2
+			echo >&2
+			echo "$messages" >&2
+		else
+			open "$outfile"
+		fi
         ;;
 
     # Defaults to linking apps to ~/Applications (previously, the default was /Applications)
