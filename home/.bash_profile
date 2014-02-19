@@ -19,6 +19,8 @@ PATH="$PATH:."
 # Set the default mode of new files to u=rwx,g=rx,o=
 # umask 0027
 
+export LANG="C"
+
 # Support extended pattern matching in bash (e.g., for quantifiers like "*_+([0-9])")
 shopt -s extglob
 # Correct for minor spelling errors
