@@ -5,10 +5,10 @@
 	excludesfile = /Users/mtorok/.gitignore_global
     editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
 [difftool "sourcetree"]
-	cmd = /usr/local/bin/ksdiff -w \"$LOCAL\" \"$REMOTE\"
+	cmd = ~/bin/ksdiff-fixed -w \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
-	cmd = /usr/local/bin/ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	cmd = ~/bin/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
 [mergetool]
 	keepBackup = true
