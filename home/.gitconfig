@@ -20,7 +20,6 @@
 [push]
 	default = simple
 [difftool "Kaleidoscope"]
-	; cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 	cmd = ~/bin/ksdiff-fixed --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [diff]
 	;tool = araxis
@@ -28,7 +27,6 @@
 [difftool]
 	prompt = false
 [mergetool "Kaleidoscope"]
-	; cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	cmd = ~/bin/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
 [merge]
