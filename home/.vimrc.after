@@ -19,7 +19,9 @@ set tw=100
 " 1 = dont break line after 1-letter word
 " j = remove comment leader when joining lines, where it makes sense
 set formatoptions+=croqal1j
-set formatoptions-=tw2
+set formatoptions-=t
+set formatoptions-=w
+set formatoptions-=2
 
 " Highlight the line the cursor is on
 set cursorline
