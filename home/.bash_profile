@@ -10,7 +10,7 @@
 # it earlier so that its tools overrides the system's tools.)
 PATH="/usr/local/bin:$PATH"
 # Add my personal 'bin' directory
-PATH="$HOME/bin:$PATH"
+[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 # With the lowest weight, execute binaries in the CWD
 PATH="$PATH:."
 
@@ -20,6 +20,10 @@ PATH="$PATH:."
 
 # Set the default mode of new files to u=rwx,g=rx,o=
 umask 0027
+
+# Set the LANG to "C" so that `ls` output is ordered to have dotfiles first, among other things
+export LANG="C"
+
 
 # Support extended pattern matching in bash (e.g., for quantifiers like "*_+([0-9])")
 shopt -s extglob
@@ -49,6 +53,10 @@ PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
 ##### Setup installed tools
 #################################
 
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
 # Homebrew-installed programs are in the homebrew directory
 if hash brew 2>/dev/null; then
     BREW_PREFIX=$(brew --prefix)
@@ -106,7 +114,7 @@ case $- in
     #export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
 
     # Kinda hacky way to indent PS2 to the same level as PS1: we make PS2 virtually the same as PS1,
-    # however we insert a command to clear the printed text ('tput el1') right before we print the 
+    # however we insert a command to clear the printed text ('tput el1') right before we print the
     # prompt seperator character ('>') so that we erase the username+PWD but retain the cursor position
     export PS2="\[$PROMPT_COLOR\]\u (\W)\[$(tput el1)$PROMPT_COLOR\]$(eval "printf '>%.0s' {1..$SHLVL}")\[\e[0m\] "
     unset PROMPT_COLOR
