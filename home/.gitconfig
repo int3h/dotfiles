@@ -47,3 +47,5 @@
 	s = status -sb
     amend = commit --amend
     hash = rev-parse --short --verify HEAD
+[commit]
+	cleanup = strip
