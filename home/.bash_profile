@@ -5,12 +5,12 @@
 # Only add npm to our path if it exists
 [[ -d /usr/local/share/npm/bin ]] && PATH="$PATH:/usr/local/share/npm/bin"
 # Add in Araxis Merge command line utilities if they're installed
-[[ -d /Users/mtorok/bin/araxis ]] && PATH="$PATH:/Users/mtorok/bin/araxis"
+[[ -d "$HOME/bin/araxis" ]] && PATH="$PATH:$HOME/bin/araxis"
 # Add homebrew's path (it's already in the PATH by default, but we need to add
 # it earlier so that its tools overrides the system's tools.)
 PATH="/usr/local/bin:$PATH"
 # Add my personal 'bin' directory
-PATH="/Users/mtorok/bin:$PATH"
+PATH="$HOME/bin:$PATH"
 # With the lowest weight, execute binaries in the CWD
 PATH="$PATH:."
 
