@@ -3,4 +3,4 @@ commentURLParser0.regex=(?<!\n)\n(?!\n)
 commentURLParser0.url=
 commentURLParser0.type=0
 commentURLParser0.project=
-commentURLParser0.description=(?<!\n)\n(?!\n) ->  
+commentURLParser0.description=Unwrap Lines
