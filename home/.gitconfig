@@ -1,6 +1,6 @@
 [user]
 	name = Matt Torok
-	email = github+mtgmail@overblown.net
+	email = github@overblown.net
 [core]
 	excludesfile = /Users/mtorok/.gitignore_global
     editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
