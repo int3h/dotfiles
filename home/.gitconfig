@@ -34,6 +34,7 @@
 [merge]
 	;tool = araxis
 	tool = Kaleidoscope
+	conflictstyle = diff3
 [github]
 	user = int3h
 [filter "email"]
