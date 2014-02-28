@@ -2,7 +2,7 @@
 	name = Matt Torok
 	email = github@overblown.net
 [core]
-	excludesfile = /Users/mtorok/.gitignore_global
+	excludesfile = /Users/mtorok/.gitsupport/gitignore
     editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
 [difftool "sourcetree"]
 	cmd = ~/bin/ksdiff-fixed -w \"$LOCAL\" \"$REMOTE\"
