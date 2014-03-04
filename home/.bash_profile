@@ -20,6 +20,7 @@ PATH="$PATH:."
 # umask 0027
 
 export LANG="C"
+export LC_CTYPE="en_US.UTF-8"
 
 # Support extended pattern matching in bash (e.g., for quantifiers like "*_+([0-9])")
 shopt -s extglob
