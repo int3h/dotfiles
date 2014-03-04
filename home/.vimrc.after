@@ -89,9 +89,9 @@ nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 " Functions supporting the above commands {{{2
 
 function VimEditRC(bBang)
-	" If the command is not proceeded by a '!', open a new MacVim instance
-	" and execute commands to load the vimrc files into tabs on startup.
 	if a:bBang != "!"
+		" If the command is not proceeded by a '!', open a new MacVim instance and execute commands
+		" to load the vimrc files into tabs on startup.
 		exec "silent !mvim -c 'edit ~/.vimrc.before' -c 'tabedit ~/.vimrc.after' -c 'tabedit ~/.gvimrc.before' -c 'tabedit ~/.gvimrc.after' -c 'tabnext 2'"
 	else
 		" If the command is proceeded by a '!', create new tabs directly in
@@ -196,8 +196,8 @@ endfunction
 function! AppendModeline()
 	" Use substitute() instead of printf() to handle '%%s' modeline in LaTeX
 	" files.
-	let l:modeline = printf(" vim: set tabstop=%d shiftwidth=%d textwidth=%d %sexpandtab foldmethod=%s :",
-				\ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no', &foldmethod)
+	let l:modeline = printf(" vim: set tabstop=%d shiftwidth=%d textwidth=%d %sexpandtab foldmethod=%s filetype=%s:",
+				\ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no', &foldmethod, &filetype)
 	let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
 
 	let l:existing = GetModelineNumber()
@@ -370,4 +370,4 @@ if exists("g:loaded_numbers")
 	let g:numbers_exclude += ["help"]
 endif
 
-" vim: set tabstop=4 shiftwidth=4 textwidth=78 noexpandtab foldmethod=marker :
+" vim: set tabstop=4 shiftwidth=4 textwidth=78 noexpandtab foldmethod=marker filetype=vim:
