@@ -2,19 +2,18 @@
 	name = Matt Torok
 	email = github+mtgmail@overblown.net
 [core]
-	excludesfile = /home/mtorok/.gitignore_global
+	excludesfile = ~/.gitsupport/gitignore
     editor = vim
 [color]
 	ui = true
 [push]
-	default = simple
-[github]
+	default = simple[github]
 	user = int3h
 [filter "email"]
-    smudge = ~/.git-filters/email/smudge_filter_email
-    clean = ~/.git-filters/email/clean_filter_email
+    smudge = ~/.gitsupport/filters/email/smudge_filter_email
+    clean = ~/.gitsupport/filters/email/clean_filter_email
 [diff "email"]
-    textconv = ~/.git-filters/email/diff_filter_email
+    textconv = ~/.gitsupport/filters/email/diff_filter_email
 [alias]
     l = log --pretty=format:'%C(yellow)%h %C(green)%ad %C(red)%d%C(reset)%s %C(blue)[%an]%C(reset)' --decorate --date=relative
     ld = log --pretty=format:'%C(yellow)%h %C(red)%d%C(reset)%s %C(blue)[%an]%C(reset)' --decorate --numstat --date=relative
@@ -22,3 +21,7 @@
 	s = status -sb
     amend = commit --amend
     hash = rev-parse --short --verify HEAD
+[commit]
+	cleanup = strip
+[init]
+	templatedir = /Users/mtorok/.gitsupport/template

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# This script is a quick hack around the fact that Kaleidoscope.app crashes unless its launch
+# environment is just so. Launching it via the `ksdiff` command line tool (which is what git and
+# Sourcetree use) will cause it to throw a lot of git/bash crash events. Launching it from a new
+# login session, discarding the current envionment, seems to fix it.
+
+# If Kaleidoscope isn't running, launch it with the proper environment
+if [ ! $(pgrep Kaleidoscope) ]; then
+	# Launch a new login session and run the shell, but do NOT inherit the environment from this
+	# shell (does not use the '-p' option.) Use this to then open Kaleidoscope.app.
+	login -fql $USER $SHELL -c "open -b com.blackpixel.kaleidoscope"
+	
+	# Give it a second for the app to launch, so that `ksdiff` will be able to find and connect to
+	# it correctly (otherwise, it may try to launch a new instance)
+	sleep "0.5"
+
+fi
+
+# Now run ksdiff, passing in the same options passed to this script
+/usr/local/bin/ksdiff $@
+
+exit $?

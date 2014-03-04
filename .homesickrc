@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+# TODO: chflags hidden ~/.bin
+#
+# TODO: Add ~/mac-scripts to repo. Have this rc hide it
+#
+# TODO: Install Janus
+#
+# TODO: Init ~/.janus and build YCM (requires Xcode tools, perhaps Homebrew Python.)

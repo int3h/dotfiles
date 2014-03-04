@@ -19,6 +19,7 @@ PATH="$PATH:."
 # Set the default mode of new files to u=rwx,g=rx,o=
 # umask 0027
 
+# Set the LANG to "C" so that `ls` output is ordered to have dotfiles first, among other things
 export LANG="C"
 export LC_CTYPE="en_US.UTF-8"
 
@@ -42,7 +43,6 @@ export HISTCONTROL=ignoredups:ignorespace;
 export HISTFILE=~/.shell_history
 # Append to the existing history file, rather than overwriting it
 shopt -s histappend;
-
 # Save each command when the prompt is re-displayed, rather than only at shell exit
 PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
 
@@ -119,6 +119,9 @@ fi
 #################################
 case $- in
 *i*)
+    export CLICOLOR=1
+    #export LSCOLORS=ExFxCxDxBxegedabagacad
+
     # Tell grep to highlight matches
     export GREP_OPTIONS='--color=auto'
 
