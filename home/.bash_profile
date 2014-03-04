@@ -87,9 +87,9 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 ##### Source secondary config files
 #################################
 
+[ -f ~/.shell_private ] && source ~/.shell_private
 [ -f ~/.shell_aliases ] && . ~/.shell_aliases
 [ -f ~/.shell_commands ] && source ~/.shell_commands
-[ -f ~/.shell_private ] && source ~/.shell_private
 
 
 #################################
