@@ -58,7 +58,7 @@ unique_filename() {
 	# Split the filename into parts
 	local olfIFS="$IFS"
 	IFS=$'\n'
-	local filename_split=($(~/mac-scripts/split_path "$filename"))
+	local filename_split=($(split_path "$filename"))
 	IFS="$olfIFS"
 	local file_path="${filename_split[0]}"
 	local file_base="${filename_split[1]}"
