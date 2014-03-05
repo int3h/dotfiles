@@ -87,8 +87,38 @@ nmap <leader>db :call BufDeleteInvisible()<CR>
 " <leader>ml : Append modeline after last line in buffe
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
+" TODO: Create some way (an imap for D-<CR>, maybe?) that inserts a newline nomatter what;
+" specifically, if the 'a' formatoption is set.
+"
+" Normally, with 'a' in 'formatoptions', Vim will automatically format your text as you type. If two
+" lines aren't separated by a blank line/empty comment line, then Vim will consider them part of the
+" same paragraph and try to concatenate them. In practice, this means that trying to hit 'enter'
+" inside a comment (or other autoformatted text) has no effect, because Vim inserts the newline,
+" immediately sees the two lines without a blank line between them, and combines them together
+" again. This makes it seem like the 'enter' never happened.
+"
+" We can default to 'a' off, but then if we modify some text, we have to manually reformat it with
+" 'gq' (though as we're typing the text for the first time, the text will be wrapped and formatted
+" correct; it's only if we modify existing text.) I really like the autoformatting, so this is
+" undersirable.
+"
+" We could also map D-<CR> to "disable 'a', press enter twice, enable 'a'". However, the new line
+" won't be formatted (and often will be only a half line wide.) We could use 'gq' to format it, but
+" I don't know how many lines to include in the block of text we reformat (it needs to be the entire
+" paragraph.) If we could tell Vim to autoformat the line as it does when we insert text, that may 
+" work, but I don't know of a reliable way to trigger that.
+"
+" Maybe we can just use the Vim script API to insert two new lines? Will that bypass the immediate 
+" autoformat concatenating, but still insert the comment leaders?
+
+nmap <leader>a :call ToggleFormatAll()<CR>
+
 
 " Functions supporting the above commands {{{2
+
+" TODO: Can we make some of these local to this script, instead of polluting the global namespace?  
+" Adding 's:' to their names gives the error "Using <SID> not in a script context".
+
 
 function VimEditRC(bBang)
 	if a:bBang != "!"
@@ -214,6 +244,15 @@ function! AppendModeline()
 		endif
 		call append(line("$"), l:modeline)
 		echom "Modeline added to end of file"
+	endif
+endfunction
+
+
+function! ToggleFormatAll()
+	if &formatoptions =~ 'a'
+		set formatoptions-=a
+	else
+		set formatoptions+=a
 	endif
 endfunction
 
