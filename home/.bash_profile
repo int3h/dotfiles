@@ -1,4 +1,13 @@
 #################################
+##### Check which OS we're running and set global flags
+#################################
+
+case $(uname -s) in
+	Darwin) export OS='Mac';;
+	Linux) export OS='Linux';;
+esac
+
+#################################
 ##### PATH setup (dependency of most other commands)
 #################################
 
