@@ -224,7 +224,7 @@ au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
 au BufRead,BufNewFile *.{p} set ft=prolog
 
 " Turn on spellchecking, auto-wrapping of long lines, and set width to 72
-au FileType gitcommit setlocal spell spelllang=en_us textwidth=72 formatoptions+=t
+au FileType gitcommit setlocal spell spelllang=en_us textwidth=72 formatoptions+=troqal1j formatoptions-=c formatoptions-=w formatoptions-=2 colorcolumn=73
 " Turn on spellchecking
 au FileType markdown setlocal spell spelllang=en_us
 
