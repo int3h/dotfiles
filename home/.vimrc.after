@@ -18,9 +18,8 @@ set tw=100
 " w = trailing whitespace indicates paragraph continues on next line
 " 1 = dont break line after 1-letter word
 " j = remove comment leader when joining lines, where it makes sense
-set formatoptions+=croqal1j
+set formatoptions+=croqal1jw
 set formatoptions-=t
-set formatoptions-=w
 set formatoptions-=2
 
 " Highlight the line the cursor is on
@@ -76,12 +75,15 @@ augroup end
 " Open a new tab with Cmd-T (remaps Janus' mapping of Ctrl-T to :CtrlP
 map <D-t> :tabnew <CR>
 imap <D-t> <ESC>:tabnew<CR>
+
 " `:VimRC[!]` : Opens all vimrc in separate tabs. If ! is present, will open
 " the tabs in the current Vim instance. Otherwise, runs a new MacVim instance
 " with the tabs open on startup.
 command -bang VimRC call VimEditRC("<bang>")
+
 " <leader>db : Delete buffers not currently loaded in a window
 nmap <leader>db :call BufDeleteInvisible()<CR>
+
 " <leader>ml : Append modeline after last line in buffe
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
@@ -224,7 +226,7 @@ au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
 au BufRead,BufNewFile *.{p} set ft=prolog
 
 " Turn on spellchecking, auto-wrapping of long lines, and set width to 72
-au FileType gitcommit setlocal spell spelllang=en_us textwidth=72 formatoptions+=troqal1j formatoptions-=c formatoptions-=w formatoptions-=2 colorcolumn=73
+au FileType gitcommit setlocal spell spelllang=en_us textwidth=72 formatoptions+=troqal1jw formatoptions-=c formatoptions-=2 colorcolumn=73
 " Turn on spellchecking
 au FileType markdown setlocal spell spelllang=en_us
 
