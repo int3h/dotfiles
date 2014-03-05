@@ -7,7 +7,8 @@
 [color]
 	ui = true
 [push]
-	default = simple[github]
+	default = simple
+[github]
 	user = int3h
 [filter "email"]
     smudge = ~/.gitsupport/filters/email/smudge_filter_email
