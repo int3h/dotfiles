@@ -1,12 +1,23 @@
 #################################
+##### Check which OS we're running and set global flags
+#################################
+
+case $(uname -s) in
+	Darwin) export OS='Mac';;
+	Linux) export OS='Linux';;
+esac
+
+#################################
 ##### PATH setup (dependency of most other commands)
 #################################
 
 # Only add npm to our path if it exists
-# [[ -d /usr/local/share/npm/bin ]] && PATH="$PATH:/usr/local/share/npm/bin"
+[[ -d /usr/local/share/npm/bin ]] && PATH="$PATH:/usr/local/share/npm/bin"
+# Add in Araxis Merge command line utilities if they're installed
+[[ -d "$HOME/bin/araxis" ]] && PATH="$PATH:$HOME/bin/araxis"
 # Add homebrew's path (it's already in the PATH by default, but we need to add
 # it earlier so that its tools overrides the system's tools.)
-# PATH="/usr/local/bin:$PATH"
+[[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
 # Add my personal 'bin' directory
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 # With the lowest weight, execute binaries in the CWD
@@ -109,9 +120,9 @@ fi
 ##### Source secondary config files
 #################################
 
+[ -f ~/.shell_private ] && source ~/.shell_private
 [ -f ~/.shell_aliases ] && . ~/.shell_aliases
 [ -f ~/.shell_commands ] && source ~/.shell_commands
-[ -f ~/.shell_private ] && source ~/.shell_private
 
 
 #################################

@@ -25,4 +25,4 @@
 [commit]
 	cleanup = strip
 [init]
-	templatedir = /Users/mtorok/.gitsupport/template
+	templatedir = ~/.gitsupport/template

@@ -19,3 +19,31 @@ delme () {
     cd "$TMPDIR"
     pwd | tr -d "\n" | pbcopy
 }
+
+
+## Commands for easily connecting to my VPS
+
+# Only enable if the URL and port vars are set (usually done somewhere else, like ~/.shell_private)
+if [[ -n $MT_URL ]] && [[ -n $MT_PORT ]]; then
+	# mt.com is a shortcut to SSH into my VPS
+	alias mt.com="ssh -p $MT_PORT $MT_URL"
+	
+	# `scp` wrapper which detects when the URL 'mt.com' is an argument and replaces it with the proper
+	# URL and, (if the user did not specify one,) port.
+	_MTCOM_SCP_WRAPPER() {
+		local ARGS="$@"
+
+		# If 'mt.com:' is an argument, replace it with the proper URL and, optionally, proper port
+		if [[ $ARGS =~ 'mt.com:' ]]; then
+			ARGS="${ARGS/mt.com:/${MT_URL}:}"
+			# If the user hasn't specified their own port, add mt.com's port
+			local PAT='-P [0-9]{1,} '
+			if [[ ! $ARGS =~ $PAT ]]; then
+				ARGS="-P $MT_PORT ${ARGS}"
+			fi
+		fi
+
+		command scp $ARGS
+	}
+	alias scp='_MTCOM_SCP_WRAPPER'
+fi
