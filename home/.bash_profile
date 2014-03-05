@@ -8,7 +8,7 @@
 [[ -d "$HOME/bin/araxis" ]] && PATH="$PATH:$HOME/bin/araxis"
 # Add homebrew's path (it's already in the PATH by default, but we need to add
 # it earlier so that its tools overrides the system's tools.)
-PATH="/usr/local/bin:$PATH"
+[[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
 # Add my personal 'bin' directory
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 # With the lowest weight, execute binaries in the CWD
