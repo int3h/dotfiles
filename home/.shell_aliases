@@ -1,17 +1,27 @@
 #!/usr/bin/env bash
 
+# Require confirmation when deleting >3 files or a directory; be verbose.
+alias rm='rm -Iv'
+
+# Detailed file listing; show hidden files; append a '/' to directories; use human-readable sizes;
+# colorize the output when not piped into another command.
 alias ls='ls -lAph --color=auto'
+# Simplified `ls`: don't show hidden files; show directories first; human readable sizes; colorized.
+alias lsd='command ls -lph --color=auto --group-directories-first'
 
-# alias make='make -j 1'
+# Run n make processes in parallel, where n = (number of CPUs) + 1
+alias make="make -j $(( $(nproc) + 1 ))"
 
-alias xargs='xargs -I {}'
+# Use '{}' as a placeholder for arguments to xargs
+alias xargs='xargs -I{}'
 
-alias fg='fgrep -i'
+# Shorter alias to grep a fixed string; case insensitive; ignore binary files.
+alias fg='fgrep -iI'
 
 # Fat fingers
 alias sudp='sudo'
 
-
+# Shortcut to cd to my current homesick castle directory
 alias castle='cd $(homesick show_path)'
 
 
