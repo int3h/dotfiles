@@ -26,3 +26,5 @@
 	cleanup = strip
 [init]
 	templatedir = ~/.gitsupport/template
+[credential]
+	helper = cache --timeout=43200
