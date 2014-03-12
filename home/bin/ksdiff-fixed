@@ -20,4 +20,7 @@ fi
 # Now run ksdiff, passing in the same options passed to this script
 /usr/local/bin/ksdiff $@
 
+# TODO: Use AppleScript to click the "Window->Zoom" menu item, to maximize the window (the default 
+# is way too small. Can we set that another way, like a .plist option?)
+
 exit $?
