@@ -111,10 +111,15 @@ fi
 # If the `keychain` utility is installed, alias `ssh` and `git` so that they trigger it before
 # running (the alternative is to run `keychain` during login, but this method means that we'll
 # only be prompted for our SSH key password if we use ssh/git, not indicriminately during login.)
-if [[ -x /usr/bin/keychain ]]; then
-    alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/*_rsa) && ssh'
-    alias git='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/*_rsa) && git'
-fi
+##
+# Update: we've disabled this because we use ssh-agent forwarding by default for most hosts. That
+# means we don't need to use this machine's SSH key, and thus don't need to unlock it so
+# proactively. In fact, we may not want to run keychain at all, since it clobbers our SSH
+# forwarding.
+# if [[ -x /usr/bin/keychain ]]; then
+#     alias ssh='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/*_rsa) && ssh'
+#     alias git='eval $(/usr/bin/keychain --eval --agents ssh -Q --quiet ~/.ssh/*_rsa) && git'
+# fi
 
 #################################
 ##### Source secondary config files
