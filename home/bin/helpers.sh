@@ -36,14 +36,6 @@ wrap() {
 }
 
 
-# Runs the command given as arguments with administrator privileges, prompting the user via a GUI
-# dialog for their password. Useful if your script is running outside a terminal session, but you
-# still need to get the user's password to elevate privileges.
-sudo_gui() {
-    osascript -e "do shell script \"$@\" with administrator privileges"
-}
-
-
 # Given a filename, prints a version which does not conflict with any existing files by appending
 # a number to the filename. If the original filename doesn't conflict to begin with, returns the
 # original filename unchanged.
