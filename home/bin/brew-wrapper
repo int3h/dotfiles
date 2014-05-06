@@ -7,7 +7,9 @@
 # Because all of homebrew's commands are processed with the `brew` binary, bash's aliases can't
 # modify individual commands. This fixes that.
 
-prime=/usr/local/bin/brew
+# TODO: Modify the `brew` command's Bash autocompletion to reflect the below changes.
+
+prime=$(which brew)
 
 case $1 in
     # Modified to automatically run the output through GraphViz and save the resulting PDF to the
@@ -33,12 +35,12 @@ case $1 in
 		else
 			open "$outfile"
 		fi
-        ;;
+	;;
 
     # Defaults to linking apps to ~/Applications (previously, the default was /Applications)
     linkapps)
         $prime linkapps --local
-        ;;
+	;;
 
     # A command to try to get rid of all of the files brew no longer needs (plus do a linkapps.)
     clean)
@@ -46,14 +48,29 @@ case $1 in
         $prime prune
         trash /Library/Caches/Homebrew
         $prime linkapps --local
-        ;;
+	;;
 
     # This now will do a `brew update` right before doing an upgrade, so that you always have the
     # most up-to-date version
     upgrade)
         $prime update
         $prime $@
-        ;;
+    ;;
+	
+	# Ensures we have the latest updates before showing outdated formulae. So long as the output
+	# is going to a terminal, it will also show the output of `update`, followed by a divider.
+	# The '-f' or '--fast' option will skip running `update` altogether.
+	outdated)
+		if [[ $2 != -f && $2 != --fast ]]; then
+			if [[ -t 1 ]]; then
+				$prime update
+				(type mark 2>&1 >/dev/null && mark) || printf '\n============\n\n'
+			else
+				$prime update >/dev/null
+			fi
+		fi
+		$prime outdated
+	;;
 	
 	# A command to shew any new formula since a given date (where date is any date format git
 	# supports, like relative dates like "1 month ago" or absolute dates like "1/1/2013")
@@ -76,9 +93,10 @@ case $1 in
 			formulas="$formulas$(git diff-tree --name-only -r -M85% --diff-filter=A --relative ${oldrev} ${currentrev} | grep -P -o '^[^.]+')\n"
 		done
 		echo -e "$formulas" | column
-		;;
+	;;
 
     # Any commands not modified or added above are passed to brew unmolested.
     *)
         $prime $@
+	;;
 esac
