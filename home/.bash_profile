@@ -32,6 +32,7 @@ umask 0027
 
 # Set the LANG to "C" so that `ls` output is ordered to have dotfiles first, among other things
 export LANG="C"
+export LC_CTYPE="en_US.UTF-8"
 
 
 # Support extended pattern matching in bash (e.g., for quantifiers like "*_+([0-9])")
@@ -90,6 +91,9 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # Initialize 'autojump' utility
 [[ -s $BREW_PREFIX/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+
+# Set SpiderOak to use non-themed Qt widgets
+export SPIDEROAK_UI_STYLE=native
 
 
 #################################
