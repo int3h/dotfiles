@@ -24,6 +24,10 @@ alias sudp='sudo'
 # Shortcut to cd to my current homesick castle directory
 alias castle='cd $(homesick show_path)'
 
+# Create a new tmux session with a given name
+alias tnew='tmux new -s'
+# Connct to an existing tmux session with a given name
+alias topen='tmux a -t'
 
 #################################
 ##### Ubuntu default setup
