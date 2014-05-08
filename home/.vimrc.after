@@ -113,6 +113,9 @@ nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 nmap <leader>a :call ToggleFormatAll()<CR>
 
+" Command to strip the trailing whitespace from a file
+command Strip :call <SID>StripTrailingWhitespaces()
+
 
 " Functions supporting the above commands {{{2
 
@@ -257,9 +260,24 @@ function! ToggleFormatAll()
 endfunction
 
 
+" Strip the trailing whitespace from a file, preserving cursor position. Ideally called from an
+" autocommand based of filetype. See:
+" http://stackoverflow.com/questions/356126/how-can-you-automatically-remove-trailing-whitespace-in-vim
+function! <SID>StripTrailingWhitespaces()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
+endfun
+
+
 """"""" Filetype settings {{{1
 
-" Map Superconductor filetypes
+"" All code files
+" Enable 'strip whitespace on save' functionality
+autocmd FileType c,cpp,java,php,ruby,python,javascript autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
+
+"" Superconductor
 au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
 " .p maps as Prolog (for cs164 project)
 au BufRead,BufNewFile *.{p} set ft=prolog
