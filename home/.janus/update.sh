@@ -13,6 +13,15 @@ function printHeader {
 
 pushd `git rev-parse --show-toplevel` > /dev/null
 
+if [[ $(git status -s .gitmodules) ]]; then
+	printf 'ERROR: Your .gitmodules file has uncommitted changes. This prevents us from\n' >&2
+	printf 'recording the changes from pulling the latest revision of the submodules. Please\n' >&2
+	printf 'commit or revert your changes to this file (listed as changes to the submodules.)\n\n' >&2
+	exit 1
+fi
+
+# So that we can later cleanly commit the changes this script makes (and only those changes)
+git stash -q
 
 printHeader "Updating submodule URLs to match .gitconfig"
 git submodule sync
@@ -33,6 +42,15 @@ printHeader "Pulling latest commit of each submodule"
 # submodules back to their recorded commit (undoing the `git pull` here.)
 git submodule foreach 'git pull origin master; git submodule update --recursive --init'
 
+
+printHeader "Committing updates to git repo"
+git add -u
+git commit -m "Vim: update plugins in ~/.janus to latest versions"
+
+# Re-apply the user's existing changes (stashed at the beginning of this script)
+git stash pop -q
+
+
 getRev "home/.janus/YouCompleteMe"
 NEW_YCM_REV="$SUBMOD_REV"
 
@@ -43,11 +61,3 @@ if [ $OLD_YCM_REV != $NEW_YCM_REV ]; then
 	./install.sh --clang-completer
 fi
 
-printHeader "User Messages"
-
-printf 'Janus Vim modules have been updated. Do a `git commit` on your Homesick castle\n'
-printf 'to record the updates.\n'
-
-printf "\n\e[1m\e[48;5;0m\e[38;5;160mWARNING:\e[0m "
-printf 'Running this script again without commiting updates to git may\n'
-printf 'cause undefined behavior, including unnecessary updates, or update reversion.\n\n'
