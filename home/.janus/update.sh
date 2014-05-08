@@ -13,17 +13,25 @@ function printHeader {
 
 pushd `git rev-parse --show-toplevel` > /dev/null
 
+
 printHeader "Updating submodule URLs to match .gitconfig"
 git submodule sync
 
 printHeader "Checking out submodules to recorded commit"
+# This will make sure each submodule is initialized and checkout the commit currently recorded in
+# our repo.
 git submodule update --recursive --init
 
+# Save the current YCM revision (before updating) so we can later tell if it was updated
 getRev "home/.janus/YouCompleteMe/"
 OLD_YCM_REV="$SUBMOD_REV"
 
 printHeader "Pulling latest commit of each submodule"
-git submodule foreach git pull origin master
+# Updates each submodule to the latest version
+# The 'git pull' could cause a submodule's submodules to need to be updated. Do it with the foreach 
+# so that we only update the 2nd-level submodules, and don't accidentally revert our top-level 
+# submodules back to their recorded commit (undoing the `git pull` here.)
+git submodule foreach 'git pull origin master; git submodule update --recursive --init'
 
 getRev "home/.janus/YouCompleteMe"
 NEW_YCM_REV="$SUBMOD_REV"
