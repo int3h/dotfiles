@@ -105,10 +105,10 @@ nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 " We could also map D-<CR> to "disable 'a', press enter twice, enable 'a'". However, the new line
 " won't be formatted (and often will be only a half line wide.) We could use 'gq' to format it, but
 " I don't know how many lines to include in the block of text we reformat (it needs to be the entire
-" paragraph.) If we could tell Vim to autoformat the line as it does when we insert text, that may 
+" paragraph.) If we could tell Vim to autoformat the line as it does when we insert text, that may
 " work, but I don't know of a reliable way to trigger that.
 "
-" Maybe we can just use the Vim script API to insert two new lines? Will that bypass the immediate 
+" Maybe we can just use the Vim script API to insert two new lines? Will that bypass the immediate
 " autoformat concatenating, but still insert the comment leaders?
 
 nmap <leader>a :call ToggleFormatAll()<CR>
@@ -116,7 +116,7 @@ nmap <leader>a :call ToggleFormatAll()<CR>
 
 " Functions supporting the above commands {{{2
 
-" TODO: Can we make some of these local to this script, instead of polluting the global namespace?  
+" TODO: Can we make some of these local to this script, instead of polluting the global namespace?
 " Adding 's:' to their names gives the error "Using <SID> not in a script context".
 
 
@@ -128,7 +128,7 @@ function VimEditRC(bBang)
 	else
 		" If the command is proceeded by a '!', create new tabs directly in
 		" this instance of Vim with the vimrc files.
-		
+
 		" If the current buffer is empty (only has one buffer, that buffer has
 		" a blank filename, is one line long, and that line has no content),
 		" load the first file into the current tab.
@@ -221,7 +221,7 @@ function GetModelineNumber()
 	if l:match != -1
 		return l:lastlineno + l:match
 	endif
-	
+
 	return -1
 endfunction
 
