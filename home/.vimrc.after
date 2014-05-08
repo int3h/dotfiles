@@ -279,17 +279,24 @@ autocmd FileType c,cpp,java,php,ruby,python,javascript autocmd BufWritePre <buff
 
 "" Superconductor
 au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
-" .p maps as Prolog (for cs164 project)
+
+"" Prolog
+" Map *.p files to Prolog (for cs164 project)
 au BufRead,BufNewFile *.{p} set ft=prolog
 
+"" Git Commit
 " Turn on spellchecking, auto-wrapping of long lines, and set width to 72
 au FileType gitcommit setlocal spell spelllang=en_us textwidth=72 formatoptions+=troqal1jw formatoptions-=c formatoptions-=2 colorcolumn=73
+
+"" Markdown
 " Turn on spellchecking
 au FileType markdown setlocal spell spelllang=en_us
 
+"" Shell
 " Highlight shell scripts as bash, not sh
 let g:is_posix = 1
 
+"" JavaScript
 " Turn on HTML/DOM highlighting in JavaScript files
 let javascript_enable_domhtmlcss = 1
 
