@@ -7,7 +7,7 @@ function getRev {
 }
 
 function printHeader {
-    printf "\n\e[1m\e[48;5;17m\e[38;5;256m\n### $1\e[0m\n\n"
+    printf "\n\e[1m\e[48;5;17m\e[38;5;256m\n=== $1\e[0m\n\n"
 }
 
 
@@ -30,7 +30,16 @@ NEW_YCM_REV="$SUBMOD_REV"
 
 # Only if we've updated YCM, rebuild it
 if [ $OLD_YCM_REV != $NEW_YCM_REV ]; then
-    printHeader "Rebuilding YouCompleteMe"
-    cd home/.janus/YouCompleteMe
-    ./install.sh --clang-completer
+	printHeader "Rebuilding YouCompleteMe"
+	cd home/.janus/YouCompleteMe
+	./install.sh --clang-completer
 fi
+
+printHeader "User Messages"
+
+printf 'Janus Vim modules have been updated. Do a `git commit` on your Homesick castle\n'
+printf 'to record the updates.\n'
+
+printf "\n\e[1m\e[48;5;0m\e[38;5;160mWARNING:\e[0m "
+printf 'Running this script again without commiting updates to git may\n'
+printf 'cause undefined behavior, including unnecessary updates, or update reversion.\n\n'
