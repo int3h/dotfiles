@@ -306,6 +306,11 @@ let g:is_posix = 1
 au FileType javascript setlocal expandtab
 let javascript_enable_domhtmlcss = 1
 
+"" OpenCL
+" Check OpenCL syntax using Apple's OpenCL compiler
+let g:syntastic_opencl_checkers = ['openclc']
+
+
 
 """"""" NERDTree {{{1
 if janus#is_plugin_enabled("nerdtree")
