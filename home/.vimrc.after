@@ -76,6 +76,11 @@ augroup end
 map <D-t> :tabnew <CR>
 imap <D-t> <ESC>:tabnew<CR>
 
+" Split a line with Ctrl+C (for when Vim won't insert a line break because of auto-formatting.)
+" Disabled at the momement, because it's buggy
+"imap <C-c> <CR><Esc>O
+
+
 " `:VimRC[!]` : Opens all vimrc in separate tabs. If ! is present, will open
 " the tabs in the current Vim instance. Otherwise, runs a new MacVim instance
 " with the tabs open on startup.
@@ -298,6 +303,7 @@ let g:is_posix = 1
 
 "" JavaScript
 " Turn on HTML/DOM highlighting in JavaScript files
+au FileType javascript setlocal expandtab
 let javascript_enable_domhtmlcss = 1
 
 
