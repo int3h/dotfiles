@@ -20,6 +20,8 @@ esac
 [[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
 # Add my personal 'bin' directory
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
+# Add Morgan Aldridge's tools-osx scripts to the path
+[ -d "$HOME/Documents/code/mac-scripts/tools-osx/src" ] && PATH="$PATH:$HOME/Documents/code/mac-scripts/tools-osx/src"
 # With the lowest weight, execute binaries in the CWD
 PATH="$PATH:."
 
