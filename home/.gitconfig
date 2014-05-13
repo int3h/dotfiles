@@ -6,7 +6,7 @@
     editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
 [difftool "sourcetree"]
 	cmd = ~/bin/ksdiff-fixed -w \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "sourcetree"]
 	cmd = ~/bin/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
@@ -41,12 +41,21 @@
 [diff "email"]
     textconv = ~/.gitsupport/filters/email/diff_filter_email
 [alias]
-    l = log --pretty=format:'%C(yellow)%h %C(green)%ad %C(red)%d%C(reset)%s %C(blue)[%an]%C(reset)' --decorate --date=relative
-    ld = log --pretty=format:'%C(yellow)%h %C(red)%d%C(reset)%s %C(blue)[%an]%C(reset)' --decorate --numstat --date=relative
+	# Shows log in pretty, one-line-per-commit format
+    l = log --pretty=format:'%C(yellow)%h %C(green)%ad%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)' --decorate --date=relative
+	# Shows log in pretty, one-line commit message, followed by a multi-line list of files changed
+	# in that commit and their stats (additions/deletions)
+    ld = log --pretty=format:'%C(yellow)%h%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)' --decorate --numstat --date=relative
+	# Shows the log, with ASCII graph of branches and merges next to commit messages
     graph = log --pretty=format:'%C(yellow)%h %C(green)%ad %C(red)%d%C(reset)%s %C(blue)[%an]%C(reset)' --decorate --date=relative --graph
+	# Short status (removes most of the explanatory text)
 	s = status -sb
+	# Shortcut to do an amend commit
     amend = commit --amend
+	# Shows short hash of current checkout
     hash = rev-parse --short --verify HEAD
+	# Shows a pretty list of stashes (adds relative date, color coding, vs. regular `stash list`)
+	stashes = stash list --pretty=format:'%C(yellow)%gd %C(green)%ar%C(reset) %gs'
 [commit]
 	cleanup = strip
 [init]
