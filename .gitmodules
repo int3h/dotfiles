@@ -43,3 +43,6 @@
 [submodule "home/.janus/vim-opencl"]
 	path = home/.janus/vim-opencl
 	url = git@github.com:int3h/vim-opencl.git
+[submodule "home/.janus/vim-indent-guides"]
+	path = home/.janus/vim-indent-guides
+	url = git@github.com:nathanaelkane/vim-indent-guides.git
