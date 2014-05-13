@@ -20,8 +20,16 @@ esac
 [[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
 # Add my personal 'bin' directory
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
+
 # Add Morgan Aldridge's tools-osx scripts to the path
-[ -d "$HOME/Documents/code/mac-scripts/tools-osx/src" ] && PATH="$PATH:$HOME/Documents/code/mac-scripts/tools-osx/src"
+if [[ -d "$HOME/Documents/code/tools-osx/bin" ]]; then
+	PATH="$PATH:$HOME/Documents/code/tools-osx/bin"
+else
+	# tools-osx can be found at https://github.com/morgant/tools-osx (main fork) or
+	# https://github.com/int3h/tools-osx (my own fork).
+	echo "tools-osx not installed in '$HOME/Documents/code/tools-osx/bin'. Not adding to PATH. Download/clone tools-osx and compile it (with \`rake\`) to fix this." >&2
+fi
+
 # With the lowest weight, execute binaries in the CWD
 PATH="$PATH:."
 
