@@ -8,7 +8,7 @@
 	cmd = ~/bin/ksdiff-fixed -w \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
-	cmd = ~/bin/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	cmd = ~/bin/ksdiff-fixed --merge --snapshot --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\"  \"$REMOTE\"
 	trustExitCode = true
 [mergetool]
 	keepBackup = true
