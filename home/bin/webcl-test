@@ -37,9 +37,10 @@
 default_server_addr="127.0.0.1"
 default_server_port="8888"
 
-# By default, dev mode is off. It can be enabled via a program argument.
-dev_mode=''
-# By default, do not save config options
+# Launch WebKit WebCL only once (not in a loop,) and disable showing the web inspector on launch
+# (default: false)
+launch_once=''
+# Write current options to local config file in this directory (default: false)
 save_options=''
 # Whether or not to reset config files before running (default: false)
 reset_conf=''
@@ -75,23 +76,22 @@ webkit_path=''
 
 # Print a usage/help message to STDOUT
 print_help() {
-	echo "Usage: $(basename "$0") [OPTION] [[<ip>] <port>]"
-	printf "Run a local web server and open WebKit.app to it, so we can test our WebCL code.\n\n" \
+	echo "Usage: $(basename "$0") [OPTION]... [[<ip>] <port>]"
+	printf "Test WebCL programs by serving the current directory over HTTP, and continually \
+opening WebKit WebCL to it until the script is terminated.\n" | fold -s -w 80
+	printf "<port> and <ip> are the port and local IP address the server binds to (defaults to \
+%s:%s). <port> is required if <ip> is present.\n\n" \
 "${default_server_addr}" "${default_server_port}" | fold -s -w 80
 
 	echo "Options:"
-	echo "  <ip>           The local IP address the server listens on (default: ${default_server_addr})"
-	echo "  <port>         The port the server listens on (default: ${default_server_port})"
-    echo "  -D, --dev      Run in development mode (continually re-launch WebKit until"
-	echo "                 script terminated; open Web Inspector at launch)"
-	echo "  -S, --save     Save <ip>:<port> and WebKit path settings for current directory"
-	echo "  -R, --reset    Delete the local and global config files before running"
+    echo "  -1, --once     Don't re-launch WebKit when quit, or show inspector on launch"
+	echo "  -S, --save     Save settings locally to current directory"
+	echo "  -R, --reset    Delete the local and global config files before continuing"
 	echo "  -h, --help     Show this help message and exit"
 
 
-		printf "\nSettings are sourced from local config file '%s' (if present), then user config \
-file '%s'. The path to the WebKit app will be taken from \$WEBKITWEBCL_PATH if found in the \
-environment.\n\n" "$conf_file_local_path" "$conf_file_path" | fold -s -w 80
+	printf "\n\nConfiguration is stored per-directory in .webkitwebcl.conf and user-wide in \
+~/.webkitwebcl.conf.\n" "$conf_file_local_path" "$conf_file_path" | fold -s -w 80
 }
 
 
@@ -123,11 +123,6 @@ get_prefs() {
 			local WEBKITWEBCL_PATH="$(echo "$(cat <<APPCHOOSER
 try
 	set webKitApp to choose application as alias with title "Select WebKit.app" with prompt "Please select WebKit.app"
-
--- 	display dialog "The location of WebKit.app has been set to:
--- " & (POSIX path of webKitApp) & "
---
--- This location will be remembered. To reset it, delete the hidden file '$conf_file_path'." with title "WebKit.app Location Saved" buttons {"OK"} with icon note
 
 	return POSIX path of webKitApp
 on error number -128
@@ -392,7 +387,7 @@ run_site() {
 
 	run_server "$server_addr" "$server_port"
 
-	if [[ $dev_mode ]]; then
+	if [[ -z "$launch_once" ]]; then
 		# Infinitely re-launch WebKit WebCL, until Ctrl+C is called
 		while :
 		do
@@ -454,11 +449,11 @@ while [[ $# -gt 0 ]]; do
 			print_help
 			exit 0
 			;;
-		-D)
-			dev_mode=1
+		-1)
+			launch_once=1
 			;;
-		--dev)
-			dev_mode=1
+		--once)
+			launch_once=1
 			;;
 		-S)
 			save_options=1
