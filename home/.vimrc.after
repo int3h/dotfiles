@@ -280,7 +280,7 @@ endfun
 
 "" All code files
 " Enable 'strip whitespace on save' functionality
-autocmd FileType c,cpp,java,php,ruby,python,javascript autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
+autocmd FileType c,cpp,java,php,ruby,python,javascript,sh autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
 
 "" Superconductor
 au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
