@@ -7,31 +7,28 @@ case $(uname -s) in
 	Linux) export OS='Linux';;
 esac
 
+
 #################################
 ##### PATH setup (dependency of most other commands)
 #################################
 
-# Only add npm to our path if it exists
-[[ -d /usr/local/share/npm/bin ]] && PATH="$PATH:/usr/local/share/npm/bin"
-# Add in Araxis Merge command line utilities if they're installed
-[[ -d "$HOME/bin/araxis" ]] && PATH="$PATH:$HOME/bin/araxis"
-# Add homebrew's path (it's already in the PATH by default, but we need to add
-# it earlier so that its tools overrides the system's tools.)
-[[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
-# Add my personal 'bin' directory
-[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
+## High weight (last added = highest priority)
+	# Morgan Aldridge's tools-osx (https://github.com/morgant/tools-osx or
+	# https://github.com/int3h/tools-osx (my fork))
+	[[ -d "$HOME/Documents/code/tools-osx/bin" ]] && PATH="$HOME/Documents/code/tools-osx/bin:$PATH"
+	# Homebrew (overrides system tools)
+	[[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
+	# Local (to the current dir) npm modules' bins (overrides global npm bins), if npm installed
+	type -t 'npm' >/dev/null && PATH="./node_modules/.bin:$PATH"
+	# My own user bin directory (highest priority)
+	[[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
 
-# Add Morgan Aldridge's tools-osx scripts to the path
-if [[ -d "$HOME/Documents/code/tools-osx/bin" ]]; then
-	PATH="$PATH:$HOME/Documents/code/tools-osx/bin"
-else
-	# tools-osx can be found at https://github.com/morgant/tools-osx (main fork) or
-	# https://github.com/int3h/tools-osx (my own fork).
-	echo "tools-osx not installed in '$HOME/Documents/code/tools-osx/bin'. Not adding to PATH. Download/clone tools-osx and compile it (with \`rake\`) to fix this." >&2
-fi
+## Low weight (last added = lowest priority)
+	# Araxis Merge command line utilities (if they're installed)
+	[[ -d "$HOME/bin/araxis" ]] && PATH="$PATH:$HOME/bin/araxis"
+	# Binaries in the CWD
+	PATH="$PATH:."
 
-# With the lowest weight, execute binaries in the CWD
-PATH="$PATH:."
 
 #################################
 ##### Shell options
