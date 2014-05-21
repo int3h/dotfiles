@@ -55,9 +55,6 @@ case $1 in
 		# Unlink apps from the system directory, where they never should be
 		$prime unlinkapps
 		printf '\n'
-		# Not sure if this is true, but hopefully this command removes any dead symlinks
-		$prime unlinkapps --local
-		printf '\n'
 		# Re-link all the live applications to the user directory
 		$prime linkapps --local
 	;;
