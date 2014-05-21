@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This file defines new Bash commands that are too complicated to be aliases, but too simple to get 
+# their own script file in ~/bin. These commands are defined as functions, and this file is sourced 
+# in ~/.bash_profile so that these functions are available globally in Bash.
+
 # Search for files in <path> (defaults to '.') whose filename includes <name>
 # Usage: findfiles <name> [<path>]
 findfiles() {
@@ -46,4 +50,3 @@ notify () {
     local CMDMSG="${@//$SEARCH/$REPLACE}"
     (eval "$@" && notify-success "Command '$CMDMSG' completed successfully") || notify-failure "Command '$CMDMSG' failed"
 }
-
