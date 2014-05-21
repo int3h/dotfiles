@@ -6,7 +6,7 @@
     editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
 [difftool "sourcetree"]
 	cmd = ~/bin/ksdiff-fixed -w \"$LOCAL\" \"$REMOTE\"
-	path =
+	path = 
 [mergetool "sourcetree"]
 	cmd = ~/bin/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true

@@ -7,3 +7,4 @@ projects/superconductor/webcl/node_modules
 doc/tags
 projects/superconductor/opencl/bin
 *.ipynb
+.webkitwebcl.conf
