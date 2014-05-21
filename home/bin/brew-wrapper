@@ -42,12 +42,24 @@ case $1 in
         $prime linkapps --local
 	;;
 
-    # A command to try to get rid of all of the files brew no longer needs (plus do a linkapps.)
-    clean)
-        $prime cleanup
-        $prime prune
-        trash /Library/Caches/Homebrew
-        $prime linkapps --local
+	# A command to try to get rid of all of the files brew no longer needs (plus do a linkapps.)
+	clean)
+		cleanopts=''
+		[[ "$1" == "--force" ]] && cleanopts="--force"
+		$prime cleanup -s $cleanopts
+		printf '\n'
+		$prime prune
+		printf '\n'
+		# Commented-out because the -s option to clean should do the same thing, but more safely
+		#trash "$(brew --cache)"
+		# Unlink apps from the system directory, where they never should be
+		$prime unlinkapps
+		printf '\n'
+		# Not sure if this is true, but hopefully this command removes any dead symlinks
+		$prime unlinkapps --local
+		printf '\n'
+		# Re-link all the live applications to the user directory
+		$prime linkapps --local
 	;;
 
     # This now will do a `brew update` right before doing an upgrade, so that you always have the
