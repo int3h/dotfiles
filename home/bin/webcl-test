@@ -396,6 +396,15 @@ run_site() {
 			open -W -a "$webkit_path" >/dev/null
 
 			printf "\n%sRelaunching Safari. Press Ctrl+C to stop.%s\n\n" "$message_color" "$reset_color"
+			# Using the '-execute "kill -s INT $$ && pkill -INT -P $$ open"' option, we can make it
+			# so that clicking the notification kills WebKit, instead of activating the terminal,
+			# as we do now. We can alternatively use '-sender "org.webkit.nightly.WebKit"' to make
+			# clicking the notification activate WebKit, and the icon be WebKit's icon. However,
+			# using the '-appIcon "file://..."' option looks crappy, so don't use it.
+			type -t terminal-notifier >/dev/null && \
+				terminal-notifier -message "To stop, terminate $(basename $0) with Ctrl-C." \
+				-title "Reopening WebKit WebCL" -group "webkit-test-loop" \
+				-activate 'com.apple.Terminal' >/dev/null
 		done
 	else
 		webkit_window_bounds=$(run_browser "$ip" "$port" "$webkit_window_bounds")
@@ -410,6 +419,10 @@ run_site() {
 # The code to run when we exit (either by pressing Ctrl+C, or other means)
 on_quit() {
 	printf "\n\n%sExiting...%s\n" "$quit_color" "$reset_color"
+
+	# Clear any Notification Center notifications when we exit
+	type -t terminal-notifier >/dev/null && \
+		terminal-notifier -remove 'webkit-test-loop' >/dev/null
 
 	# The AppleScript to quit WebKit WebCL (called when this script exits)
 	local quit_script="$(cat <<APPLESCRIPT
