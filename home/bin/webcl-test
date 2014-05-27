@@ -348,7 +348,7 @@ on run argv
 		end tell
 	end tell
 
-	if "${dev_mode}" equals "1"
+	if "${launch_once}" is not equal to "1"
 		tell application "System Events"
 			-- set SafariCL to application process "WebKit"
 			-- set frontmost of SafariCL to true
