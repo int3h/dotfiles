@@ -27,7 +27,7 @@ if len(sys.argv) == 2:
         # If we can split the address into two via a ':', do that to get ip and port
         ip, port = addr.split(':')
     if len(addr.split(' ')) == 2:
-        # Also allow the IP and port to be separated by a space (but must be passed in quotes so 
+        # Also allow the IP and port to be separated by a space (but must be passed in quotes so
         # that we see it as one argument.)
         ip, port = addr.split(' ')
     else:
@@ -46,7 +46,6 @@ if port == '':
     port = default_port
 
 
-
 if sys.version_info[0] <= 2:
     import SimpleHTTPServer, BaseHTTPServer
     HandlerClass = SimpleHTTPServer.SimpleHTTPRequestHandler
@@ -57,10 +56,34 @@ else: # Python >= 3
     ServerClass = http.server.HTTPServer
 
 
+class NonCachingHTTPRequestHandler(HandlerClass):
+    """ A SimpleHTTPRequestHandler that also sends no-cache headers
+
+    Behaves exactly as SimpleHTTPRequestHandler does, but sends
+    three headers intended to disable browser caching with every
+    response.
+    """
+
+    def send_response(self, *args, **kwargs):
+        """Send the response header and log the response code.
+
+        We first call SimpleHTTPRequestHandler's send_response() to
+        send standard headers (response code, date, server version).
+        We then send three of our own headers, to disable caching.
+
+        """
+
+        res = HandlerClass.send_response(self, *args, **kwargs)
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        return res
+
+
 server_address = (ip, int(port))
 
 HandlerClass.protocol_version = "HTTP/1.0"
-httpd = ServerClass(server_address, HandlerClass)
+httpd = ServerClass(server_address, NonCachingHTTPRequestHandler)
 
 sa = httpd.socket.getsockname()
 print("Serving HTTP on", sa[0], "port", sa[1], "...\n")
