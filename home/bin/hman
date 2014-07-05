@@ -24,10 +24,18 @@ force_regen=
 try_www=1
 # The folder to store the cached HTML files in
 cache="$HOME/Library/Caches/hman"
-
+# Print extra information
+verbose=
 
 ################################################################################
 # Functions
+
+
+# Prints $1 to STDERR if $verbose is on
+print_verbosely() {
+	[[ $verbose == 1 ]] && wrap "$1" >&2
+}
+
 
 # Gets the section number of a manfile
 #   $1: the path to the manfile
@@ -37,7 +45,7 @@ get_section() {
 }
 
 
-# Gets the name of a manfile 
+# Gets the name of a manfile
 #   $1: the path to the manfile
 # Returns: the name via stdout
 get_name() {
@@ -53,21 +61,36 @@ display_www() {
     # If the manfile is a built-in Mac OS X man file, open it on the Apple website instead of
     # generating a new HTML file locally.
     if [[ $1 =~ ^/usr/share/man/.* ]]; then
+		print_verbosely "Command is a Mac OS X standard command. Attempting to open man page on Apple's developer web portal."
+
         local URL="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/${1#/usr/share/man/}.html"
         check_url $URL
-        if [[ $? -eq 0 ]]; then 
+        if [[ $? -eq 0 ]]; then
+			print_verbosely "Man page found on Apple's developer portal. Opening."
             open "$URL"
             return 0
+		else
+			print_verbosely "Man page NOT found on Apple's developer portal. Will try to generate HTML man page locally."
+			return 2
         fi
-	elif [[ $1 =~ git-[^\/]+\.[0-9]+ ]]; then 
+	fi
+
+	if [[ $1 =~ git-[^\/]+\.[0-9]+ ]]; then
+		print_verbosely "Command is a git command. Attempting to open man page on the Git website."
+
 		local URL="http://git-scm.com/docs/$(echo "$1" | sed 's/.*\(git-[^\/]\{1,\}\)\.[0-9]\{1,\}/\1/')"
         check_url $URL
-        if [[ $? -eq 0 ]]; then 
+        if [[ $? -eq 0 ]]; then
+			print_verbosely "Man page found on Git website. Opening."
             open "$URL"
             return 0
+		else
+			print_verbosely "Man page NOT found on Git website. Will try to generate HTML man page locally."
+			return 3
         fi
     fi
-    return 1
+
+	return 1
 }
 
 
@@ -76,7 +99,7 @@ display_www() {
 #   $2: the path to save generated secondary files (images, etc.)
 # Returns: a string of the HTML via stdout
 generate_html() {
-    # Use groff 
+    # Use groff
     # Enable ALL the pre-processors! (Except grap, that gave me an error.)
     # -t -p -k -e -g -R -s : preprocess with gtbl, gpic, preconv, geqn, ggrn, grefer, gsoelim
     local rawhtml="$(groff -mandoc -t -p -k -e -g -R -s -Txhtml -N -P"-D${2}" "$1")"
@@ -121,6 +144,7 @@ generate_html() {
 get_cached_path() {
     echo "$cache/$(get_section "$1")/$(basename "$1").html"
 }
+
 
 # Gets the path to the cached version of a manfile, if it exists.
 #   $1: the path to the manfile
@@ -191,7 +215,7 @@ only open local copies.)
 USAGEMSG
 )
 
-args=$(getopt :lrh $*)
+args=$(getopt :lrhv $*)
 if [[ $? != 0 ]]; then
     echo -e "Error: unknown option used\n\n${usage}" >&2
     exit 1
@@ -213,6 +237,10 @@ for arg; do
             echo "$usage"
             exit 0
             ;;
+		-v)
+			verbose=1
+			shift
+			;;
         --)
             shift
             break
@@ -232,6 +260,9 @@ manfile="$(man -w $2 "$1")"
 
 # If the command is a Bash builtin, display `help` instead of a HTML manpage
 if [[ "$(basename $manfile)" == 'builtin.1' ]]; then
+	print_verbosely "Command is a Bash built-in. Showing \`help\` instead of man page."
+	print_verbosely '-----------------------------------------------------------------'
+	print_verbosely ''
     help "$@"
     exit
 fi
@@ -245,13 +276,17 @@ fi
 
 
 # If the file is already cached, then just open the cached version
-cached=$(get_cached $manfile)
+html_file_path=$(get_cached $manfile)
 if [[ $? == 0 ]]; then
-    open "$cached"
+	print_verbosely "Opening cached HTML man page: $html_file_path"
 else
     # Otherwise, write to cache the HTML version of the manfile and open that
     other_files=$(mktemp -d -t hman)
-    open "$(write_cache "$manfile" "$(generate_html "$manfile" "$other_files")" "$other_files")"
+	html_file_path="$(write_cache "$manfile" "$(generate_html "$manfile" "$other_files")" "$other_files")"
     rm -rf "$other_files" 2>&1 >/dev/null
+
+	print_verbosely "Generated new HTML man page to: $html_file_path"
 fi
+
+open "$html_file_path"
 
