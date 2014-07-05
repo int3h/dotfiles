@@ -143,6 +143,8 @@ case $- in
 
     ########## Prompt config
 
+	COLOR_RESET="\e[0m"
+
 	case "$TERM" in
 		screen*)
 			PROMPT_COLOR="\e[1m\e[48;5;6m\e[38;5;227m"
@@ -155,15 +157,15 @@ case $- in
 	esac
 
 
-    # The below version adds more '$' for every level deeper the shell is nested
-    export PS1="\[$PROMPT_COLOR\]\u@\H (\w)$(eval "printf '\\$%.0s' {1..$NUM_PROMPTS}")\[\e[0m\] "
+	# The below version adds more '$' for every level deeper the shell is nested
+    export PS1="\[${COLOR_RESET}${PROMPT_COLOR}\]\u@\H (\w)$(eval "printf '\\$%.0s' {1..$NUM_PROMPTS}")\[${COLOR_RESET}\] "
     # The below version adds '[n]' before the '$' if the shell is nested, where n is the nesting level
     #export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
 
     # Kinda hacky way to indent PS2 to the same level as PS1: we make PS2 virtually the same as PS1,
     # however we insert a command to clear the printed text ('tput el1') right before we print the
     # prompt seperator character ('>') so that we erase the username+PWD but retain the cursor position
-    export PS2="\[$PROMPT_COLOR\]\u (\W)\[$(tput el1)$PROMPT_COLOR\]$(eval "printf '>%.0s' {1..$NUM_PROMPTS}")\[\e[0m\] "
+    export PS2="\u@\H(\w)[$(tput el1)$PROMPT_COLOR\]$(eval "printf '>%.0s' {1..$NUM_PROMPTS}")\[${COLOR_RESET}\] "
 
     # Set terminal title to user@host:dir
     export PS1="\[\e]0;\w\a\]$PS1"
