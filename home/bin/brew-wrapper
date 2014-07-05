@@ -44,18 +44,30 @@ case $1 in
 
 	# A command to try to get rid of all of the files brew no longer needs (plus do a linkapps.)
 	clean)
+		# TODO: Accept '-n' option to show what we would do without actually executing it
 		cleanopts=''
-		[[ "$1" == "--force" ]] && cleanopts="--force"
+		force=''
+		[[ "$2" == "--force" ]] && cleanopts=" --force" && force=1
+		printf 'Running `brew cleanup -s%s`\n' "$cleanopts" >&2
+		printf '=====================\n' >&2
 		$prime cleanup -s $cleanopts
-		printf '\n'
+
+		printf '\nPruning dead symlinks from Homebrew prefix\n' >&2
+		printf '=====================\n' >&2
 		$prime prune
-		printf '\n'
-		# Commented-out because the -s option to clean should do the same thing, but more safely
-		#trash "$(brew --cache)"
+
+		printf '\nManually trashing Homebrew cache directory\n' >&2
+		printf '=====================\n' >&2
+		trash "$(brew --cache)"
+
 		# Unlink apps from the system directory, where they never should be
+		printf '\nUnlinking any Homebrew .app files linked in /Applications\n' >&2
+		printf '=====================\n' >&2
 		$prime unlinkapps
-		printf '\n'
+
 		# Re-link all the live applications to the user directory
+		printf '\n(Re-)linking Homebrew installed .app files to ~/Applications\n' >&2
+		printf '=====================\n' >&2
 		$prime linkapps --local
 	;;
 
