@@ -136,11 +136,13 @@ case $- in
     # Kinda hacky way to indent PS2 to the same level as PS1: we make PS2 virtually the same as PS1,
     # however we insert a command to clear the printed text ('tput el1') right before we print the
     # prompt seperator character ('>') so that we erase the username+PWD but retain the cursor position
-    export PS2="\[$PROMPT_COLOR\]\u (\W)\[$(tput el1)$PROMPT_COLOR\]$(eval "printf '>%.0s' {1..$SHLVL}")\[\e[0m\] "
+    export PS2="\[$PROMPT_COLOR\]\u (\w)\[$(tput el1)$PROMPT_COLOR\]$(eval "printf '>%.0s' {1..$SHLVL}")\[\e[0m\] "
     unset PROMPT_COLOR
 
-    # Set terminal title to user@host:dir
-    export PS1="\[\e]0;\w\a\]$PS1"
+	# Set the tab name in Terminal.app to the basename of PWD
+	[[ $OS == 'Mac' ]] && PS1="\[\e]1;\W\a\]${PS1}"
+	# Change '1' to {2,1} to set {window,tab+window} title. /etc/bashrc already sends PWD to
+	# Terminal.app via $PROMPT_COMMAND, which sets the file breadcrumb in the title bar.
 
     [ -x ~/mac-scripts/launchd-update-homebrew.sh ] && ~/mac-scripts/launchd-update-homebrew.sh display
 
