@@ -174,5 +174,20 @@ case $- in
     unset PROMPT_COLOR
     unset NUM_PROMPTS
 
+
+    ########## Launch tmux by default
+	if type -t tmux 2>&1 >/dev/null && test -z "$TMUX"; then
+		tmux new-session -A -s "$USER"
+	fi
+
+	########## Print MOTD when we start a shell in TMUX
+	if [[ $TMUX ]] ; then
+		printf '\e[38;5;240m'
+		cat /run/motd.dynamic
+		# Print last login info using our `lastlog` formatter
+		[[ $(type -t lastlogin) ]] && lastlogin || lastlog -u mtorok | tail -n 1
+		printf '\e[0m\n'
+	fi
+
     ;;
 esac
