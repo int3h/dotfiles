@@ -168,7 +168,8 @@ case $- in
     export PS2="\u@\H(\w)[$(tput el1)$PROMPT_COLOR\]$(eval "printf '>%.0s' {1..$NUM_PROMPTS}")\[${COLOR_RESET}\] "
 
     # Set terminal title to user@host:dir
-    export PS1="\[\e]0;\w\a\]$PS1"
+	# FIXME: This doesn't seem to work (does not set Terminal.app title thorugh SSH session)
+    #export PS1="\[\e[0;\w\a\]$PS1"
 
     unset PROMPT_COLOR
     unset NUM_PROMPTS
