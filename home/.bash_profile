@@ -13,21 +13,21 @@ esac
 #################################
 
 ## High weight (last added = highest priority)
-	# Morgan Aldridge's tools-osx (https://github.com/morgant/tools-osx or
-	# https://github.com/int3h/tools-osx (my fork))
-	[[ -d "$HOME/Documents/code/tools-osx/bin" ]] && PATH="$HOME/Documents/code/tools-osx/bin:$PATH"
-	# Homebrew (overrides system tools)
-	[[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
-	# Local (to the current dir) npm modules' bins (overrides global npm bins), if npm installed
-	type -t 'npm' >/dev/null && PATH="./node_modules/.bin:$PATH"
-	# My own user bin directory (highest priority)
-	[[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
+
+# Homebrew (overrides system tools)
+[[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
+# Local (to the current dir) npm modules' bins (overrides global npm bins), if npm installed
+type -t 'npm' >/dev/null && PATH="./node_modules/.bin:$PATH"
+# My own user bin directory (highest priority)
+[[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
+
 
 ## Low weight (last added = lowest priority)
-	# Araxis Merge command line utilities (if they're installed)
-	[[ -d "$HOME/bin/araxis" ]] && PATH="$PATH:$HOME/bin/araxis"
-	# Binaries in the CWD
-	PATH="$PATH:."
+
+# Araxis Merge command line utilities (if they're installed)
+[[ -d "$HOME/bin/araxis" ]] && PATH="$PATH:$HOME/bin/araxis"
+# Binaries in the CWD
+PATH="$PATH:."
 
 
 #################################
