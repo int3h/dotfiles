@@ -5,7 +5,7 @@ alias lsx='ls -lAOphe@'
 
 alias make='make -j 2'
 
-alias xargs='xargs -I {}'
+alias xargs='xargs -0 -I {}'
 
 alias fgrep='grep -Fi'
 
