@@ -7,7 +7,7 @@ alias make='make -j 2'
 
 alias xargs='xargs -I {}'
 
-alias fg='fgrep -i'
+alias fgrep='grep -Fi'
 
 # Fat fingers
 alias sudp='sudo'
