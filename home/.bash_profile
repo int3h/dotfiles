@@ -102,6 +102,9 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 # Set SpiderOak to use non-themed Qt widgets
 export SPIDEROAK_UI_STYLE=native
 
+# Add in Grunt completions
+type -t grunt >/dev/null && eval "$(grunt --completion=bash)"
+
 
 #################################
 ##### Source secondary config files
