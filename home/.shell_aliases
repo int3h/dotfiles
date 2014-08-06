@@ -11,6 +11,7 @@ alias fg='fgrep -i'
 
 # Fat fingers
 alias sudp='sudo'
+alias la='ls -lAOph'
 
 export INST="sphere.cs.berkeley.edu"
 
