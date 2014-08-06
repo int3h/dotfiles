@@ -447,3 +447,18 @@ c.NotebookApp.enable_mathjax = True
 
 # The directory to use for notebooks.
 c.NotebookManager.notebook_dir = u'/Users/mtorok/.ipython/notebooks'
+
+c.IPKernelApp.matplotlib = 'inline'
+c.InlineBackend.figure_formats = {'svg', 'retina'}
+c.InlineBackend.rc = {'font.size': 10,
+    'figure.figsize': (10.0, 6.0),
+    'figure.facecolor': (1, 1, 1, 0),
+    'savefig.dpi': 72,
+    'figure.subplot.bottom': 0.125,
+    'figure.edgecolor': (1, 1, 1, 0),
+    'axes.facecolor': (0.93, 0.93, 0.93, 1),
+    'axes.edgecolor': (0.7, 0.7, 0.7, 1),
+    'xtick.color': (0.7, 0.7, 0.7, 1),
+    'xtick.labelsize': 8,
+    'ytick.color': (0.7, 0.7, 0.7, 1),
+    'ytick.labelsize': 8}
