@@ -9,6 +9,9 @@ alias xargs='xargs -I {}'
 
 alias fgrep='grep -Fi'
 
+alias psa='ps -Axww -o pid,user,cpu,command'
+alias psal='ps -Axww -o pid,user,cpu,command | less -S'
+
 # Fat fingers
 alias sudp='sudo'
 alias la='ls -lAOph'
