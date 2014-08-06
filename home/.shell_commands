@@ -58,3 +58,12 @@ if type -t aspell>/dev/null; then
 		echo "$@" | aspell pipe | grep -v 'but really Aspell'
 	}
 fi
+
+
+# Grep for a process name and show the results
+psgrep() {
+	search_term="$*"
+	procs="$(command ps -Axww -o pid,user,command)"
+	echo "$procs" | head -n 1
+	echo "$procs" | grep -i "[${search_term:0:1}]${search_term:1}"
+}
