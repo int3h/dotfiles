@@ -91,7 +91,7 @@ if hash mvim 2>/dev/null; then
     export VISUAL='mvim -f'
 fi
 
-[ -f $BREW_PREFIX/etc/bash_completion ] &&. $BREW_PREFIX/etc/bash_completion
+[ -f $BREW_PREFIX/etc/bash_completion ] && . $BREW_PREFIX/etc/bash_completion
 
 export RBENV_ROOT=/usr/local/var/rbenv
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
