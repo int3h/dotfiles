@@ -315,6 +315,7 @@ let g:syntastic_opencl_checkers = ['openclc']
 """"""" NERDTree {{{1
 if janus#is_plugin_enabled("nerdtree")
 	call add(NERDTreeIgnore, '\.tmp$')
+	call add(NERDTreeIgnore, '\.DS_Store$')
 	let NERDTreeChDirMode=2
 	let NERDTreeShowLineNumbers=0
 	let NERDTreeStatusline=' '
