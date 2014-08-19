@@ -361,16 +361,21 @@ if janus#is_plugin_enabled("ctrlp")
 		\ 'dir': '\v[\/](\.(git|hg|svn)$\|node_modules$)'
 	\ }
 
-	" Use <C-p> as 'search buffers' mode (<C-t> is alreadt set to 'search
-	" files' mode by Janus)
+	" Use <Cmd-p> as 'search buffers+files+mru' mode
 	map <silent> <D-p> :CtrlPMixed <CR>
 	imap <silent> <D-p> <ESC>:CtrlPMixed <CR>
 
+	" Map <Cmd-Shift-p> to 'search MRU' mode
 	map <silent> <D-P> :CtrlPMRU <CR>
 	imap <silent> <D-P> <ESC>:CtrlPBuffer <CR>
 
-	map <silent> π :CtrlPMRU <CR>
-	imap <silent> π <ESC>:CtrlPMRU <CR>
+	" Map <Option-p> to 'search buffers' mode
+	map <silent> π :CtrlPBuffer <CR>
+	imap <silent> π <ESC>:CtrlPBuffer <CR>
+
+	" Map <Option-Shift-p> to 'search files' mode
+	map <silent> ∏ :CtrlP <CR>
+	imap <silent> ∏ <ESC>:CtrlP <CR>
 endif
 
 
