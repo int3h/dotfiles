@@ -408,6 +408,7 @@ if exists("g:loaded_session")
 	" After loading a session, find the active file in NERDTree, if it's open
 	augroup MTorok
 		autocmd SessionLoadPost * call s:syncNerdTree()
+		autocmd VimEnter * call s:CloseSessionBuffer()
 	augroup END
 
 	" Reveal in NERDTree any open files within its current path This prevents
@@ -433,6 +434,20 @@ if exists("g:loaded_session")
 			endif
 
 		endif
+	endfunction
+
+	function s:CloseSessionBuffer()
+		"if exists("s:closedSessionBuffer") == 0
+			let s:closedSessionBuffer = 1
+			let l:sessionName = xolox#session#find_current_session()
+			if l:sessionName != ""
+				let l:sessionPath = xolox#session#name_to_path(l:sessionName)
+				if bufname(l:sessionPath) != ""
+					bd bufname(l:sessionPath)
+				endif
+			endif
+
+		"endif
 	endfunction
 endif
 
