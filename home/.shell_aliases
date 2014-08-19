@@ -43,3 +43,5 @@ alias castle='cd $(homesick show_path)'
 # Check an OpenCL file for compilation errors. (Preprocesses, compiles, and assembles the file, with
 # all warnings, and discards the generated file.)
 alias opencl-check='/System/Library/Frameworks/OpenCL.framework/Versions/A/Libraries/openclc -c -x cl -cl-std=CL1.1 -Weverything -o /dev/null'
+
+alias bashrc='mvim ~/.bash_profile'
