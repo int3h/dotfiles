@@ -18,8 +18,6 @@ esac
 #[[ -d $HOME/anaconda/bin ]] && PATH="$HOME/anaconda/bin:$PATH"
 # Homebrew (overrides system tools)
 [[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
-# Local (to the current dir) npm modules' bins (overrides global npm bins), if npm installed
-type -t 'npm' >/dev/null && PATH="./node_modules/.bin:$PATH"
 # My own user bin directory (highest priority)
 [[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
 
@@ -66,6 +64,40 @@ export HISTFILE=~/.shell_history
 shopt -s histappend;
 # Save each command when the prompt is re-displayed, rather than only at shell exit
 PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
+
+
+# Add non-globally installed npm modules' bins to $PATH while you're in install dir or subdir
+# Example: in ~/Documents/my-js-project, do `npm install jshint`. `jshint` will be available in your
+# path while you're in this dir or a subdir. When you leave, the bin will be removed from your path.
+if type -t 'npm' >/dev/null; then
+	__npm_local_bin_path=""
+
+	add_npm_to_path() {
+		local npmRoot="$(npm root)/.bin"
+
+		# If the new npm bin path matches the old path, then nothing needs to be done
+		if [[ $npmRoot == $__npm_local_bin_path ]]; then return; fi
+
+		# Remove old npm bin path from $PATH, if we previously added it
+		if [[ -n "$__npm_local_bin_path" ]]; then
+			PATH="${PATH/":${__npm_local_bin_path}"/}"
+			__npm_local_bin_path=""
+		fi
+
+		# If there's an npm bin path for the current dir, add that to the path
+		if [[ -d "${npmRoot}" ]]; then
+			PATH="$PATH:${npmRoot}"
+			__npm_local_bin_path="${npmRoot}"
+		fi
+
+		export PATH
+		export __npm_local_bin_path
+	}
+
+	PROMPT_COMMAND="${PROMPT_COMMAND}; add_npm_to_path"
+	export PROMPT_COMMAND
+	export __npm_local_bin_path
+fi
 
 
 #################################
