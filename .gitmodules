@@ -43,3 +43,6 @@
 [submodule "home/.janus/vim-indent-guides"]
 	path = home/.janus/vim-indent-guides
 	url = git@github.com:nathanaelkane/vim-indent-guides.git
+[submodule "home/.janus/auto-pairs"]
+	path = home/.janus/auto-pairs
+	url = git@github.com:jiangmiao/auto-pairs.git
