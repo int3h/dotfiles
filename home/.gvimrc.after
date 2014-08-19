@@ -5,6 +5,13 @@ set guifont=InputMonoPowerline:h11
 "set guifont=Inconsolata:h11			 " Decent font.
 
 colorscheme jellybeans+
+" jellybeans doesn't set highlighting of concealed elements, so link them to keyword highlighting
+" (we use `hi` instead of `hi!` so that the link won't be made if Conceal already has highlighting)
+hi clear Conceal
+hi! link Conceal Underlined
+"hi Conceal gui=bold,underline ctermfg=103 guifg=#8197bf
+"	guibg=#2A2733
+
 "set background=light
 "colorscheme solarized
 

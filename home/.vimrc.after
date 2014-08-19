@@ -290,8 +290,11 @@ let g:is_posix = 1
 
 "" JavaScript
 " Turn on HTML/DOM highlighting in JavaScript files
-au FileType javascript setlocal expandtab
+au FileType javascript setlocal expandtab "conceallevel=1 concealcursor=ncv
 let javascript_enable_domhtmlcss = 1
+" Replace certain JS keywords ('function', 'null', etc.) with symbols
+let g:javascript_conceal = 1
+let javascript_ignore_javaScriptdoc=1
 
 "" OpenCL
 " Check OpenCL syntax using Apple's OpenCL compiler
