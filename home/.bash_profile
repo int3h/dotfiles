@@ -29,7 +29,7 @@ type -t 'npm' >/dev/null && PATH="./node_modules/.bin:$PATH"
 # Araxis Merge command line utilities (if they're installed)
 [[ -d "$HOME/bin/araxis" ]] && PATH="$PATH:$HOME/bin/araxis"
 # Binaries in the CWD
-PATH="$PATH:."
+export PATH="$PATH:."
 
 
 #################################
@@ -100,9 +100,6 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # Initialize 'autojump' utility
 [[ -s $BREW_PREFIX/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
-
-# Set SpiderOak to use non-themed Qt widgets
-export SPIDEROAK_UI_STYLE=native
 
 # Add in Grunt completions
 type -t grunt >/dev/null && eval "$(grunt --completion=bash)"
