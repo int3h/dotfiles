@@ -353,6 +353,11 @@ if janus#is_plugin_enabled("ctrlp")
 	let g:ctrlp_root_markers=['.ctrlproot']
 	let g:ctrlp_open_new_file = 'r'
 
+	let g:ctrlp_custom_ignore = {
+		\ 'file': '\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
+		\ 'dir': '\v[\/](\.(git|hg|svn)$\|node_modules$)'
+	\ }
+
 	" Use <C-p> as 'search buffers' mode (<C-t> is alreadt set to 'search
 	" files' mode by Janus)
 	map <silent> <D-p> :CtrlPMixed <CR>
