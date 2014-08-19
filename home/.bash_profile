@@ -14,6 +14,8 @@ esac
 
 ## High weight (last added = highest priority)
 
+# added by Anaconda 2.0.1 installer
+#[[ -d $HOME/anaconda/bin ]] && PATH="$HOME/anaconda/bin:$PATH"
 # Homebrew (overrides system tools)
 [[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
 # Local (to the current dir) npm modules' bins (overrides global npm bins), if npm installed
