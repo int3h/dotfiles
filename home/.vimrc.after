@@ -458,4 +458,11 @@ if exists('g:loaded_indent_guides')
 endif
 
 
+""""""" auto-pairs {{{1
+if exists('g:AutoPairsLoaded')
+	" Don't center the line in the window when inserting an autopair
+	let g:AutoPairsCenterLine = 0
+endif
+
+
 " vim: set tabstop=4 shiftwidth=4 textwidth=78 noexpandtab foldmethod=marker filetype=vim:
