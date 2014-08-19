@@ -435,4 +435,19 @@ if exists("g:loaded_numbers")
 	let g:numbers_exclude += ["help"]
 endif
 
+
+""""""" vim-indent-guides {{{1
+if exists('g:loaded_indent_guides')
+	" Enable indent guides by default
+	" (This needs to be enabled in .vimrc.before to work, so it's commented out here)
+	"let g:indent_guides_enable_on_vim_startup = 1
+
+	" Don't use indent guides on help, nerdtree windows
+	let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
+	let g:indent_guides_start_level = 2
+	" Make them only 1 column wide, rather than as wide as shiftwidth
+	let g:indent_guides_guide_size = 1
+endif
+
+
 " vim: set tabstop=4 shiftwidth=4 textwidth=78 noexpandtab foldmethod=marker filetype=vim:

@@ -15,3 +15,9 @@ call janus#disable_plugin('vroom')
 " Enable Powerline
 set encoding=utf-8
 set rtp+=/usr/local/lib/python2.7/site-packages/powerline/bindings/vim/
+
+" Enable indent guides by default (this must be set in .vimrc.before; even .gvimrc.before won't do)
+if has("gui_macvim") && has("gui_running")
+	let g:indent_guides_enable_on_vim_startup = 1
+endif
+
