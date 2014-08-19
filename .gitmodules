@@ -1,9 +1,6 @@
 [submodule "home/.janus/YouCompleteMe"]
 	path = home/.janus/YouCompleteMe
 	url = git@github.com:Valloric/YouCompleteMe.git
-[submodule "home/.janus/delimitMate"]
-	path = home/.janus/delimitMate
-	url = git@github.com:Raimondi/delimitMate.git
 [submodule "home/.janus/editorconfig-vim"]
 	path = home/.janus/editorconfig-vim
 	url = git@github.com:editorconfig/editorconfig-vim.git
