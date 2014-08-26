@@ -29,6 +29,9 @@ alias tnew='tmux new -s'
 # Connct to an existing tmux session with a given name
 alias topen='tmux a -t'
 
+# Show public IP address
+alias whatismyip='wget -qO- http://ipecho.net/plain ; echo'
+
 #################################
 ##### Ubuntu default setup
 #################################
