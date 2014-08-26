@@ -143,22 +143,23 @@ case $- in
 
     ########## Prompt config
 
-	COLOR_RESET="\e[0m"
+	COLOR_RESET="$(tput sgr0)"
 
 	case "$TERM" in
 		screen*)
-			PROMPT_COLOR="\e[1m\e[48;5;6m\e[38;5;227m"
+			PROMPT_COLOR="${COLOR_RESET}$(tput bold)$(tput setab 33)"
 			NUM_PROMPTS="$((SHLVL - 1))"
 			;;
 		*)
-			PROMPT_COLOR="\e[1m\e[48;5;6m"
+			PROMPT_COLOR="${COLOR_RESET}$(tput bold)$(tput setab 33)"
+			#PROMPT_COLOR="${COLOR_RESET}$(tput bold)$(tput setab 6)"
 			NUM_PROMPTS=$SHLVL
 			;;
 	esac
 
 
 	# The below version adds more '$' for every level deeper the shell is nested
-    export PS1="\[${COLOR_RESET}${PROMPT_COLOR}\]\u@\H (\w)$(eval "printf '\\$%.0s' {1..$NUM_PROMPTS}")\[${COLOR_RESET}\] "
+    export PS1="\[${PROMPT_COLOR}\]\u@\H (\w)$(eval "printf '\\$%.0s' {1..$NUM_PROMPTS}")\[${COLOR_RESET}\] "
     # The below version adds '[n]' before the '$' if the shell is nested, where n is the nesting level
     #export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
 
