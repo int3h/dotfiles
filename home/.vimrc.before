@@ -14,4 +14,3 @@ call janus#disable_plugin('vroom')
 
 " Enable Powerline
 set encoding=utf-8
-set rtp+=/home/mtorok/.local/lib/python2.7/site-packages/powerline/bindings/vim/
