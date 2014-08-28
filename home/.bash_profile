@@ -19,7 +19,7 @@ esac
 # it earlier so that its tools overrides the system's tools.)
 [[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
 # Add my personal 'bin' directory
-[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
+[ -d "$HOME/bin" ] && PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 # With the lowest weight, execute binaries in the CWD
 PATH="$PATH:."
 
@@ -144,14 +144,19 @@ case $- in
     ########## Prompt config
 
 	COLOR_RESET="$(tput sgr0)"
+	if type -t hashcolor >/dev/null 2>&1; then
+		hashedColor=($(hashcolor $HOSTNAME))
+		PROMPT_COLOR="${COLOR_RESET}$(tput bold)$(tput setab ${hashedColor[0]})$(tput setaf ${hashedColor[1]})"
+		unset hashedColor
+	else
+		PROMPT_COLOR="${COLOR_RESET}$(tput bold)$(tput setab 33)"
+	fi
 
 	case "$TERM" in
 		screen*)
-			PROMPT_COLOR="${COLOR_RESET}$(tput bold)$(tput setab 33)"
 			NUM_PROMPTS="$((SHLVL - 1))"
 			;;
 		*)
-			PROMPT_COLOR="${COLOR_RESET}$(tput bold)$(tput setab 33)"
 			#PROMPT_COLOR="${COLOR_RESET}$(tput bold)$(tput setab 6)"
 			NUM_PROMPTS=$SHLVL
 			;;

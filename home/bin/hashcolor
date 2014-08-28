@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+from __future__ import division, absolute_import, print_function, unicode_literals
+import hashlib, math, sys, os
+
+
+def termToRgb(colorCode):
+    """ Translates an xterm 256 color code (given as an int in range [0,255]) to an r,g,b tuple """
+    # basicColors = [0, 8388608, 32768, 8421376, 128, 8388736, 32896, 12632256, ]
+    if colorCode < 16:
+        raise ValueError("Color codes from 0-15 are ANSI basic colors, which we currently don't support converting to rgb")
+    elif colorCode < 232:
+        # colorCode = 16 + 36*r + 6*g + b, 0 <= r,g,b <= 5
+        # r, b, and b are then mapped onto rgbMultiples to get their [0,255] color value
+        colorCode = colorCode - 16
+        r = colorCode // 36
+        g = (colorCode % 36) // 6
+        b = (colorCode % 36) % 6
+        rgbMultiples = [0, 95, 135, 175, 215, 255]
+        return rgbMultiples[r], rgbMultiples[g], rgbMultiples[b]
+    elif colorCode < 255:
+        grey = 8 + (colorCode - 232) * 10
+        return grey, grey, grey
+    else:
+        raise ValueError("Color code is out of range of valid xterm-256 colors (must be within 0-255, inclusive)")
+
+
+def isBright(r, g, b):
+    """ Calculates the perceived brightness of a color (given as r,g,b from 0-255)
+    and returns True if it's 'bright' (by some arbitrary threshold.) """
+    brightness = math.sqrt((0.299*r*r) + (0.587*g*g) + (0.114*b*b))
+    if brightness > 180:
+        return True
+    else:
+        return False
+
+
+def nameToColor(name):
+    """ Given a string name, returns a tuple of (background, foreground) xterm-256 color codes """
+    # Get the md5 hash of name, and turn the first 2 bytes into an int to get xterm-256 color code
+    colorCode = int(hashlib.md5(name).hexdigest()[0:2],16)
+    if colorCode < 16:
+        # colors 0-15 are basic ANSI colors. By inspection, 11, 12, 14 and 15 are
+        # bright enough to need a black foreground
+        if colorCode == 11 or colorCode == 12 or colorCode == 14 or colorCode == 15:
+            return colorCode, 0
+        else:
+            # The other basic colors get a white foreground
+            return colorCode, 231
+    else:
+        r, g, b = termToRgb(colorCode)
+        if(isBright(r,g,b)):
+            # Black foreground for 'bright' colors
+            return colorCode, 0
+        else:
+            # White foreground for 'dark' colors
+            return colorCode, 231
+
+
+if __name__ == "__main__":
+    if len(sys.argv) == 2 and (sys.argv[1] == "-h" or sys.argv[1] == "--help"):
+        print("""Usage: {} [-h|--help] <string>
+
+Hashes <string> to xterm-256 color codes for the foreground and background
+colors, and prints them to stdout (separated by a space).""".format(os.path.basename(sys.argv[0])),
+            file=sys.stderr)
+        sys.exit(0)
+    elif len(sys.argv) < 2:
+        print("15 0")
+    else:
+        name = " ".join(sys.argv[1:])
+        bg, fg = nameToColor(name)
+        print("{} {}".format(bg, fg))
