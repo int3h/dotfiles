@@ -3,11 +3,12 @@
 	"segments": {
 		"left": [
 			{
-				"name": "virtualenv"
+				"name": "virtualenv",
+				"priority": 10
 			},
 			{
 				"type": "string",
-				"contents": "In[",
+				"contents": "In [",
 				"draw_soft_divider": false,
 				"highlight_group": ["prompt"]
 			},
