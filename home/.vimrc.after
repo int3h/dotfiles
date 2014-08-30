@@ -340,6 +340,16 @@ if janus#is_plugin_enabled("buffergator")
 	let g:buffergator_viewport_split_policy="R"
 	" Don't expand the GUI window when opening the buffer list
 	let g:buffergator_autoexpand_on_split=0
+	" Auto-update the list of open buffers
+	let g:buffergator_autoupdate=1
+	" Sort the buffers by most recently used
+	let g:buffergator_sort_regime="mru"
+	" Show relative, not full, paths of the buffers
+	let g:buffergator_show_full_directory_path=0
+	" Calculate MRU based off of all windows, not per-window
+	let g:buffergator_mru_cycle_local_to_window=0
+	" Set the width of its vsplit window to 32
+	let g:buffergator_vsplit_size=32
 endif
 
 
