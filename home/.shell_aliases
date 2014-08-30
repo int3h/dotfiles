@@ -47,3 +47,11 @@ alias opencl-check='/System/Library/Frameworks/OpenCL.framework/Versions/A/Libra
 alias bashrc='mvim ~/.bash_profile'
 
 alias defs='defaults read'
+
+alias findlib="find $HOME/Library \
+\( -not -path '$HOME/Library/Mail/*' -not -path '$HOME/Library/Application Support/Google/Chrome*/Default/File System/*' \
+-not -path '$HOME/Library/Application Support/Google/Chrome*/Default/IndexedDB/*' \
+-not -path '$HOME/Library/Application Support/Google/Chrome*/Default/Local Storage/*' \
+-not -path '$HOME/Library/Application Support/Google/Chrome*/Default/Pepper Data/*' \
+-not -path '$HOME/Library/Calendars/*' \) \
+-iname "
