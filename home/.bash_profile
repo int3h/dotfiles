@@ -148,8 +148,38 @@ type -t grunt >/dev/null && eval "$(grunt --completion=bash)"
 #################################
 ##### Interactive mode config
 #################################
+
+__SHORTENED_PWD=""
+# Changes $PROMPT_DIRTRIM so that '\w' is $PS1 is a reasonable length for the terminal width
+function resize_prompt_dirtrim() {
+	# Only evaluate if we've changed directories since the last time we evaluated
+	if [ "$__SHORTENED_PWD" == "$PWD" ]; then
+		return
+	fi
+
+	# The maximum % of columns $PWD should be (0-100%).
+	local PWD_WIDTH_MAX=40
+	# Max # of characters PWD, given the user-set PWD % (take off 4 chars to account for '/...' in
+	# the dirtrim'ed PWD.)
+	local maxLength="$(( ( ( $COLUMNS * $PWD_WIDTH_MAX ) / 100 ) - 4 ))"
+
+	# Turn $HOME in PWD into '~'
+	local pwdHomed="${PWD/#$HOME/\~\/}"
+	# Trim PWD to have the maximum desired characters, taken from the end
+	local pwdDesired="${pwdHomed:(-$maxLength)}"
+	# Delete all non '/' characters from PWD
+	local numPaths="${pwdDesired//[^\/]}"
+	# Count how many '/' characters there were in PWD (a rough estimate of how many directories
+	# there were in our trimmed PWD) and set $PROMPT_DIRTRIM to this number
+	PROMPT_DIRTRIM="${#numPaths}"
+	__SHORTENED_PWD="$PWD"
+}
+
+
 case $- in
 *i*)
+	export PROMPT_COMMAND="$PROMPT_COMMAND; resize_prompt_dirtrim"
+
     export CLICOLOR=1
     #export LSCOLORS=ExFxCxDxBxegedabagacad
 
@@ -162,15 +192,17 @@ case $- in
 	PROMPT_RESET="$(tput sgr0)"
 	PROMPT_COLOR="${PROMPT_RESET}$(tput bold)$(tput setab 2)"
 
+	PROMPT_DIRTRIM=3
+
     # The below version adds more '$' for every level deeper the shell is nested
-    export PS1="\[${PROMPT_COLOR}\]\u (\w)$(eval "printf '\\$%.0s' {1..$SHLVL}")\[${PROMPT_RESET}\] "
+	export PS1="\[${PROMPT_COLOR}\]\u (\w)$(eval "printf '\\$%.0s' {1..$SHLVL}")\[${PROMPT_RESET}\] "
     # The below version adds '[n]' before the '$' if the shell is nested, where n is the nesting level
     #export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
 
     # Kinda hacky way to indent PS2 to the same level as PS1: we make PS2 virtually the same as PS1,
     # however we insert a command to clear the printed text ('tput el1') right before we print the
     # prompt seperator character ('>') so that we erase the username+PWD but retain the cursor position
-    export PS2="\[${PROMPT_COLOR}\]\u (\w)\[$(tput el1)$PROMPT_COLOR\]$(eval "printf '>%.0s' {1..$SHLVL}")\[${PROMPT_RESET}\] "
+	export PS2="\[${PROMPT_COLOR}\]\u (\w)\[$(tput el1)$PROMPT_COLOR\]$(eval "printf '>%.0s' {1..$SHLVL}")\[${PROMPT_RESET}\] "
     unset PROMPT_COLOR
 	unset PROMPT_RESET
 
