@@ -55,3 +55,6 @@ alias findlib="find $HOME/Library \
 -not -path '$HOME/Library/Application Support/Google/Chrome*/Default/Pepper Data/*' \
 -not -path '$HOME/Library/Calendars/*' \) \
 -iname "
+
+# Show public IP address
+alias whatismyip="curl -s 'http://ipecho.net/plain' && echo"
