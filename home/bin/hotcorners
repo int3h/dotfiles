@@ -1,0 +1,125 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+# For command line argument parsing + help message
+import argparse
+# For printing to stderr
+from sys import stderr, exit
+# For working with the saved_state file
+import os
+# For running `defaults`
+import subprocess
+
+################################################################################
+# Global config vargs
+################################################################################
+config_file_path = '~/.config/hotcorners.saved'
+config_realpath = os.path.abspath(os.path.expanduser(config_file_path))
+config_dir = os.path.dirname(config_realpath)
+
+prefs = ('wvous-tr-corner', 
+         'wvous-bl-corner',
+         'wvous-br-corner',
+         'wvous-tl-corner')
+
+file_header="# This file contains the previous state of OS X hot corners, in the format top-right, lower-right, lower-left, top-left (one value per line.) DO NOT MODIFY."
+
+################################################################################
+# Argument parsing
+################################################################################
+parser = argparse.ArgumentParser(
+        description="Toggle Mac OS X 'hot corners' on or off.",
+        epilog="""If hot conrners are enabled, save their state to '{conf}' and disable them. If
+disabled and a saved state file exists, re-enable them with that state. Otherwise error. The Dock
+is killed and restarted after toggling hot corners, but this should have no adverse affect.""".format(conf=config_file_path),
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+args = parser.parse_args()
+
+
+################################################################################
+# Sanity checking
+################################################################################
+# Make sure we can write to the config directory
+if not os.path.exists(config_dir):
+    stderr.write("Config directory doesn't exist, creating it.\n")
+    try:
+        os.makedirs(config_dir)
+    except os.error:
+        stderr.write("Fatal error! Could not create config directory '{}'\n".format(config_dir))
+        exit(1)
+
+
+################################################################################
+# Utility functions
+################################################################################
+def get_preference(pref):
+    value = subprocess.check_output(['defaults', 'read', 'com.apple.dock', pref])
+    return value.strip()
+
+
+def set_preference(pref, value):
+    return subprocess.check_call(['defaults', 'write', 'com.apple.dock', pref, '-int', value])
+
+
+def set_state(state):
+    """Sets the state of the hot corners to that of the passed tuple, which contain the integer
+       IDs of the actions for the top-right, lower-right, lower-left and top-left corners, in
+       that order."""
+    if len(state) != 4:
+        raise ValueError("Must have four values (one for each corner) in state to set.")
+    for i in range(0,4):
+        set_preference(prefs[i], state[i])
+
+
+def get_current_state():
+    """Returns a tuple with the current state of the hotcorners"""
+    state = []
+    for corner in prefs:
+        state.append(get_preference(corner))
+    return tuple(state)
+
+
+def get_saved_state():
+    """Reads the saved state from the config file and returns it as a tuple"""
+    state = []
+    with open(config_realpath, 'r') as f:
+        header = f.readline().strip()
+        if header != file_header:
+            raise Exception("Saved hot corner state is invalud, can't re-enable.")
+        for line in f:
+            state.append(line.strip())
+
+    if len(state) != 4:
+        raise Exception("Saved hot corner state is invalid, can't re-enable.")
+    return tuple(state)
+
+
+def save_state(state):
+    if len(state) != 4:
+        raise ValueError("Must have four values (one for each corner) in state to save.")
+    with open(config_realpath, 'w') as f:
+        f.write(file_header + "\n")
+        for corner in state:
+            f.write(corner + "\n")
+
+
+def save_default_state():
+    """Saves a default state, where all corners are disabled"""
+    save_state(('1','1','1','1'))
+
+
+################################################################################
+# Enable or disable the hot corners
+################################################################################
+if not os.path.isfile(config_realpath):
+    stderr.write("No saved state found, saving the default state (all hot corners disabled)\n")
+    save_default_state()
+
+old_state = get_saved_state()
+current_state = get_current_state()
+
+set_state(old_state)
+save_state(current_state)
+
+
+subprocess.check_call(['osascript', '-e', 'tell application "Dock" to quit'])

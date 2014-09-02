@@ -5,7 +5,7 @@
 	user = int3h
 [core]
 	excludesfile = ~/.gitsupport/gitignore
-    editor = vim
+    editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
 	prompt = false
 [init]
 	templatedir = ~/.gitsupport/template
@@ -13,6 +13,8 @@
 	ui = true
 [commit]
 	cleanup = strip
+[credential]
+	helper = osxkeychain
 [push]
 	default = simple
 
@@ -21,6 +23,33 @@
     clean = ~/.gitsupport/filters/email/clean_filter_email
 [diff "email"]
     textconv = ~/.gitsupport/filters/email/diff_filter_email
+
+
+[difftool "Kaleidoscope"]
+	cmd = ~/bin/ksdiff-fixed --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[difftool "sourcetree"]
+	cmd = ~/bin/ksdiff-fixed -w \"$LOCAL\" \"$REMOTE\"
+	path =
+[difftool]
+	prompt = false
+[diff]
+	;tool = araxis
+	tool = Kaleidoscope
+
+[mergetool "Kaleidoscope"]
+	cmd = ~/bin/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
+[mergetool "sourcetree"]
+	cmd = ~/bin/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
+[mergetool]
+	keepBackup = true
+[merge]
+	;tool = araxis
+	tool = Kaleidoscope
+	conflictstyle = diff3
+
+
 [alias]
 	# Shows log in pretty, one-line-per-commit format
     l = log --pretty=format:'%C(yellow)%h %C(green)%ad%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)' --decorate --date=relative
@@ -35,11 +64,5 @@
     amend = commit --amend
 	# Shows short hash of current checkout
     hash = rev-parse --short --verify HEAD
-    # Shows a pretty list of stashes (adds relative date, color coding, vs. regular `stash list`)
+	# Shows a pretty list of stashes (adds relative date, color coding, vs. regular `stash list`)
 	stashes = stash list --pretty=format:'%C(yellow)%gd %C(green)%ar%C(reset) %gs'
-[commit]
-	cleanup = strip
-[init]
-	templatedir = ~/.gitsupport/template
-[credential]
-	helper = cache --timeout=43200
