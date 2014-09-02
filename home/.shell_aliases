@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Require confirmation when deleting >3 files or a directory; be verbose.
-alias rm='rm -Iv'
-
 if [[ $OS == "Mac" ]]; then
 	alias ls='command ls -lAOph'
 	alias lsd='command ls -lOph'
@@ -14,6 +11,9 @@ else
 	# Simplified `ls`: don't show hidden files; show directories first; human readable sizes; colorized.
 	alias lsd='command ls -lph --color=auto --group-directories-first'
 fi
+
+# Require confirmation when deleting >3 files or a directory; be verbose.
+[[ $OS == "Linux" ]] && alias rm='rm -Iv'
 
 if [[ $OS == "Mac" ]]; then
 	alias make="make -j $(( $(sysctl -n hw.ncpu) + 1 ))"

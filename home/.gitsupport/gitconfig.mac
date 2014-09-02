@@ -29,7 +29,7 @@
 	cmd = ~/bin/ksdiff-fixed --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [difftool "sourcetree"]
 	cmd = ~/bin/ksdiff-fixed -w \"$LOCAL\" \"$REMOTE\"
-	path =
+	path = 
 [difftool]
 	prompt = false
 [diff]
