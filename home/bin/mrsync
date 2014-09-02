@@ -24,9 +24,11 @@ if [[ -f $HOME/.rsync_exclude.conf ]]; then
     ARGS="$ARGS --exclude-from=$HOME/.rsync_exclude.conf"
 fi
 
+# In OS X, we want to use our homebrew-installed rsync instead of the (outdated) system one
 if [[ -x /usr/local/bin/rsync ]]; then
     binary=/usr/local/bin/rsync
 else
+	# Default case
     binary=rsync
 fi
 
