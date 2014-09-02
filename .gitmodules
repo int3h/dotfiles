@@ -46,3 +46,6 @@
 [submodule "home/.janus/auto-pairs"]
 	path = home/.janus/auto-pairs
 	url = git@github.com:jiangmiao/auto-pairs.git
+[submodule "home/.janus/delimitMate"]
+	path = home/.janus/delimitMate
+	url = git@github.com:Raimondi/delimitMate.git
