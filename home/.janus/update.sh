@@ -66,6 +66,7 @@ if [[ $install_only != 1 ]]; then
 	printHeader "Committing updates to git repo"
 	git add -u
 	git commit -m "Vim: update plugins in ~/.janus to latest versions"
+fi
 
 # Re-apply the user's existing changes (stashed at the beginning of this script)
 git stash pop -q
@@ -78,6 +79,11 @@ NEW_YCM_REV="$SUBMOD_REV"
 if [[ "$OLD_YCM_REV" != "$NEW_YCM_REV" ]]; then
 	printHeader "Rebuilding YouCompleteMe"
 	cd home/.janus/YouCompleteMe
-	./install.sh --clang-completer
+	# On Linux, don't install clang completer (may not have the libs available)
+	if [[ $OS == "Linux" ]]; then
+		./install.sh
+	else
+		./install.sh --clang-completer
+	fi
 fi
 
