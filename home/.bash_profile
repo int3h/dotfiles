@@ -155,6 +155,8 @@ if [[ $OS == "Linux" ]]; then
 
 	export EDITOR="vim"
 	export VISUAL="vim"
+
+	export GIT_CONFIG=~/.gitsupport/gitconfig.linux
 fi
 
 
@@ -183,6 +185,8 @@ if [[ $OS == "Mac" ]]; then
 
 	# Initialize 'autojump' utility
 	[[ -s $BREW_PREFIX/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+
+	export GIT_CONFIG=~/.gitsupport/gitconfig.mac
 fi
 
 
