@@ -16,9 +16,6 @@
 [submodule "home/.janus/ultisnips"]
 	path = home/.janus/ultisnips
 	url = git@github.com:SirVer/ultisnips.git
-[submodule "home/.janus/vim-latex"]
-	path = home/.janus/vim-latex
-	url = git://vim-latex.git.sourceforge.net/gitroot/vim-latex/vim-latex
 [submodule "home/.janus/vim-session"]
 	path = home/.janus/vim-session
 	url = git@github.com:xolox/vim-session.git
@@ -46,3 +43,6 @@
 [submodule "home/.janus/auto-pairs"]
 	path = home/.janus/auto-pairs
 	url = git@github.com:jiangmiao/auto-pairs.git
+[submodule "home/.janus/vim-latex"]
+	path = home/.janus/vim-latex
+	url = http://git.code.sf.net/p/vim-latex/vim-latex
