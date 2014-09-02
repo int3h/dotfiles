@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Repairs the problem of duplicate entries in OS X Finder's right-click -> "Open With" menu
+# Running this command should fix those, with the only side effect being that OS X will forget
+# which downloaded apps you'cw already given permission to run to, and will prompt you again
+# the first time you run any app downloaded from the internet.
+
+# Removed argument '-domain system' to lsregister, since it's not included in this TUAW help post:
+# http://www.tuaw.com/2013/03/25/how-to-spring-clean-open-with-duplicates/
+
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -seed -r -domain local -domain user
+
+killall Finder

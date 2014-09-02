@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This file defines new Bash commands that are too complicated to be aliases, but too simple to get
+# their own script file in ~/bin. These commands are defined as functions, and this file is sourced
+# in ~/.bash_profile so that these functions are available globally in Bash.
+
 # Search for files in <path> (defaults to '.') whose filename includes <name>
 # Usage: findfiles <name> [<path>]
 findfiles() {
@@ -12,6 +16,11 @@ findfiles() {
 }
 
 
+# Open a man page as a PDF in Preview.app
+pman () {
+    man -t $@ | open -f -a /Applications/Preview.app
+}
+
 
 # Make a tmp directory, switch to it and copy its name to the system's paste buffer
 delme () {
@@ -21,29 +30,40 @@ delme () {
 }
 
 
-## Commands for easily connecting to my VPS
-
-# Only enable if the URL and port vars are set (usually done somewhere else, like ~/.shell_private)
-if [[ -n $MT_URL ]] && [[ -n $MT_PORT ]]; then
-	# mt.com is a shortcut to SSH into my VPS
-	alias mt.com="ssh -p $MT_PORT $MT_URL"
-	
-	# `scp` wrapper which detects when the URL 'mt.com' is an argument and replaces it with the proper
-	# URL and, (if the user did not specify one,) port.
-	_MTCOM_SCP_WRAPPER() {
-		local ARGS="$@"
-
-		# If 'mt.com:' is an argument, replace it with the proper URL and, optionally, proper port
-		if [[ $ARGS =~ 'mt.com:' ]]; then
-			ARGS="${ARGS/mt.com:/${MT_URL}:}"
-			# If the user hasn't specified their own port, add mt.com's port
-			local PAT='-P [0-9]{1,} '
-			if [[ ! $ARGS =~ $PAT ]]; then
-				ARGS="-P $MT_PORT ${ARGS}"
-			fi
-		fi
-
-		command scp $ARGS
-	}
-	alias scp='_MTCOM_SCP_WRAPPER'
+# Commands to display OS X notifications from the terminal
+if hash terminal-notifier 2>/dev/null; then
+    alias notify-success='terminal-notifier -sound Glass -sender com.apple.Terminal -activate com.apple.Terminal -title "Succeeded" -message'
+    alias notify-failure='terminal-notifier -sound Basso -sender com.apple.Terminal -activate com.apple.Terminal -title "Failed" -message'
+else
+    alias notify-success='say'
+    alias notify-failure='say'
 fi
+notify () {
+    if [[ ! "$@" ]]; then
+        echo "Usage: notify <command>" >&2
+        echo "Executes <command> and shows an OS X notification on success or failure" >&2
+        return 1
+    fi
+
+    local SEARCH=' '
+    local REPLACE='%20'
+    local CMDMSG="${@//$SEARCH/$REPLACE}"
+    (eval "$@" && notify-success "Command '$CMDMSG' completed successfully") || notify-failure "Command '$CMDMSG' failed"
+}
+
+
+# Check the spelling of a word with aspell (if installed)
+if type -t aspell>/dev/null; then
+	spell() {
+		echo "$@" | aspell pipe | grep -v 'but really Aspell'
+	}
+fi
+
+
+# Grep for a process name and show the results
+psgrep() {
+	search_term="$*"
+	procs="$(command ps -Axww -o pid,user,command)"
+	echo "$procs" | head -n 1
+	echo "$procs" | grep -i "[${search_term:0:1}]${search_term:1}"
+}

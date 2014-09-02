@@ -1,0 +1,64 @@
+#!/usr/bin/env python
+
+from __future__ import division, absolute_import, print_function, unicode_literals
+
+from sys import argv, stderr, exit
+import random
+
+msgHelp = """usage: rand [-h] [[A] B]
+
+Prints a random number number in the range A <= N <= B
+
+options:
+  -h, --help  show this help message and exit
+   B          sets the range of N to be 0.0 <= N <= B (default: 1.0)
+   A          sets the range of N to be A <= N <= B (default: 0.0)
+
+If both A and B are integers, then the random number N is an integer."""
+
+if len(argv) > 1 and (argv[1] == "-h" or argv[1] == "--help"):
+    print(msgHelp, file=stderr)
+    exit(0)
+if len(argv) > 3:
+    print("ERROR: Wrong number of arguments found (expected 0-2, found {})\n".format(len(argv)-1),
+            file=stderr)
+    print(msgHelp, file=stderr)
+    exit(1)
+
+
+useInt = False
+boundLower = 0.0
+boundUpper = 1.0
+
+try:
+    if len(argv) == 2:
+        try:
+            boundUpper = int(argv[1])
+            boundLower = 0
+            useInt = True
+        except ValueError:
+            useInt = False
+            boundUpper = float(argv[1])
+            boundLower = 0.0
+    elif len(argv) == 3:
+        try:
+            boundUpper = int(argv[1])
+            boundLower = int(argv[2])
+            useInt = True
+        except ValueError:
+            useInt = False
+            boundUpper = float(argv[1])
+            boundLower = float(argv[2])
+except ValueError:
+    print("ERROR: could not convert arguments '{}' to int or float\n".format(argv[1:]), file=stderr)
+    print(msgHelp, file=stderr)
+    exit(2)
+
+
+if boundUpper < boundLower:
+    boundLower, boundUpper = boundUpper, boundLower
+
+if useInt:
+    print(random.randint(boundLower, boundUpper))
+else:
+    print(random.uniform(boundLower, boundUpper))

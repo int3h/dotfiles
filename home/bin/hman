@@ -1,0 +1,292 @@
+#!/usr/bin/env bash
+. ~/bin/helpers.sh
+
+################################################################################
+# hman: like `man` but opens an HTML version of the manpage in the browser.
+#
+# First tries to open the file on Apple's website and, if that fails, creates a HTML version of the
+# manpage in a local temp directory and opens that.
+#
+# Requires a version of `groff` that supports the xhtml backend (the built-in version in OS X does
+# not, as of OS X 10.9.) Install it from homebrew after tapping the 'homebrew-dupes' keg (be sure
+# to use the '--with-grohtml' install option to install ghostscript, netpbm and psutils, which are
+# needed to get the xhtml backend fully working.)
+################################################################################
+
+
+################################################################################
+# Config variables
+
+# Should we regenerate the HTML file even if it's already cached? (default: no)
+force_regen=
+# Try to open built-in OS X man pages on https://developer.apple.com/library rather than generating
+# and opening a local copy. (default: yes)
+try_www=1
+# The folder to store the cached HTML files in
+cache="$HOME/Library/Caches/hman"
+# Print extra information
+verbose=
+
+################################################################################
+# Functions
+
+
+# Prints $1 to STDERR if $verbose is on
+print_verbosely() {
+	[[ $verbose == 1 ]] && wrap "$1" >&2
+}
+
+
+# Gets the section number of a manfile
+#   $1: the path to the manfile
+# Returns: the section number via stdout
+get_section() {
+    expr "$1" : '.*\.\([0-9]*[0-9]\)'
+}
+
+
+# Gets the name of a manfile
+#   $1: the path to the manfile
+# Returns: the name via stdout
+get_name() {
+    # Cuts off the last period and everything that follows from the filename
+    basename "$1" | rev | cut -d '.' -f 2- | rev
+}
+
+
+# Checks if a manfile can be shown on developer.apple.com and then does so.
+#   $1: the path to the manfile
+# Returns: 0 if we opened the manfile on apple.com, or 1 otherwise
+display_www() {
+    # If the manfile is a built-in Mac OS X man file, open it on the Apple website instead of
+    # generating a new HTML file locally.
+    if [[ $1 =~ ^/usr/share/man/.* ]]; then
+		print_verbosely "Command is a Mac OS X standard command. Attempting to open man page on Apple's developer web portal."
+
+        local URL="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/${1#/usr/share/man/}.html"
+        check_url $URL
+        if [[ $? -eq 0 ]]; then
+			print_verbosely "Man page found on Apple's developer portal. Opening."
+            open "$URL"
+            return 0
+		else
+			print_verbosely "Man page NOT found on Apple's developer portal. Will try to generate HTML man page locally."
+			return 2
+        fi
+	fi
+
+	if [[ $1 =~ git-[^\/]+\.[0-9]+ ]]; then
+		print_verbosely "Command is a git command. Attempting to open man page on the Git website."
+
+		local URL="http://git-scm.com/docs/$(echo "$1" | sed 's/.*\(git-[^\/]\{1,\}\)\.[0-9]\{1,\}/\1/')"
+        check_url $URL
+        if [[ $? -eq 0 ]]; then
+			print_verbosely "Man page found on Git website. Opening."
+            open "$URL"
+            return 0
+		else
+			print_verbosely "Man page NOT found on Git website. Will try to generate HTML man page locally."
+			return 3
+        fi
+    fi
+
+	return 1
+}
+
+
+# Converts the manfile into HTML
+#   $1: the path to the manfile
+#   $2: the path to save generated secondary files (images, etc.)
+# Returns: a string of the HTML via stdout
+generate_html() {
+    # Use groff
+    # Enable ALL the pre-processors! (Except grap, that gave me an error.)
+    # -t -p -k -e -g -R -s : preprocess with gtbl, gpic, preconv, geqn, ggrn, grefer, gsoelim
+    local rawhtml="$(groff -mandoc -t -p -k -e -g -R -s -Txhtml -N -P"-D${2}" "$1")"
+    if [ $? -ne 0 ]; then
+      echo "Error generating HTML from man page" >&2
+      exit -1
+    fi
+
+    local displayname="$(get_name "$1")($(get_section "$1"))"
+
+    # Fix up the HTML `groff` produces (using lots of `sed` commands) so it sucks much less.
+    echo "$rawhtml" | tidy -ashtml 2>/dev/null | sed \
+    -e 's/<\/style>/body {font-family: "Helvetica Neue", Helvetica, sans-serif; width: 800px; margin-left: auto; margin-right: auto;}\
+        .toc {position: fixed; overflow-y: scroll; overflow-x: hidden; top: 10px; height: 90%; width: 200px; text-transform: lowercase; margin-left: -200px; margin-top: 1.5em; font-size: 11pt; border-right: 1px solid black; }\
+        .toc a { line-height: 2em; display: block; margin-left: 1em; text-indent: -1em;}\
+        .toc p { margin-top: 0em; }\
+        .toc p br { display: none} \
+        .content { font-size: 10pt; margin-left: 50px; }\
+        h1 { font-weight: 300; font-size: 64px; margin-top: 0em; letter-spacing: -2px; }\
+        h2 { margin-top: 2.5em; font-weight: 300;} \
+        p { line-height: 1.25em; margin-top: 1.2em; }\
+        h2 + p { margin-top: 0em !important; }<\/style>/' \
+    -e 's/<p><a href="#heading1">/<div class="toc">\
+        <p><a href="#heading1">/' \
+    -e 's/<hr>/<\/div>/' \
+    -e 's/<h2 id="heading1">/<div class="content">\
+        <h2 id="heading1">/'\
+    -e "s/<title><\/title>/<title>$displayname<\/title>/"\
+    -e 's/<\/title>/ \&mdash; hman<\/title>/'\
+	-e 's/\&minus\;/-/g'\
+    -e "s:$2/:$(basename $1).:"
+    # That last line removes the path component of any linked temporary files, and replaces it
+    # with a prefix matching the manfile name (since we will be moving all temp files into the same
+    # directory as the HTML and giving them the same prefix when we save everything.)
+}
+
+
+# Determines the path for the cached version of a manfile. Only constructs the path, does not check
+# if any file exists.
+#   $1: the path to the manfile
+# Returns the path for the cached version via stdout.
+get_cached_path() {
+    echo "$cache/$(get_section "$1")/$(basename "$1").html"
+}
+
+
+# Gets the path to the cached version of a manfile, if it exists.
+#   $1: the path to the manfile
+# Returns: 0 if the page exists in the cache, and 1 if not. The path itself is echoed to stdout.
+get_cached() {
+    if [[ $force_regen ]]; then
+        return 1
+    fi
+
+    local cached=$(get_cached_path "$1")
+    if [[ -f $cached ]]; then
+        # Check to make sure the HTML page has a more recent creation time than the manfile
+        if (($(stat -f %m "$1") <= $(stat -f %c "$cached"))); then
+            echo "$cached"
+            return 0
+        else
+            return 1
+        fi
+    else
+        return 1
+    fi
+}
+
+
+# Writes content to the cache for a given manfile
+#   $1: the path to the manfile
+#   $2: the content to cache
+#   $3: a directory containing any additional files that need to be put into the cache
+# Returns the path to the cached file via stdout.
+write_cache() {
+    local cached=$(get_cached_path "$1")
+    if [[ ! -d $(dirname "$cached") ]]; then
+        mkdir -p "$(dirname "$cached")" >/dev/null
+    fi
+
+    # Delete any old supporting files
+    rm "$(dirname "$cached")/$(basename $1)."* 2>/dev/null
+    # For each new supporting file, move it to the same directory as the cached content, and prefix
+    # its name with the same name as the manfile.
+    if [[ $(command ls -A "${3}/") ]]; then
+        local f
+        for f in $3/* ; do mv $f "$(dirname "$cached")/$(basename $1).$(basename $f)"; done
+    fi
+
+    echo "$2" > "$cached"
+    echo "$cached"
+}
+
+
+################################################################################
+# Main actions
+
+# Parge the command-line args
+usage=$(cat <<USAGEMSG
+usage: hman [-l] [-r] [-h] [<section>] <name>"
+
+  -l :       use only local files (see below)"
+  -r :       force a regeneration of the HTML page, even if in cache"
+  -h :       display usage and exit"
+  <section>  (optional) look only in <section> of the manual"
+  <name>     the name of the manual page"
+
+Without the -l option, hman will detect if a manual page is a standard one"
+shipped by Apple with OS X. It will then check if the online version of the"
+manual page exists at developer.apple.com/library and opens that page instead of"
+generating a local copy. The -l option disables this behavior and causes hman to"
+only open local copies.)
+USAGEMSG
+)
+
+args=$(getopt :lrhv $*)
+if [[ $? != 0 ]]; then
+    echo -e "Error: unknown option used\n\n${usage}" >&2
+    exit 1
+fi
+
+set -- $args
+for arg; do
+    case "${arg}" in
+        -l)
+            try_www=
+            shift
+            ;;
+        -r)
+            force_regen=1
+            shift
+            ;;
+        -h)
+            echo -e "hman: format and display the on-line manual pages as HTML\n"
+            echo "$usage"
+            exit 0
+            ;;
+		-v)
+			verbose=1
+			shift
+			;;
+        --)
+            shift
+            break
+            ;;
+    esac
+done
+
+if [[ $# != 1  && $# != 2 ]]; then
+    echo -e "Wrong number of arguments provided.\n\n${usage}" >&2
+    exit 1
+fi
+
+# Get the filename of the manfile
+manfile="$(man -w $2 "$1")"
+[[ $? == 0 ]] || exit $?
+
+
+# If the command is a Bash builtin, display `help` instead of a HTML manpage
+if [[ "$(basename $manfile)" == 'builtin.1' ]]; then
+	print_verbosely "Command is a Bash built-in. Showing \`help\` instead of man page."
+	print_verbosely '-----------------------------------------------------------------'
+	print_verbosely ''
+    help "$@"
+    exit
+fi
+
+
+# If the option is set, first try to open the file on Apple's site
+if [[ $try_www == 1 ]]; then
+    display_www $manfile
+    [[ $? == 0 ]] && exit
+fi
+
+
+# If the file is already cached, then just open the cached version
+html_file_path=$(get_cached $manfile)
+if [[ $? == 0 ]]; then
+	print_verbosely "Opening cached HTML man page: $html_file_path"
+else
+    # Otherwise, write to cache the HTML version of the manfile and open that
+    other_files=$(mktemp -d -t hman)
+	html_file_path="$(write_cache "$manfile" "$(generate_html "$manfile" "$other_files")" "$other_files")"
+    rm -rf "$other_files" 2>&1 >/dev/null
+
+	print_verbosely "Generated new HTML man page to: $html_file_path"
+fi
+
+open "$html_file_path"
+

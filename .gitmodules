@@ -1,9 +1,6 @@
 [submodule "home/.janus/YouCompleteMe"]
 	path = home/.janus/YouCompleteMe
 	url = git@github.com:Valloric/YouCompleteMe.git
-[submodule "home/.janus/delimitMate"]
-	path = home/.janus/delimitMate
-	url = git@github.com:Raimondi/delimitMate.git
 [submodule "home/.janus/editorconfig-vim"]
 	path = home/.janus/editorconfig-vim
 	url = git@github.com:editorconfig/editorconfig-vim.git
@@ -40,3 +37,12 @@
 [submodule "home/.janus/vim-misc"]
 	path = home/.janus/vim-misc
 	url = git@github.com:xolox/vim-misc.git
+[submodule "home/.janus/vim-opencl"]
+	path = home/.janus/vim-opencl
+	url = git@github.com:int3h/vim-opencl.git
+[submodule "home/.janus/vim-indent-guides"]
+	path = home/.janus/vim-indent-guides
+	url = git@github.com:nathanaelkane/vim-indent-guides.git
+[submodule "home/.janus/auto-pairs"]
+	path = home/.janus/auto-pairs
+	url = git@github.com:jiangmiao/auto-pairs.git

@@ -2,10 +2,48 @@
 from __future__ import print_function
 import sys
 
-if sys.argv[1:]:
-    port = int(sys.argv[1])
-else:
-    port = 8888
+# TODO: Serve up a placeholder favicon.ico if the file is not found (supresses 404 errors)
+
+default_ip = '127.0.0.1'
+default_port = '8888'
+
+if ('-h' in sys.argv) or ('--help' in sys.argv):
+    print("Usage: serve [<listening address>]")
+    print("Run a simple HTTP server, serving up the current directory")
+
+    print("\nThe optional argument <listening address> is the IP address and/or port you")
+    print("want the server to listen on (default: {}:{}).".format(default_ip, default_port))
+    sys.exit(0)
+
+
+
+ip = ''
+port = ''
+
+# If an address argument is provided, try to intelligently grab the IP and/or port from it
+if len(sys.argv) == 2:
+    addr = sys.argv[1]
+    if len(addr.split(':')) == 2:
+        # If we can split the address into two via a ':', do that to get ip and port
+        ip, port = addr.split(':')
+    if len(addr.split(' ')) == 2:
+        # Also allow the IP and port to be separated by a space (but must be passed in quotes so
+        # that we see it as one argument.)
+        ip, port = addr.split(' ')
+    else:
+        # If we can't split on ':', only an IP or port was provided. Try to figure out which.
+        if addr.isdigit():
+            # If the address is only numbers, assume it's a port number
+            port = addr
+        else:
+            # Otherwise, assume it's an IP address
+            ip = addr
+
+# Handle the case where one or more parts of the address are blank (':8888', etc)
+if ip == '':
+    ip = default_ip
+if port == '':
+    port = default_port
 
 
 if sys.version_info[0] <= 2:
@@ -16,18 +54,42 @@ else: # Python >= 3
     import http.server
     HandlerClass = http.server.SimpleHTTPRequestHandler
     ServerClass = http.server.HTTPServer
-    
-    
-server_address = ('', port)
+
+
+class NonCachingHTTPRequestHandler(HandlerClass):
+    """ A SimpleHTTPRequestHandler that also sends no-cache headers
+
+    Behaves exactly as SimpleHTTPRequestHandler does, but sends
+    three headers intended to disable browser caching with every
+    response.
+    """
+
+    def send_response(self, *args, **kwargs):
+        """Send the response header and log the response code.
+
+        We first call SimpleHTTPRequestHandler's send_response() to
+        send standard headers (response code, date, server version).
+        We then send three of our own headers, to disable caching.
+
+        """
+
+        res = HandlerClass.send_response(self, *args, **kwargs)
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        return res
+
+
+server_address = (ip, int(port))
 
 HandlerClass.protocol_version = "HTTP/1.0"
-httpd = ServerClass(server_address, HandlerClass)
+httpd = ServerClass(server_address, NonCachingHTTPRequestHandler)
 
 sa = httpd.socket.getsockname()
-print("Serving HTTP on", sa[0], "port", sa[1], "...")
+print("Serving HTTP on", sa[0], "port", sa[1], "...\n")
 try:
     httpd.serve_forever()
 except KeyboardInterrupt:
-    print("\nKeyboard interrupt received, exiting.")
+    print("\n\nKeyboard interrupt received, exiting.")
     httpd.server_close()
     sys.exit(0)

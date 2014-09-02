@@ -77,6 +77,11 @@ augroup end
 map <D-t> :tabnew <CR>
 imap <D-t> <ESC>:tabnew<CR>
 
+" Split a line with Ctrl+C (for when Vim won't insert a line break because of auto-formatting.)
+" Disabled at the momement, because it's buggy
+"imap <C-c> <CR><Esc>O
+
+
 " `:VimRC[!]` : Opens all vimrc in separate tabs. If ! is present, will open
 " the tabs in the current Vim instance. Otherwise, runs a new MacVim instance
 " with the tabs open on startup.
@@ -106,10 +111,10 @@ nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 " We could also map D-<CR> to "disable 'a', press enter twice, enable 'a'". However, the new line
 " won't be formatted (and often will be only a half line wide.) We could use 'gq' to format it, but
 " I don't know how many lines to include in the block of text we reformat (it needs to be the entire
-" paragraph.) If we could tell Vim to autoformat the line as it does when we insert text, that may 
+" paragraph.) If we could tell Vim to autoformat the line as it does when we insert text, that may
 " work, but I don't know of a reliable way to trigger that.
 "
-" Maybe we can just use the Vim script API to insert two new lines? Will that bypass the immediate 
+" Maybe we can just use the Vim script API to insert two new lines? Will that bypass the immediate
 " autoformat concatenating, but still insert the comment leaders?
 
 nmap <leader>a :call ToggleFormatAll()<CR>
@@ -117,7 +122,7 @@ nmap <leader>a :call ToggleFormatAll()<CR>
 
 " Functions supporting the above commands {{{2
 
-" TODO: Can we make some of these local to this script, instead of polluting the global namespace?  
+" TODO: Can we make some of these local to this script, instead of polluting the global namespace?
 " Adding 's:' to their names gives the error "Using <SID> not in a script context".
 
 
@@ -129,7 +134,7 @@ function VimEditRC(bBang)
 	else
 		" If the command is proceeded by a '!', create new tabs directly in
 		" this instance of Vim with the vimrc files.
-		
+
 		" If the current buffer is empty (only has one buffer, that buffer has
 		" a blank filename, is one line long, and that line has no content),
 		" load the first file into the current tab.
@@ -222,7 +227,7 @@ function GetModelineNumber()
 	if l:match != -1
 		return l:lastlineno + l:match
 	endif
-	
+
 	return -1
 endfunction
 
@@ -258,23 +263,50 @@ function! ToggleFormatAll()
 endfunction
 
 
+
 """"""" Filetype settings {{{1
 
-" Map Superconductor filetypes
+"" All code files
+" Enable 'strip whitespace on save' functionality
+autocmd FileType c,cpp,java,php,ruby,python,javascript,sh,vim autocmd BufWritePre <buffer> FixWhitespace
+
+"" Superconductor
 au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
-" .p maps as Prolog (for cs164 project)
+
+"" Prolog
+" Map *.p files to Prolog (for cs164 project)
 au BufRead,BufNewFile *.{p} set ft=prolog
 
+"" Git Commit
 " Turn on spellchecking, auto-wrapping of long lines, and set width to 72
 au FileType gitcommit setlocal spell spelllang=en_us textwidth=72 formatoptions+=troqal1jw formatoptions-=c formatoptions-=2 colorcolumn=73
+
+"" Markdown
 " Turn on spellchecking
 au FileType markdown setlocal spell spelllang=en_us
 
+"" Shell
 " Highlight shell scripts as bash, not sh
 let g:is_posix = 1
 
+"" JavaScript
 " Turn on HTML/DOM highlighting in JavaScript files
+au FileType javascript setlocal expandtab "conceallevel=1 concealcursor=ncv
 let javascript_enable_domhtmlcss = 1
+" Replace certain JS keywords ('function', 'null', etc.) with symbols
+let g:javascript_conceal = 1
+let javascript_ignore_javaScriptdoc=1
+
+"" OpenCL
+" Check OpenCL syntax using Apple's OpenCL compiler
+let g:syntastic_opencl_checkers = ['openclc']
+
+
+
+""""""" Powerline {{{1
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
 
 
 """"""" Powerline {{{1
@@ -286,9 +318,12 @@ python del powerline_setup
 """"""" NERDTree {{{1
 if janus#is_plugin_enabled("nerdtree")
 	call add(NERDTreeIgnore, '\.tmp$')
+	call add(NERDTreeIgnore, '\.DS_Store$')
 	let NERDTreeChDirMode=2
 	let NERDTreeShowLineNumbers=0
 	let NERDTreeStatusline=' '
+	" Always shows hidden files
+	let NERDTreeShowHidden=1
 
 	nmap <silent> <leader>N :NERDTreeFind<CR>
 endif
@@ -312,6 +347,16 @@ if janus#is_plugin_enabled("buffergator")
 	let g:buffergator_viewport_split_policy="R"
 	" Don't expand the GUI window when opening the buffer list
 	let g:buffergator_autoexpand_on_split=0
+	" Auto-update the list of open buffers
+	let g:buffergator_autoupdate=1
+	" Sort the buffers by most recently used
+	let g:buffergator_sort_regime="mru"
+	" Show relative, not full, paths of the buffers
+	let g:buffergator_show_full_directory_path=0
+	" Calculate MRU based off of all windows, not per-window
+	let g:buffergator_mru_cycle_local_to_window=0
+	" Set the width of its vsplit window to 32
+	let g:buffergator_vsplit_size=32
 endif
 
 
@@ -336,16 +381,26 @@ if janus#is_plugin_enabled("ctrlp")
 	let g:ctrlp_root_markers=['.ctrlproot']
 	let g:ctrlp_open_new_file = 'r'
 
-	" Use <C-p> as 'search buffers' mode (<C-t> is alreadt set to 'search
-	" files' mode by Janus)
+	let g:ctrlp_custom_ignore = {
+		\ 'file': '\.pyc$\|\.pyo$\|\.rbc$|\.rbo$\|\.class$\|\.o$\|\~$\',
+		\ 'dir': '\v[\/](\.(git|hg|svn)$\|node_modules$)'
+	\ }
+
+	" Use <Cmd-p> as 'search buffers+files+mru' mode
 	map <silent> <D-p> :CtrlPMixed <CR>
 	imap <silent> <D-p> <ESC>:CtrlPMixed <CR>
 
+	" Map <Cmd-Shift-p> to 'search MRU' mode
 	map <silent> <D-P> :CtrlPMRU <CR>
 	imap <silent> <D-P> <ESC>:CtrlPBuffer <CR>
 
-	map <silent> π :CtrlPMRU <CR>
-	imap <silent> π <ESC>:CtrlPMRU <CR>
+	" Map <Option-p> to 'search buffers' mode
+	map <silent> π :CtrlPBuffer <CR>
+	imap <silent> π <ESC>:CtrlPBuffer <CR>
+
+	" Map <Option-Shift-p> to 'search files' mode
+	map <silent> ∏ :CtrlP <CR>
+	imap <silent> ∏ <ESC>:CtrlP <CR>
 endif
 
 
@@ -383,6 +438,7 @@ if exists("g:loaded_session")
 	" After loading a session, find the active file in NERDTree, if it's open
 	augroup MTorok
 		autocmd SessionLoadPost * call s:syncNerdTree()
+		autocmd VimEnter * call s:CloseSessionBuffer()
 	augroup END
 
 	" Reveal in NERDTree any open files within its current path This prevents
@@ -409,6 +465,20 @@ if exists("g:loaded_session")
 
 		endif
 	endfunction
+
+	function s:CloseSessionBuffer()
+		"if exists("s:closedSessionBuffer") == 0
+			let s:closedSessionBuffer = 1
+			let l:sessionName = xolox#session#find_current_session()
+			if l:sessionName != ""
+				let l:sessionPath = xolox#session#name_to_path(l:sessionName)
+				if bufname(l:sessionPath) != ""
+					bd bufname(l:sessionPath)
+				endif
+			endif
+
+		"endif
+	endfunction
 endif
 
 
@@ -417,5 +487,27 @@ if exists("g:loaded_numbers")
 	nnoremap <F3> :NumbersToggle<CR>
 	let g:numbers_exclude += ["help"]
 endif
+
+
+""""""" vim-indent-guides {{{1
+if exists('g:loaded_indent_guides')
+	" Enable indent guides by default
+	" (This needs to be enabled in .vimrc.before to work, so it's commented out here)
+	"let g:indent_guides_enable_on_vim_startup = 1
+
+	" Don't use indent guides on help, nerdtree windows
+	let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
+	let g:indent_guides_start_level = 2
+	" Make them only 1 column wide, rather than as wide as shiftwidth
+	let g:indent_guides_guide_size = 1
+endif
+
+
+""""""" auto-pairs {{{1
+if exists('g:AutoPairsLoaded')
+	" Don't center the line in the window when inserting an autopair
+	let g:AutoPairsCenterLine = 0
+endif
+
 
 " vim: set tabstop=4 shiftwidth=4 textwidth=78 noexpandtab foldmethod=marker filetype=vim:
