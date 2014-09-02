@@ -100,3 +100,5 @@
 	url = git@github.com:xolox/vim-session.git
 [submodule "home/.janus/vim-surround"]
 	url = git@github.com:tpope/vim-surround.git
+[submodule "home/.janus/tern_for_vim"]
+	url = git@github.com:marijnh/tern_for_vim.git

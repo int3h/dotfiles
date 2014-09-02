@@ -78,12 +78,20 @@ NEW_YCM_REV="$SUBMOD_REV"
 # Only if we've updated YCM, rebuild it
 if [[ "$OLD_YCM_REV" != "$NEW_YCM_REV" ]]; then
 	printHeader "Rebuilding YouCompleteMe"
-	cd home/.janus/YouCompleteMe
+	pushd home/.janus/YouCompleteMe >/dev/null
 	# On Linux, don't install clang completer (may not have the libs available)
 	if [[ $OS == "Linux" ]]; then
 		./install.sh
 	else
 		./install.sh --clang-completer
 	fi
+	popd >/dev/null
 fi
 
+printHeader "Installing tern_for_vim npm dependencies"
+pushd home/.janus/tern_for_vim >/dev/null
+npm install
+popd >/dev/null
+
+
+popd >/dev/null

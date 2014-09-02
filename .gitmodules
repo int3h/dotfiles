@@ -46,3 +46,6 @@
 [submodule "home/.janus/vim-latex"]
 	path = home/.janus/vim-latex
 	url = http://git.code.sf.net/p/vim-latex/vim-latex
+[submodule "home/.janus/tern_for_vim"]
+	path = home/.janus/tern_for_vim
+	url = git@github.com:marijnh/tern_for_vim.git
