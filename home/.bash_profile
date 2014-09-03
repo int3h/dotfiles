@@ -1,56 +1,19 @@
 #################################
-##### Check which OS we're running and set global flags
+##### Guard against double execution (for example, in tmux subshell)
 #################################
 
-if [[ -n $_BASHRC_DID_RUN ]]; then
-	case $- in
-	*i*)
-		########## Print MOTD when we start a shell in TMUX
-		if [[ $TMUX ]] ; then
-			printf '\e[38;5;240m'
-			cat /run/motd.dynamic
-			# Print last login info using our `lastlog` formatter
-			[[ $(type -t lastlogin) ]] && lastlogin || lastlog -u mtorok | tail -n 1
-			printf '\e[0m\n'
-		fi
-		;;
-	esac
-else
-
+if [[ -z $_BASHRC_DID_RUN ]]; then
 _BASHRC_DID_RUN=1
+
+
+#################################
+##### Check which OS we're running and set global flags
+#################################
 
 case $(uname -s) in
 	Darwin) export OS='Mac';;
 	Linux) export OS='Linux';;
 esac
-
-
-#################################
-##### PATH setup (dependency of most other commands)
-#################################
-
-# We want to avoud setting the path twice, which can happen if, e.g., we're in a tmux subshell. We
-# check to see if one our custom path components (~/bin) is in $PATH and only proceed if it isn't.
-if [[ ":${PATH}:" != *":${HOME}/bin:"* ]]; then
-	## High weight (last added = highest priority)
-
-	# added by Anaconda 2.0.1 installer
-	#[[ -d $HOME/anaconda/bin ]] && PATH="$HOME/anaconda/bin:$PATH"
-	# Homebrew (overrides system tools)
-	[[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
-	# `pip install --user` binaries
-	[[ -d $HOME/.local/bin ]] && PATH="$HOME/.local/bin:$PATH"
-	# My own user bin directory (highest priority)
-	[[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
-
-	## Low weight (last added = lowest priority)
-
-	# Araxis Merge command line utilities (if they're installed)
-	[[ -d "$HOME/bin/araxis" ]] && PATH="$PATH:$HOME/bin/araxis"
-	# Binaries in the CWD
-	export PATH="$PATH:."
-fi
-
 
 [ -f ~/.config/bash/shell_local ] && source ~/.config/bash/shell_local
 
@@ -94,6 +57,31 @@ export HISTFILE=~/.config/bash/shell_history
 shopt -s histappend;
 # Save each command when the prompt is re-displayed, rather than only at shell exit
 PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
+
+
+#################################
+##### PATH setup (dependency of most other commands)
+#################################
+
+# We want to avoud setting the path twice, which can happen if, e.g., we're in a tmux subshell. We
+# check to see if one our custom path components (~/bin) is in $PATH and only proceed if it isn't.
+if [[ ":${PATH}:" != *":${HOME}/bin:"* ]]; then
+	## High weight (last added = highest priority)
+
+    # Homebrew (overrides system tools)
+	[[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
+	# `pip install --user` binaries
+	[[ -d $HOME/.local/bin ]] && PATH="$HOME/.local/bin:$PATH"
+	# My own user bin directory (highest priority)
+	[[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
+
+	## Low weight (last added = lowest priority)
+
+	# Araxis Merge command line utilities (if they're installed)
+	[[ -d "$HOME/bin/araxis" ]] && PATH="$PATH:$HOME/bin/araxis"
+	# Binaries in the CWD
+	export PATH="$PATH:."
+fi
 
 
 # Add non-globally installed npm modules' bins to $PATH while you're in install dir or subdir
@@ -316,4 +304,24 @@ case $- in
     ;;
 esac
 
-fi # _BASHRC_DID_RUN
+
+#################################
+##### _BASH_RC_DID_RUN is non-zero (i.e., this file has been run before)
+#################################
+
+else # _BASHRC_DID_RUN
+
+
+case $- in
+*i*)
+    ########## Print MOTD when we start a shell in TMUX
+    if [[ $TMUX ]] ; then
+        printf '\e[38;5;240m'
+        cat /run/motd.dynamic
+        # Print last login info using our `lastlog` formatter
+        [[ $(type -t lastlogin) ]] && lastlogin || lastlog -u mtorok | tail -n 1
+        printf '\e[0m\n'
+    fi
+    ;;
+esac
+fi
