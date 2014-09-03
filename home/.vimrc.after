@@ -309,12 +309,6 @@ python powerline_setup()
 python del powerline_setup
 
 
-""""""" Powerline {{{1
-python from powerline.vim import setup as powerline_setup
-python powerline_setup()
-python del powerline_setup
-
-
 """"""" NERDTree {{{1
 if janus#is_plugin_enabled("nerdtree")
 	call add(NERDTreeIgnore, '\.tmp$')
