@@ -260,11 +260,13 @@ case $- in
 	fi
 	PROMPT_CLR_CMD="${COLOR_RESET}$(tput bold)$PROMPT_COLOR"
 
-	if [[ $OS == "Mac" ]]; then
-		PROMPT_TEXT='\u (\w)'
-	else
-		PROMPT_TEXT='\u@\H (\w)'
-	fi
+    if [[ -z $PROMPT_TEXT ]]; then
+        if [[ $OS == "Mac" ]]; then
+            PROMPT_TEXT='\u (\w)'
+        else
+            PROMPT_TEXT='\u@\H (\w)'
+        fi
+    fi
 
 	# The below version adds more '$' for every level deeper the shell is nested
 	export PS1="\[${PROMPT_CLR_CMD}\]${PROMPT_TEXT}$(eval "printf '\\$%.0s' {1..$NUM_PROMPTS}")\[${COLOR_RESET}\] "
