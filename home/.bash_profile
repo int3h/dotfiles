@@ -175,6 +175,31 @@ if [[ $OS == "Mac" ]]; then
     # Initialize 'autojump' utility
     [[ -s $BREW_PREFIX/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
+    # Needed for ec2 api tools; otherwise nice to have
+    export JAVA_HOME="$(/usr/libexec/java_home)"
+
+    # Setup ec2 api tools
+    # $AWS_ACCESS_KEY and $AWS_SECRET_KEY should be set in shell_local or similar
+    if type -t ec2-cmd >/dev/null; then
+        # Find the path to the ec2 api tools libexec directory
+        ec2_symlink="$(which ec2-cmd)"
+        # Get the asbsolute path to the cmd by combining the dir to it + (relative) symlink pointer
+        ec2_abs_path="$(printf '%s/%s' "$(dirname "$ec2_symlink")" "$(readlink "$ec2_symlink")")"
+        # We can get to the libexec path relative to the absolute cmd path
+        ec2_libexec="$(printf '%s/../libexec' "$(dirname "$ec2_abs_path")")"
+
+        [[ -d "$ec2_libexec" ]] && export EC2_HOME="$ec2_libexec"
+        unset ec2_symlink ec2_abs_path ec2_libexec
+    fi
+    if type -t ec2-ami-tools-version >/dev/null; then
+        # Same for ec2 ami tools
+        ec2_symlink="$(which ec2-ami-tools-version)"
+        ec2_abs_path="$(printf '%s/%s' "$(dirname "$ec2_symlink")" "$(readlink "$ec2_symlink")")"
+        ec2_libexec="$(printf '%s/../libexec' "$(dirname "$ec2_abs_path")")"
+        [[ -d "$ec2_libexec" ]] && export EC2_AMITOOL_HOME="$ec2_libexec"
+        unset ec2_symlink ec2_abs_path ec2_libexec
+    fi
+
     export GIT_CONFIG=~/.gitsupport/gitconfig.mac
 fi
 
