@@ -1,7 +1,7 @@
 {
 	"common": {
 		"term_truecolor": false,
-        "paths": ["/Users/mtorok/.config/powerline/modules"]
+        "paths": ["/Users/mtorok/.config/powerline/modules", "/home/mtorok/.config/powerline/modules"]
 	},
 	"ext": {
 		"ipython": {
