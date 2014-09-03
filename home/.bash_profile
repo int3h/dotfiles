@@ -2,8 +2,8 @@
 ##### Guard against double execution (for example, in tmux subshell)
 #################################
 
-if [[ -z $_BASHRC_DID_RUN ]]; then
-_BASHRC_DID_RUN=1
+#if [[ -z $_BASHRC_DID_RUN ]]; then
+#_BASHRC_DID_RUN=1
 
 
 #################################
@@ -336,21 +336,21 @@ esac
 ##### _BASH_RC_DID_RUN is non-zero (i.e., this file has been run before)
 #################################
 
-else # _BASHRC_DID_RUN
+#else # _BASHRC_DID_RUN
 
 
-case $- in
-*i*)
-    ########## Print MOTD when we start a shell in TMUX
-    if [[ $TMUX ]] ; then
-        printf '\e[38;5;240m'
-        cat /run/motd.dynamic
-        # Print last login info using our `lastlog` formatter
-        [[ $(type -t lastlogin) ]] && lastlogin || lastlog -u mtorok | tail -n 1
-        printf '\e[0m\n'
-    fi
-    ;;
-esac
-fi
+#case $- in
+#*i*)
+    ########### Print MOTD when we start a shell in TMUX
+    #if [[ $TMUX ]] ; then
+        #printf '\e[38;5;240m'
+        #cat /run/motd.dynamic
+        ## Print last login info using our `lastlog` formatter
+        #[[ $(type -t lastlogin) ]] && lastlogin || lastlog -u mtorok | tail -n 1
+        #printf '\e[0m\n'
+    #fi
+    #;;
+#esac
+#fi
 
 # vim: set tabstop=4 shiftwidth=4 textwidth=100 expandtab foldmethod=manual filetype=sh:
