@@ -211,6 +211,8 @@ fi
 # Add in Grunt completions
 type -t grunt >/dev/null && eval "$(grunt --completion=bash)"
 
+[[ -x ~/.local/bin/powerline-config ]] && export POWERLINE_CONFIG_COMMAND=~/.local/bin/powerline-config
+
 
 #################################
 ##### Source secondary config files
