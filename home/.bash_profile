@@ -205,7 +205,7 @@ type -t grunt >/dev/null && eval "$(grunt --completion=bash)"
 [ -f ~/.shell_private ] && source ~/.shell_private
 [ -f ~/.shell_aliases ] && source ~/.shell_aliases
 [ -f ~/.shell_commands ] && source ~/.shell_commands
-[ -f ~/.local_config ] && source ~/.local_config
+[ -f ~/.shell_local ] && source ~/.shell_local
 
 
 #################################
@@ -262,7 +262,6 @@ case $- in
 
     # Prompt will be 'username (pwd)$ ', colored with white-on-green
 	COLOR_RESET="$(tput sgr0)"
-	PROMPT_COLOR="${PROMPT_RESET}$(tput bold)$(tput setab 2)"
 	if [[ -z $PROMPT_COLOR ]]; then
 		if type -t hashcolor >/dev/null 2>&1; then
 			hashedColor=($(hashcolor $HOSTNAME))
