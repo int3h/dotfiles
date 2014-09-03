@@ -5,3 +5,4 @@ bin
 
 .gitsupport
 .matplotlib
+.config/bash

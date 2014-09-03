@@ -52,6 +52,7 @@ if [[ ":${PATH}:" != *":${HOME}/bin:"* ]]; then
 fi
 
 
+[ -f ~/.config/bash/shell_local ] && source ~/.config/bash/shell_local
 
 
 #################################
@@ -88,7 +89,7 @@ HISTSIZE=1000
 HISTFILESIZE=2000
 export HISTCONTROL=ignoredups:ignorespace;
 # Change the file history commands are saved to
-export HISTFILE=~/.shell_history
+export HISTFILE=~/.config/bash/shell_history
 # Append to the existing history file, rather than overwriting it
 shopt -s histappend;
 # Save each command when the prompt is re-displayed, rather than only at shell exit
@@ -202,10 +203,8 @@ type -t grunt >/dev/null && eval "$(grunt --completion=bash)"
 ##### Source secondary config files
 #################################
 
-[ -f ~/.shell_private ] && source ~/.shell_private
-[ -f ~/.shell_aliases ] && source ~/.shell_aliases
-[ -f ~/.shell_commands ] && source ~/.shell_commands
-[ -f ~/.shell_local ] && source ~/.shell_local
+[ -f ~/.config/bash/shell_aliases ] && source ~/.config/bash/shell_aliases
+[ -f ~/.config/bash/shell_commands ] && source ~/.config/bash/shell_commands
 
 
 #################################
