@@ -1,12 +1,4 @@
 #################################
-##### Guard against double execution (for example, in tmux subshell)
-#################################
-
-if [[ -z $_BASHRC_DID_RUN ]]; then
-_BASHRC_DID_RUN=1
-
-
-#################################
 ##### Check which OS we're running and set global flags
 #################################
 
@@ -56,7 +48,7 @@ export HISTFILE=~/.config/bash/shell_history
 # Append to the existing history file, rather than overwriting it
 shopt -s histappend;
 # Save each command when the prompt is re-displayed, rather than only at shell exit
-PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
+[[ $_BASHRC_DID_RUN ]] || PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
 
 
 #################################
@@ -65,7 +57,7 @@ PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
 
 # We want to avoud setting the path twice, which can happen if, e.g., we're in a tmux subshell. We
 # check to see if one our custom path components (~/bin) is in $PATH and only proceed if it isn't.
-if [[ ":${PATH}:" != *":${HOME}/bin:"* ]]; then
+if [[ ! $_BASHRC_DID_RUN ]]; then
     ## High weight (last added = highest priority)
 
     # Homebrew (overrides system tools)
@@ -112,9 +104,8 @@ if type -t 'npm' >/dev/null; then
         export __npm_local_bin_path
     }
 
-    PROMPT_COMMAND="${PROMPT_COMMAND}; add_npm_to_path"
-    export PROMPT_COMMAND
-    export __npm_local_bin_path
+    [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="${PROMPT_COMMAND}; add_npm_to_path" && \
+        export __npm_local_bin_path
 fi
 
 
@@ -251,7 +242,7 @@ function resize_prompt_dirtrim() {
 
 case $- in
 *i*)
-    export PROMPT_COMMAND="$PROMPT_COMMAND; resize_prompt_dirtrim"
+    [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="$PROMPT_COMMAND; resize_prompt_dirtrim"
 
     export CLICOLOR=1
     #export LSCOLORS=ExFxCxDxBxegedabagacad
@@ -332,25 +323,4 @@ case $- in
 esac
 
 
-#################################
-##### _BASH_RC_DID_RUN is non-zero (i.e., this file has been run before)
-#################################
-
-else # _BASHRC_DID_RUN
-
-
-case $- in
-*i*)
-    ########## Print MOTD when we start a shell in TMUX
-    if [[ $TMUX ]] ; then
-        printf '\e[38;5;240m'
-        cat /run/motd.dynamic
-        # Print last login info using our `lastlog` formatter
-        [[ $(type -t lastlogin) ]] && lastlogin || lastlog -u mtorok | tail -n 1
-        printf '\e[0m\n'
-    fi
-    ;;
-esac
-fi
-
-# vim: set tabstop=4 shiftwidth=4 textwidth=100 expandtab foldmethod=manual filetype=sh:
+export _BASHRC_DID_RUN=1
