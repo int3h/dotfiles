@@ -16,40 +16,13 @@ findfiles() {
 }
 
 
-# Open a man page as a PDF in Preview.app
-pman () {
-    man -t $@ | open -f -a /Applications/Preview.app
-}
-
-
 # Make a tmp directory, switch to it and copy its name to the system's paste buffer
 delme () {
     local TMPDIR="$(mktemp -d -t delme)"
     cd "$TMPDIR"
-    pwd | tr -d "\n" | pbcopy
+    [[ "$OS" == "Mac" ]] && pwd | tr -d "\n" | pbcopy
 }
 
-
-# Commands to display OS X notifications from the terminal
-if hash terminal-notifier 2>/dev/null; then
-    alias notify-success='terminal-notifier -sound Glass -sender com.apple.Terminal -activate com.apple.Terminal -title "Succeeded" -message'
-    alias notify-failure='terminal-notifier -sound Basso -sender com.apple.Terminal -activate com.apple.Terminal -title "Failed" -message'
-else
-    alias notify-success='say'
-    alias notify-failure='say'
-fi
-notify () {
-    if [[ ! "$@" ]]; then
-        echo "Usage: notify <command>" >&2
-        echo "Executes <command> and shows an OS X notification on success or failure" >&2
-        return 1
-    fi
-
-    local SEARCH=' '
-    local REPLACE='%20'
-    local CMDMSG="${@//$SEARCH/$REPLACE}"
-    (eval "$@" && notify-success "Command '$CMDMSG' completed successfully") || notify-failure "Command '$CMDMSG' failed"
-}
 
 
 # Check the spelling of a word with aspell (if installed)
@@ -63,7 +36,54 @@ fi
 # Grep for a process name and show the results
 psgrep() {
 	search_term="$*"
-	procs="$(command ps -Axww -o pid,user,command)"
+	procs="$(command ps -Aww -o pid,user,command)"
 	echo "$procs" | head -n 1
 	echo "$procs" | grep -i "[${search_term:0:1}]${search_term:1}"
 }
+
+
+if [[ "$OS" == "Mac" ]]; then
+	# Open a man page as a PDF in Preview.app
+	pman () {
+		man -t $@ | open -f -a /Applications/Preview.app
+	}
+
+
+	# Commands to display OS X notifications from the terminal
+	if hash terminal-notifier 2>/dev/null; then
+		alias notify-success='terminal-notifier -sound Glass -sender com.apple.Terminal -activate com.apple.Terminal -title "Succeeded" -message'
+		alias notify-failure='terminal-notifier -sound Basso -sender com.apple.Terminal -activate com.apple.Terminal -title "Failed" -message'
+	else
+		alias notify-success='say'
+		alias notify-failure='say'
+	fi
+	notify () {
+		if [[ ! "$@" ]]; then
+			echo "Usage: notify <command>" >&2
+			echo "Executes <command> and shows an OS X notification on success or failure" >&2
+			return 1
+		fi
+
+		local SEARCH=' '
+		local REPLACE='%20'
+		local CMDMSG="${@//$SEARCH/$REPLACE}"
+		(eval "$@" && notify-success "Command '$CMDMSG' completed successfully") || notify-failure "Command '$CMDMSG' failed"
+	}
+
+
+	# If the man page is just a reference to "Bash built-in commands" man page, use `help` instead
+	man_or_help() {
+		# Get the filename of the manfile
+		manfile="$(command man -w $2 "$1")"
+		[[ $? == 0 ]] || return
+
+
+		# If the command is a Bash builtin, display `help` instead of a HTML manpage
+		if [[ "$(basename $manfile)" == 'builtin.1' ]]; then
+			help "$1"
+		else
+			command man $@
+		fi
+	}
+	alias man="man_or_help"
+fi
