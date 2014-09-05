@@ -137,6 +137,10 @@ if [[ $OS == "Linux" ]]; then
     export VISUAL="vim"
 
     export GIT_CONFIG=~/.gitsupport/gitconfig.linux
+
+	# Tell GUI apps to use (virtual) display 0 (else in ssh they will fail when they can't find
+	# a display)
+	export DISPLAY=:0
 fi
 
 
