@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+if [[ "$OS" == "Mac" ]]; then
+	printf 'WARNING: Linux shell aliases sourced on Mac system\n' >&2
+fi
+
+
+# Detailed file listing; show hidden files; append a '/' to directories; use human-readable sizes;
+# colorize the output when not piped into another command.
+alias ls='ls -lAph --color=auto'
+# Simplified `ls`: don't show hidden files; show directories first; human readable sizes; colorized.
+alias lsd='command ls -lph --color=auto --group-directories-first'
+
+# Require confirmation when deleting >3 files or a directory; be verbose.
+alias rm='rm -Iv'
+
+# Run n make processes in parallel, where n = (number of CPUs) + 1
+alias make="make -j $(( $(nproc) + 1 ))"
+
+alias bashrc="$VISUAL ~/.bash_profile"
+
+
+#################################
+##### Ubuntu default setup
+#################################
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+	#alias dir='dir --color=auto'
+	#alias vdir='vdir --color=auto'
+
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
+fi
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+
+# vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=sh:

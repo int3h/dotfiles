@@ -1,37 +1,10 @@
 #!/usr/bin/env bash
 
-if [[ $OS == "Mac" ]]; then
-	alias ls='command ls -lAOph'
-	alias lsd='command ls -lOph'
-	alias lsx='command ls -lAOphe@'
-else
-	# Detailed file listing; show hidden files; append a '/' to directories; use human-readable sizes;
-	# colorize the output when not piped into another command.
-	alias ls='ls -lAph --color=auto'
-	# Simplified `ls`: don't show hidden files; show directories first; human readable sizes; colorized.
-	alias lsd='command ls -lph --color=auto --group-directories-first'
-fi
-
-# Require confirmation when deleting >3 files or a directory; be verbose.
-[[ $OS == "Linux" ]] && alias rm='rm -Iv'
-
-if [[ $OS == "Mac" ]]; then
-	alias make="make -j $(( $(sysctl -n hw.ncpu) + 1 ))"
-else
-	# Run n make processes in parallel, where n = (number of CPUs) + 1
-	alias make="make -j $(( $(nproc) + 1 ))"
-fi
-
 # Use '{}' as a placeholder for arguments to xargs
-alias xargs='xargs -0 -I {}'
+alias xargs='xargs -0 -I{}'
 
 # Shorter alias to grep a fixed string; case insensitive; ignore binary files.
 alias fgrep='grep -Fi'
-
-if [[ $OS == "Mac" ]]; then
-	alias psa='ps -Axww -o pid,user,cpu,command'
-	alias psal='ps -Axww -o pid,user,cpu,command | less -S'
-fi
 
 # Run 'less' but disable line wrapping (and enable horizontal scrolling)
 alias lesw='less -S'
@@ -50,70 +23,11 @@ if type -t tmux >/dev/null; then
 	alias topen='tmux a -t'
 fi
 
-if [[ $OS == "Mac" ]]; then
-	alias bashrc="mvim ~/.bash_profile"
-else
-	alias bashrc="$VISUAL ~/.bash_profile"
-fi
 
 # Show public IP address
 alias whatismyip="curl -s 'http://ipecho.net/plain' && echo"
 
-# Homebrew's `brew` command is a single monolithic binary that processes all homebrew commands, so
-# we can't modify/add commands via aliases. This script wraps brew and allows us to do so.
-if [[ -x ${HOME}/bin/brew-wrapper ]]; then
-    alias brew="$HOME/bin/brew-wrapper"
-fi
 
-
-if [[ $OS == "Mac" ]]; then
-	# List all the preferences domains currently available
-	alias domains='defaults domains | sed "s:, :\\`echo -e "\n\r"`:g"'
-
-	# Show all items currently excluded from backup by their HFS+ extended attributes
-	alias backup-excluded="sudo mdfind \"com_apple_backup_excludeItem = 'com.apple.backupd'\";\
-	defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist UserPathsExcluded | grep -oE --color=never -e '\"[^\"]+\"' | xargs -I {} printf \"$HOME/{}\n\";\
-	defaults read /Library/Preferences/com.apple.TimeMachine.plist ExcludeByPath | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\
-	defaults read /Library/Preferences/com.apple.TimeMachine.plist SkipPaths | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\
-	defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist ContentsExcluded | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\
-	defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist FileContentsExcluded | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\
-	defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist PathsExcluded | grep -oP --color=never -e '^\\W*\"\\K[^\"]+';"
-
-
-	# Check an OpenCL file for compilation errors. (Preprocesses, compiles, and assembles the file, with
-	# all warnings, and discards the generated file.)
-	alias opencl-check='/System/Library/Frameworks/OpenCL.framework/Versions/A/Libraries/openclc -c -x cl -cl-std=CL1.1 -Weverything -o /dev/null'
-
-
-	alias defs='defaults read'
-
-	alias findlib="find $HOME/Library \
-	\( -not -path '$HOME/Library/Mail/*' -not -path '$HOME/Library/Application Support/Google/Chrome*/Default/File System/*' \
-	-not -path '$HOME/Library/Application Support/Google/Chrome*/Default/IndexedDB/*' \
-	-not -path '$HOME/Library/Application Support/Google/Chrome*/Default/Local Storage/*' \
-	-not -path '$HOME/Library/Application Support/Google/Chrome*/Default/Pepper Data/*' \
-	-not -path '$HOME/Library/Calendars/*' \) \
-	-iname "
-fi
-
-
-if [[ $OS == "Linux" ]]; then
-	#################################
-	##### Ubuntu default setup
-	#################################
-
-	# enable color support of ls and also add handy aliases
-	if [ -x /usr/bin/dircolors ]; then
-		test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-		#alias dir='dir --color=auto'
-		#alias vdir='vdir --color=auto'
-
-		alias grep='grep --color=auto'
-		alias fgrep='fgrep --color=auto'
-		alias egrep='egrep --color=auto'
-	fi
-
-	# Add an "alert" alias for long running commands.  Use like so:
-	#   sleep 10; alert
-	alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-fi
+# Source our OS-specific aliases
+[[ "$OS" == "Mac" ]] && . ~/.config/bash/shell_aliases.mac
+[[ "$OS" == "Linux" ]] && . ~/.config/bash/shell_aliases.linux
