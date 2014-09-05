@@ -136,7 +136,8 @@ if [[ $OS == "Linux" ]]; then
     export EDITOR="vim"
     export VISUAL="vim"
 
-    export GIT_CONFIG=~/.gitsupport/gitconfig.linux
+	# This doesn't seem to work, so we should ln -s this file to ~/.gitconfig
+    #export GIT_CONFIG=~/.gitsupport/gitconfig.linux
 
 	# Tell GUI apps to use (virtual) display 0 (else in ssh they will fail when they can't find
 	# a display)
@@ -195,7 +196,8 @@ if [[ $OS == "Mac" ]]; then
         unset ec2_symlink ec2_abs_path ec2_libexec
     fi
 
-    export GIT_CONFIG=~/.gitsupport/gitconfig.mac
+	# This doesn't seem to work, so we should ln -s this file to ~/.gitconfig
+    #export GIT_CONFIG=~/.gitsupport/gitconfig.mac
 fi
 
 
