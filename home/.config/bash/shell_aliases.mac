@@ -12,7 +12,7 @@ alias lsx='command ls -lAOphe@'
 alias lsd='command ls -lOph'
 
 # Run n make processes in parallel, where n = (number of CPUs) + 1
-alias make="make -j $(( $(sysctl -n hw.ncpu) + 1 ))"
+alias make="make -j$(( $(sysctl -n hw.ncpu) + 1 ))"
 
 alias psa='ps -Axww -o pid,user,cpu,command'
 alias psal='ps -Axww -o pid,user,cpu,command | less -S'
