@@ -43,6 +43,8 @@ set wildignore+=*.tmp
 
 set number
 
+set hidden
+
 
 """"""" Startup commands {{{1
 
