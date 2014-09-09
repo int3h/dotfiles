@@ -26,9 +26,9 @@
 
 
 [difftool "Kaleidoscope"]
-	cmd = ~/bin/ksdiff-fixed --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+	cmd = ~/bin/mac/ksdiff-fixed --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [difftool "sourcetree"]
-	cmd = ~/bin/ksdiff-fixed -w \"$LOCAL\" \"$REMOTE\"
+	cmd = ~/bin/mac/ksdiff-fixed -w \"$LOCAL\" \"$REMOTE\"
 	path = 
 [difftool]
 	prompt = false
@@ -37,10 +37,10 @@
 	tool = Kaleidoscope
 
 [mergetool "Kaleidoscope"]
-	cmd = ~/bin/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	cmd = ~/bin/mac/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
 [mergetool "sourcetree"]
-	cmd = ~/bin/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	cmd = ~/bin/mac/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
 [mergetool]
 	keepBackup = true

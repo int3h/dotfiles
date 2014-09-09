@@ -22,7 +22,7 @@ alias bashrc="mvim ~/.bash_profile"
 # Homebrew's `brew` command is a single monolithic binary that processes all homebrew commands, so
 # we can't modify/add commands via aliases. This script wraps brew and allows us to do so.
 if [[ -x ${HOME}/bin/brew-wrapper ]]; then
-    alias brew="$HOME/bin/brew-wrapper"
+    alias brew="$HOME/bin/mac/brew-wrapper"
 fi
 
 # List all the preferences domains currently available
