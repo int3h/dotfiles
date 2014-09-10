@@ -16,12 +16,8 @@ alias la='ls'
 # Shortcut to cd to my current homesick castle directory
 type -t homesick >/dev/null && alias castle='cd $(homesick show_path)'
 
-if type -t tmux >/dev/null; then
-	# Create a new tmux session with a given name
-	alias tnew='tmux new -s'
-	# Connct to an existing tmux session with a given name
-	alias topen='tmux a -t'
-fi
+# `tm` will open (and create, if necessary) a tmux session named for the current user
+type -t tmux 2>&1 >/dev/null && alias tm="tmux new-session -A -s \"$USER\""
 
 # Show public IP address
 alias whatismyip="curl -s 'http://ipecho.net/plain' && echo"
