@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+#USERPROMPT="\e[1m"
+USERPROMPT=""
+
+function printColors {
+    for color in {0..256} ; do #Colors
+		printf "${USERPROMPT}\e[${1};5;${color}m %10s \e[0m" "${color}"
+		#printf "${USERPROMPT}%s%s %10s \e[0m" "$(tput sgr0)" "$(tput setaf $color)" "${color}"
+        #Display 10 colors per lines
+        if [ $((($color + 1) % 8)) == 0 ] ; then
+            echo
+        fi
+    done
+    echo
+}
+
+function printForegrounds {
+    printColors 38
+}
+function printBackgrounds {
+    printColors 48
+}
+
+#USERPROMPT="\e[1m"
+USERPROMPT="\e[0m"
+printBackgrounds
+echo
+read -p "Enter the value of the background color of the prompt: " USERBG
+USERPROMPT="${USERPROMPT}\e[48;5;${USERBG}m"
+echo
+echo -ne "\e[48;5;${USERBG}m\e[1m"
+printForegrounds
+echo -ne "\e[0m"
+echo
+echo -n "Enter the value of the foreground color of the prompt: "
+read USERFG
+USERPROMPT="${USERPROMPT}\e[38;5;${USERFG}m"
+echo
+echo "Your prompt will look like:"
+echo -e "${USERPROMPT}user@host (~/example)\$\e[0m "
+echo
+echo "Color code: ${USERPROMPT}"

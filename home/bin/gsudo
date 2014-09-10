@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-# Runs the specified command as root, but uses a GUI password prompt instead of the terminal one
-
-# Escape quotes
-user_script="${@//\"/\\\"}"
-osascript -e "do shell script \"${user_script}\" with administrator privileges"

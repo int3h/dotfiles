@@ -66,6 +66,7 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
     [[ -d $HOME/.local/bin ]] && PATH="$HOME/.local/bin:$PATH"
     # My own user bin directory (highest priority)
     [[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
+	[[ "$OS" == "Mac" ]] && [[ -d "$HOME/bin/mac" ]] && PATH="$HOME/bin/mac:$PATH"
 
     ## Low weight (last added = lowest priority)
 

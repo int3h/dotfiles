@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+
+if [[ -f ~/bin/helpers.sh ]]; then
+    . ~/bin/helpers.sh
+fi
+
+# From https://gist.github.com/walesmd/7315613
+
+holding_dir="$HOME/fix_iconservicesagent"
+launchagent="$HOME/Library/LaunchAgents/com.matthewtorok.fix-iconservicesagent.plist"
+launchdaemon="/Library/LaunchDaemons/com.matthewtorok.fix-inconservicesdaemon.plist"
+script_path=$(get_script_path)
+
+################################################################################
+# Functions
+################################################################################
+
+# Moves QuickLook plugins from /System to holding dir and resets the QL cache
+reset_ql() {
+    # Make a directory to hold the uninstalled QL plugins
+    mkdir "$holding_dir" >/dev/null
+
+    # Kill IconServicesAgent
+    sudo killall -KILL com.apple.IconServicesAgent
+
+    # With `sudo`, move the plugins from /System to the holding directory
+    sudo mv /System/Library/LaunchAgents/com.apple.quicklook.* $holding_dir/
+
+    # Clear the QL cache
+    qlmanage -r && qlmanage -r cache
+}
+
+
+# Installs a LaunchAgent and helper script to run the second stage of this script
+install_launchagent() {
+    (cat <<DAEMON
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.matthewtorok.fix-iconservicesagent-daemon</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>$script_path</string>
+      <string>daemon</string>
+      <string>$holding_dir</string>
+    </array>
+
+    <key>ExitTimeOut</key>
+    <integer>335</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>LaunchOnlyOnce</key>
+    <true/>
+
+    <key>UserName</key>
+    <string>root</string>
+</dict>
+</plist>
+DAEMON
+        ) > daemon.plist
+        sudo mv daemon.plist "$launchdaemon"
+        sudo chown root:wheel "$launchdaemon"
+        sudo chmod 600 "$launchdaemon"
+
+
+    # Write the LaunchAgent plist to the user's Library. This agent is set to run once on load
+    # and simply runs the helper script.
+    (cat <<AGENT
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.matthewtorok.fix-iconservicesagent-user</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>$script_path</string>
+      <string>stage2</string>
+    </array>
+
+    <key>ExitTimeOut</key>
+    <integer>345</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>LaunchOnlyOnce</key>
+    <true/>
+</dict>
+</plist>
+AGENT
+		) > "$launchagent"
+}
+
+
+# The actions to take when the user runs the script direcly
+stage_one_user() {
+    # Reset QuickLook
+    reset_ql
+
+    # Install the LaunchAgent
+    install_launchagent
+
+    # Alert the user they must reboot
+    echo
+    echo "Stage 1 complete. The machine will now be rebooted to continue. Please save your documents."
+    read -n1 -p "Press any key to continue: " IGNORE
+
+    osascript -e 'Tell application "System Events" to restart'
+}
+
+
+# The actions to take when run by the LaunchAgent, after rebooting when stage 1 completes
+stage_two_launchd() {
+    # Delete the holding directory and LaunchAgent
+    rm "$launchagent"
+
+    # Send to background a bash command to sleep $timeout-10 seconds, then does a reboot (this
+    # will ensure the machine reboots even if the user never dismisses the dialog we display below.
+    # Otherwise, launchd may see our script waiting for too long and kill it before we can reboot.)
+    bash -c "sleep 330 && osascript -e 'Tell application \"System Events\" to restart'" &
+
+    # Run an applescript to display a "We're going to reboot" dialog to the user, then reboots.
+    osascript -e 'display dialog "The computer will now rebooted a second, and final, time to finish fixing IconServicesAgent." buttons {"OK"} with title "Fix IconServicesAgent" with icon stop' \
+    -e 'Tell application "System Events" to restart'
+}
+
+
+stage_two_daemon() {
+    mv $1/com.apple.quicklook.* /System/Library/LaunchAgents
+    rm -rf "$1"
+    rm "$launchdaemon"
+}
+
+
+################################################################################
+# Runtime dispatcher
+################################################################################
+
+
+if [[ $# -eq 0 ]]; then
+    # If no arguments given, assume the user is asking us to run
+    echo "Fixes IconServicesAgent memory usage. Must run all actions, rebooting"
+    echo "between each. Requires 'sudo' permission."
+    echo
+    read -n1 -p "Do you wish to continue? (y/n): " do_run
+    if [[ $do_run != y && $do_run != Y ]]; then
+        echo -e "\nExiting without continuing."
+        exit 2
+    fi
+
+    echo
+    stage_one_user
+else
+    if [[ $1 == stage2 ]]; then
+        # If the first argument is 'stage2', then this script is being run by the LaunchAgent after
+        # the first reboot.
+        stage_two_launchd
+    elif [[ $1 == daemon ]]; then
+        stage_two_daemon "$2"
+    else
+        # DEBUG
+        echo "WARNING: This script isn't fully tested. It seems to work in dry-runs, but I" >&2
+        echo "haven't run it live yet. Use at your own risk!" >&2
+        echo
+        echo "Fixes IconServicesAgent memory usage. Must run all actions, rebooting"
+        echo "between each. Requires 'sudo' permission."
+
+        # Otherwise, we don't recognize the argument, so display help/error
+        if [[ $1 != -h && $1 != --help ]]; then
+            echo
+            echo "ERROR: unrecognized option '$1'" >&2
+            exit 1
+        else
+            exit 0
+        fi
+    fi
+fi

@@ -32,4 +32,4 @@ else
     binary=rsync
 fi
 
-rsync $ARGS $@
+command $binary $ARGS $@
