@@ -99,13 +99,9 @@ if type -t 'npm' >/dev/null; then
             PATH="$PATH:${npmRoot}"
             __npm_local_bin_path="${npmRoot}"
         fi
-
-        export PATH
-        export __npm_local_bin_path
     }
 
-    [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="${PROMPT_COMMAND}; add_npm_to_path" && \
-        export __npm_local_bin_path
+    [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="${PROMPT_COMMAND}; add_npm_to_path"
 fi
 
 
@@ -329,6 +325,8 @@ case $- in
 
         [ -x ~/mac-scripts/launchd-update-homebrew.sh ] && ~/mac-scripts/launchd-update-homebrew.sh display
     fi
+
+	export _BASHRC_DID_RUN=1
 
      ########## Launch tmux by default
     if type -t tmux 2>&1 >/dev/null && test -z "$TMUX"; then
