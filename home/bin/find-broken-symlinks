@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+if [ $# -ne 1 ] && [ $# -ne 2 ]; then
+    echo "Usage: $(basename "${BASH_SOURCE[0]}") [-d|--delete] <path>" >&2
+    exit 1
+fi
+
+if [[ $1 == '-d' ]] || [[ $1 == '--delete' ]]; then
+    ACTION='-exec rm -i {} +'
+    LOCATION="$2"
+elif [[ $2 == '-d' ]] || [[ $2 == '--delete' ]]; then
+    ACTION='-exec rm -i {} +'
+    LOCATION="$1"
+else
+    ACTION=''
+    LOCATION="$1"
+fi
+
+find -L "$LOCATION" -type l $ACTION
