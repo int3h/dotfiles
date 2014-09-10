@@ -214,6 +214,13 @@ fi
 # Add in Grunt completions
 type -t grunt >/dev/null && eval "$(grunt --completion=bash)"
 
+# Link SSH agent forwarding socket to constant location so that it works even on tmux reconnect
+if [[ ! -z "$SSH_AUTH_SOCK" ]] && [[ "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent_auth_sock"  ]] ; then
+	command rm -f "$HOME/.ssh/agent_auth_sock" 2>&1 >/dev/null
+	ln -sf "$SSH_AUTH_SOCK" "$HOME/.ssh/agent_auth_sock" 2>&1 >/dev/null
+	export SSH_AUTH_SOCK="$HOME/.ssh/agent_auth_sock"
+fi
+
 
 #################################
 ##### Source secondary config files
