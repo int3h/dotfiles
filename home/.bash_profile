@@ -133,11 +133,14 @@ if [[ $OS == "Linux" ]]; then
     export EDITOR="vim"
     export VISUAL="vim"
 
-	# This doesn't seem to work, so we should ln -s this file to ~/.gitconfig
-    #export GIT_CONFIG=~/.gitsupport/gitconfig.linux
+	# Link SSH agent forwarding socket to constant location so that it works even on tmux reconnect
+	if [[ ! -z "$SSH_AUTH_SOCK" ]] && [[ "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent_auth_sock"  ]] ; then
+		command rm -f "$HOME/.ssh/agent_auth_sock" 2>&1 >/dev/null
+		ln -sf "$SSH_AUTH_SOCK" "$HOME/.ssh/agent_auth_sock" 2>&1 >/dev/null
+		export SSH_AUTH_SOCK="$HOME/.ssh/agent_auth_sock"
+	fi
 
-	# Tell GUI apps to use (virtual) display 0 (else in ssh they will fail when they can't find
-	# a display)
+	# Tell X apps to use (virtual) display 0 (these fail under SSH when they can't find a display)
 	export DISPLAY=:0
 
 	# Setup CUDA tools
@@ -201,9 +204,6 @@ if [[ $OS == "Mac" ]]; then
         [[ -d "$ec2_libexec" ]] && export EC2_AMITOOL_HOME="$ec2_libexec"
         unset ec2_symlink ec2_abs_path ec2_libexec
     fi
-
-	# This doesn't seem to work, so we should ln -s this file to ~/.gitconfig
-    #export GIT_CONFIG=~/.gitsupport/gitconfig.mac
 fi
 
 
@@ -213,13 +213,6 @@ fi
 
 # Add in Grunt completions
 type -t grunt >/dev/null && eval "$(grunt --completion=bash)"
-
-# Link SSH agent forwarding socket to constant location so that it works even on tmux reconnect
-if [[ ! -z "$SSH_AUTH_SOCK" ]] && [[ "$SSH_AUTH_SOCK" != "$HOME/.ssh/agent_auth_sock"  ]] ; then
-	command rm -f "$HOME/.ssh/agent_auth_sock" 2>&1 >/dev/null
-	ln -sf "$SSH_AUTH_SOCK" "$HOME/.ssh/agent_auth_sock" 2>&1 >/dev/null
-	export SSH_AUTH_SOCK="$HOME/.ssh/agent_auth_sock"
-fi
 
 
 #################################
