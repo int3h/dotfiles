@@ -1,0 +1,164 @@
+#!/usr/bin/env bash
+
+# Exit immediately if pipe or subshell exits with non-zero status
+set -o errexit
+
+# TODO: Allow for multiple syncs to be setup, and exit each when this script gets an exit signal, or
+# one of the sync loops has an error.
+
+# TODO: Only sync the changed files? Don't know if this is more/less efficient than letting rsync
+# figure it out. We'd also need to make sure to change the dest path to match the path of the single
+# file we're uploading. It's possible we don't even need rsync here. If we do use rsync, look into
+# the '--files-from=- --from0' option to pass the files to sync from stdin (see man page for
+# details.)
+
+progname="$(basename "$0")"
+
+# Defaults
+latency="3.0"
+# -a = -rlptgoD
+rsync_options="--archive --no-owner --no-group --update --executability --compress --rsh=ssh -h -h -h --exclude-from=$HOME/.rsync_exclude.conf -F"
+fswatch_options='--one-per-batch --recursive --print0 --exclude /\.git/\{0,1\} --exclude /4913$ --exclude /node_modules/\{0,1\} --exclude /build/\{0,1\}'
+src=
+dest=
+src_nonlocal=
+verbose=
+clr_msg="$(tput setab 6)"
+clr_err="$(tput setab 1)"
+clr_reset="$(tput sgr0)"
+
+usage="Usage: $progname [-h] [-v] [-t <latency>] [-r <rsync option>...] <src> <dest>"
+helpmsg="Watch <src> (if local path) for changes and rsync them to <dest>
+
+$usage
+
+Options:
+  -h, --help                  show this help message and exit
+  -v, --verbose               increase verbosity
+  -t, --throttle <latency>    delay <latency> seconds (a double) after a fs
+                              event before invoking rsync (default: 3.0)
+  -r, --rsopt <rsync option>  options to pass to rsync when invoking
+
+When run, will perform an rsync from <src> to <dest>. Then, if <src> is a local
+path, a filesystem event watcher will be set up to watch <src> and all of its
+children, and will invoke rsync again when it detects changes."
+
+
+################################################################################
+################################################################################
+
+
+parse_options() {
+    while [[ $# > 0 ]]; do
+        option="$1"
+        shift
+
+        case $option in
+            -h|--help)
+                echo "$helpmsg"
+                exit 0
+                ;;
+            -v|--verbose)
+                verbose=1
+                rsync_options="$rsync_options -v"
+                exec 3>&2
+                ;;
+            -t|--throttle)
+                [[ $# < 1 ]] && echo "ERROR: argument required for option '$option'" >&2 && exit 3
+
+                latency="$1"
+                shift
+                ;;
+            -r|--rsopt)
+                [[ $# < 1 ]] && echo "ERROR: argument required for option '$option'" >&2 && exit 3
+
+                rsync_options="$rsync_options $1"
+                shift
+                ;;
+            -- )
+                src="$1"
+                dest="$2"
+                break
+                ;;
+            *)
+                if [[ -z $src ]]; then
+                    src="$option"
+                elif [[ -z $dest ]]; then
+                    dest="$option"
+                else
+                    echo "ERROR: unknown option '$option'"
+                    echo "$usage"
+                    exit 1
+                fi
+                ;;
+        esac
+    done
+
+    if [[ -z $src ]] || [[ -z $dest ]]; then
+        echo "ERROR: must supply both source and destination path" >&2
+        exit 2
+    fi
+
+    if [[ "$src" =~ *:* ]]; then
+        [[ $verbose ]] && echo "Source '$src' is non-local and can not be watched. Will run \`rsync\` once and exit." >&2
+        src_nonlocal=1
+    fi
+}
+
+
+################################################################################
+
+
+check_system() {
+        if ! type -t rsync 2>&1 >/dev/null; then
+        echo "ERROR: \`rsync\` not found. Make sure \`rsync\` is installed and in your \$PATH." >&2
+        exit 4
+    fi
+    if ! type -t fswatch 2>&1 >/dev/null; then
+        echo "ERROR: \`fswatch\` not found. Make sure \`fswatch\` is installed and in your \$PATH" >&2
+        exit 5
+    fi
+}
+
+
+################################################################################
+
+
+sync() {
+    #printf 'rsync %s "%s" "%s"\n\n' "$rsync_options" "$src" "$dest" >&3
+
+    rsync $rsync_options "$src" "$dest"
+
+    rsync_return=$?
+    if [[ $rsync_return != 0 ]]; then
+        printf '\n%sERROR: rsync reported an error while trying to sync (error code: %s)%s\n' "$clr_err" "$rsync_return" "$clr_reset" >&2
+        printf 'Command: rsync %s "%s" "%s"\n' "$rsync_options" "$src" "$dest" >&2
+        exit $rsync_return
+    fi
+
+    [[ $src_nonlocal ]] || printf "\n%sWatching %s/ for changes... %s" "$clr_msg" "$src" "$clr_reset" >&3
+}
+
+
+################################################################################
+################################################################################
+
+
+parse_options "$@"
+check_system
+
+# Perform initial rsync
+printf '%sSyncing "%s" to "%s"%s\n' "$clr_msg" "$src" "$dest" "$clr_reset" >&3
+printf -- 'Latency: %s sec\n' "$latency" >&3
+printf -- 'Sync command: rsync %s "%s" "%s"\n\n' "$rsync_options" "$src" "$dest" >&3
+sync
+
+if [[ $src_nonlocal ]]; then
+    printf '%sExiting after initial sync due to source "%s" being non-local%s\n\n' "$clr_msg" "$src" "$clr_reset" >&3
+    exit 0
+fi
+
+while read -d '' num_files_changed; do
+    printf '%s%s file(s) changed, syncing%s\n\n' "$clr_msg" "$num_files_changed" "$clr_reset" >&3
+    sync
+done < <(fswatch $fswatch_options --latency "$latency" "$src")
