@@ -121,6 +121,9 @@ nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 nmap <leader>a :call ToggleFormatAll()<CR>
 
+" Unmap 'Q' entering 'ex' mode (built-in binding, but nobody uses ex mode, seriously)
+nmap <silent> Q <Nop>
+
 
 " Functions supporting the above commands {{{2
 
