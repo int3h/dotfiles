@@ -328,7 +328,7 @@ case $- in
         # Kinda hacky way to indent PS2 to the same level as PS1: we make PS2 virtually the same as PS1,
         # however we insert a command to clear the printed text ('tput el1') right before we print the
         # prompt seperator character ('>') so that we erase the username+PWD but retain the cursor position
-    export PS2="${PROMPT_TEXT}(\w)[$(tput el1)$PROMPT_CLR_CMD\]$(eval "printf '>%.0s' {1..$NUM_PROMPTS}")\[${COLOR_RESET}\] "
+        #export PS2="${PROMPT_TEXT}(\w)[$(tput el1)$PROMPT_CLR_CMD\]$(eval "printf '>%.0s' {1..$NUM_PROMPTS}")\[${COLOR_RESET}\] "
 
         unset PROMPT_CLR_CMD
         unset NUM_PROMPTS
