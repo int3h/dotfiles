@@ -65,9 +65,13 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
     [[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
     # `pip install --user` binaries
     [[ -d $HOME/.local/bin ]] && PATH="$HOME/.local/bin:$PATH"
+	# In Linux, `npm install -g` normally requires `sudo`. We set the global path to ~/.npm_global
+	# and add its bin directory to our $PATH.
+	[[ "$OS" == "Linux" ]] && [[ -d ~/.npm_global ]] && PATH="$HOME/.npm_global/bin:$PATH"
     # My own user bin directory (highest priority)
     [[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
 	[[ "$OS" == "Mac" ]] && [[ -d "$HOME/bin/mac" ]] && PATH="$HOME/bin/mac:$PATH"
+	[[ "$OS" == "Linux" ]] && [[ -d "$HOME/bin/linux" ]] && PATH="$HOME/bin/linux:$PATH"
 
     ## Low weight (last added = lowest priority)
 
@@ -354,7 +358,7 @@ case $- in
 
         export _BASHRC_DID_RUN=1
 
-         ########## Launch tmux by default
+        ########## Launch tmux by default
         if type -t tmux 2>&1 >/dev/null && test -z "$TMUX"; then
             tmux new-session -A -s "$USER"
         fi
