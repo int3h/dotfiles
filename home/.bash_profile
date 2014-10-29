@@ -297,6 +297,7 @@ case $- in
                 NUM_PROMPTS=$SHLVL
                 ;;
         esac
+        PROMPT_CHAR="$(printf '\\$%.0s' {1..$NUM_PROMPTS})"
 
         # Prompt will be 'username (pwd)$ ', colored with white-on-green
         COLOR_RESET="$(tput sgr0)"
@@ -320,7 +321,7 @@ case $- in
         fi
 
         # The below version adds more '$' for every level deeper the shell is nested
-    export PS1="\[${PROMPT_CLR_CMD}\]${PROMPT_TEXT}$(eval "printf '\\$%.0s' {1..$NUM_PROMPTS}")\[${COLOR_RESET}\] "
+        export PS1="\\[${PROMPT_CLR_CMD}\\]${PROMPT_TEXT}${PROMPT_CHAR}\\[${COLOR_RESET}\\] "
         # The below version adds '[n]' before the '$' if the shell is nested, where n is the nesting level
         #export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
 
@@ -331,6 +332,7 @@ case $- in
 
         unset PROMPT_CLR_CMD
         unset NUM_PROMPTS
+        unset PROMPT_CHAR
         unset COLOR_RESET
         unset PROMPT_TEXT
 
@@ -338,7 +340,7 @@ case $- in
             # Set the tab name in Terminal.app to the basename of PWD
             # Change '1' to {2,1} to set {window,tab+window} title. /etc/bashrc already sends PWD to
             # Terminal.app via $PROMPT_COMMAND, which sets the file breadcrumb in the title bar.
-        PS1="\[\e]1;\W\a\]${PS1}"
+            PS1="\\[\\e]1;\\W\\a\\]${PS1}"
 
             if [[ -s $BREW_PREFIX/etc/grc.bashrc ]]; then
                 # Initialize the 'Generic Colouriser' utility
