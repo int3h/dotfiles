@@ -84,7 +84,7 @@ if type -t 'npm' >/dev/null; then
     __npm_local_bin_path=""
 
     add_npm_to_path() {
-        local npmRoot="$(npm root)/.bin"
+        local npmRoot="$(npm root 2>/dev/null)/.bin"
 
         # If the new npm bin path matches the old path, then nothing needs to be done
         if [[ $npmRoot == $__npm_local_bin_path ]]; then return; fi
