@@ -48,7 +48,8 @@ export HISTFILE=~/.config/bash/shell_history
 # Append to the existing history file, rather than overwriting it
 shopt -s histappend;
 # Save each command when the prompt is re-displayed, rather than only at shell exit
-[[ $_BASHRC_DID_RUN ]] || PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;} history -a";
+#[[ $_BASHRC_DID_RUN ]] || PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;}history -a;history -c;history -r";
+[[ $_BASHRC_DID_RUN ]] || PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;}history -a";
 
 
 #################################
