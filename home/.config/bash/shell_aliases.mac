@@ -17,7 +17,7 @@ alias make="make -j$(( $(sysctl -n hw.ncpu) + 1 ))"
 alias psa='ps -Axww -o pid,user,cpu,command'
 alias psal='ps -Axww -o pid,user,cpu,command | less -S'
 
-alias bashrc="mvim ~/.bash_profile"
+alias bashrc="find ~/.config/bash -not -name 'shell_history' -not -type d -print0 | command xargs -0 mvim ~/.bash_profile ~/.bashrc ~/.bash_logout "
 
 # Homebrew's `brew` command is a single monolithic binary that processes all homebrew commands, so
 # we can't modify/add commands via aliases. This script wraps brew and allows us to do so.
