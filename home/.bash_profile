@@ -272,7 +272,7 @@ case $- in
             # Read the cursor position printed by terminal (will be something like `^[[45;1R`)
             read -s -d R -t 0.25 CURPOS
             # If the position doesn't have ';1R' in it, we're not at column 1 so print a newline
-            [[ $CURPOS == *\;1R ]] || printf '\n'
+            [[ $CURPOS == *\;1 ]] || echo ""
         }
         [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="$PROMPT_COMMAND; ensure_prompt_on_own_line"
 
