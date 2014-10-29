@@ -261,84 +261,86 @@ function resize_prompt_dirtrim() {
 
 case $- in
 *i*)
-    [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="$PROMPT_COMMAND; resize_prompt_dirtrim"
+    if [[ $TERM != dumb ]]; then
+        [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="$PROMPT_COMMAND; resize_prompt_dirtrim"
+        PROMPT_DIRTRIM=3
 
-    export CLICOLOR=1
-    #export LSCOLORS=ExFxCxDxBxegedabagacad
+        export CLICOLOR=1
+        #export LSCOLORS=ExFxCxDxBxegedabagacad
 
-    # Tell grep to highlight matches
-    export GREP_OPTIONS='--color=auto'
+        # Tell grep to highlight matches
+        export GREP_OPTIONS='--color=auto'
 
-    PROMPT_DIRTRIM=3
 
-    ########## Prompt config
-    case "$TERM" in
-        screen*)
-            NUM_PROMPTS="$((SHLVL - 1))"
-            ;;
-        *)
-            #PROMPT_COLOR="${COLOR_RESET}$(tput bold)$(tput setab 6)"
-            NUM_PROMPTS=$SHLVL
-            ;;
-    esac
+        ########## Prompt config
+        case "$TERM" in
+            screen*)
+                NUM_PROMPTS="$((SHLVL - 1))"
+                ;;
+            *)
+                #PROMPT_COLOR="${COLOR_RESET}$(tput bold)$(tput setab 6)"
+                NUM_PROMPTS=$SHLVL
+                ;;
+        esac
 
-    # Prompt will be 'username (pwd)$ ', colored with white-on-green
-    COLOR_RESET="$(tput sgr0)"
-    if [[ -z $PROMPT_COLOR ]]; then
-        if type -t hashcolor >/dev/null 2>&1; then
-            hashedColor=($(hashcolor $HOSTNAME))
-            PROMPT_COLOR="$(tput setab ${hashedColor[0]})$(tput setaf ${hashedColor[1]})"
-            unset hashedColor
-        else
-            PROMPT_COLOR="$(tput setab 33)"
+        # Prompt will be 'username (pwd)$ ', colored with white-on-green
+        COLOR_RESET="$(tput sgr0)"
+        if [[ -z $PROMPT_COLOR ]]; then
+            if type -t hashcolor >/dev/null 2>&1; then
+                hashedColor=($(hashcolor $HOSTNAME))
+                PROMPT_COLOR="$(tput setab ${hashedColor[0]})$(tput setaf ${hashedColor[1]})"
+                unset hashedColor
+            else
+                PROMPT_COLOR="$(tput setab 33)"
+            fi
         fi
-    fi
-    PROMPT_CLR_CMD="${COLOR_RESET}$(tput bold)$PROMPT_COLOR"
+        PROMPT_CLR_CMD="${COLOR_RESET}$(tput bold)$PROMPT_COLOR"
 
-    if [[ -z $PROMPT_TEXT ]]; then
-    if [[ $OS == "Mac" ]]; then
-        PROMPT_TEXT='\u (\w)'
-    else
-        PROMPT_TEXT='\u@\H (\w)'
-    fi
-    fi
+        if [[ -z $PROMPT_TEXT ]]; then
+            if [[ $OS == "Mac" ]]; then
+                PROMPT_TEXT='\u (\w)'
+            else
+                PROMPT_TEXT='\u@\H (\w)'
+            fi
+        fi
 
-    # The below version adds more '$' for every level deeper the shell is nested
+        # The below version adds more '$' for every level deeper the shell is nested
     export PS1="\[${PROMPT_CLR_CMD}\]${PROMPT_TEXT}$(eval "printf '\\$%.0s' {1..$NUM_PROMPTS}")\[${COLOR_RESET}\] "
-    # The below version adds '[n]' before the '$' if the shell is nested, where n is the nesting level
-    #export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
+        # The below version adds '[n]' before the '$' if the shell is nested, where n is the nesting level
+        #export PS1="\[\e[1;42m\]\u (\W)$(((SHLVL>1))&&echo "[$SHLVL]")\$\[\e[0m\] "
 
-    # Kinda hacky way to indent PS2 to the same level as PS1: we make PS2 virtually the same as PS1,
-    # however we insert a command to clear the printed text ('tput el1') right before we print the
-    # prompt seperator character ('>') so that we erase the username+PWD but retain the cursor position
+        # Kinda hacky way to indent PS2 to the same level as PS1: we make PS2 virtually the same as PS1,
+        # however we insert a command to clear the printed text ('tput el1') right before we print the
+        # prompt seperator character ('>') so that we erase the username+PWD but retain the cursor position
     export PS2="${PROMPT_TEXT}(\w)[$(tput el1)$PROMPT_CLR_CMD\]$(eval "printf '>%.0s' {1..$NUM_PROMPTS}")\[${COLOR_RESET}\] "
 
-    unset PROMPT_CLR_CMD
-    unset NUM_PROMPTS
-    unset COLOR_RESET
-    unset PROMPT_TEXT
+        unset PROMPT_CLR_CMD
+        unset NUM_PROMPTS
+        unset COLOR_RESET
+        unset PROMPT_TEXT
 
-    if [[ $OS == "Mac" ]]; then
-        # Set the tab name in Terminal.app to the basename of PWD
-        # Change '1' to {2,1} to set {window,tab+window} title. /etc/bashrc already sends PWD to
-        # Terminal.app via $PROMPT_COMMAND, which sets the file breadcrumb in the title bar.
+        if [[ $OS == "Mac" ]]; then
+            # Set the tab name in Terminal.app to the basename of PWD
+            # Change '1' to {2,1} to set {window,tab+window} title. /etc/bashrc already sends PWD to
+            # Terminal.app via $PROMPT_COMMAND, which sets the file breadcrumb in the title bar.
         PS1="\[\e]1;\W\a\]${PS1}"
 
-        if [[ -s $BREW_PREFIX/etc/grc.bashrc ]]; then
-            # Initialize the 'Generic Colouriser' utility
-            . $BREW_PREFIX/etc/grc.bashrc
-            # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
-            alias make="make -j $(( $(sysctl -n hw.ncpu) + 1 ))"
+            if [[ -s $BREW_PREFIX/etc/grc.bashrc ]]; then
+                # Initialize the 'Generic Colouriser' utility
+                . $BREW_PREFIX/etc/grc.bashrc
+                # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
+                alias make="make -j $(( $(sysctl -n hw.ncpu) + 1 ))"
+            fi
+
+            [ -x ~/mac-scripts/launchd-update-homebrew.sh ] && ~/mac-scripts/launchd-update-homebrew.sh display
         fi
 
-        [ -x ~/mac-scripts/launchd-update-homebrew.sh ] && ~/mac-scripts/launchd-update-homebrew.sh display
-    fi
+        export _BASHRC_DID_RUN=1
 
-	export _BASHRC_DID_RUN=1
-
-     ########## Launch tmux by default
-    if type -t tmux 2>&1 >/dev/null && test -z "$TMUX"; then
-        tmux new-session -A -s "$USER"
+         ########## Launch tmux by default
+        if type -t tmux 2>&1 >/dev/null && test -z "$TMUX"; then
+            tmux new-session -A -s "$USER"
+        fi
     fi
     ;;
 esac
