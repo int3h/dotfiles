@@ -40,8 +40,8 @@ shopt -s histreedit
 
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=5000
+HISTFILESIZE=10000
 export HISTCONTROL=ignoredups:ignorespace;
 # Change the file history commands are saved to
 export HISTFILE=~/.config/bash/shell_history
