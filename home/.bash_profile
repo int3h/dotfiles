@@ -237,22 +237,22 @@ function resize_prompt_dirtrim() {
     # Only evaluate if we've changed directories since the last time we evaluated
     if [ "$__SHORTENED_PWD" != "$PWD" ]; then
         # The maximum % of columns $PWD should be (0-100%).
-		[[ $PWD_WIDTH_MAX ]] || PWD_WIDTH_MAX=40
+        [[ $PWD_WIDTH_MAX ]] || PWD_WIDTH_MAX=40
         # Max # of characters PWD, given the user-set PWD % (take off 4 chars to account for '/...' in
         # the dirtrim'ed PWD.)
         local maxLength="$(( ( ( $COLUMNS * $PWD_WIDTH_MAX ) / 100 ) - 4 ))"
 
         # Turn $HOME in PWD into '~'
         local pwdHomed="${PWD/#$HOME/\~\/}"
-		[[ $maxLength -ge ${#pwdHomed} ]] && maxLength="${#pwdHomed}"
+        [[ $maxLength -ge ${#pwdHomed} ]] && maxLength="${#pwdHomed}"
         # Trim PWD to have the maximum desired characters, taken from the end
         local pwdDesired="${pwdHomed:(-$maxLength)}"
-		# Delete all non '/' characters from PWD
+        # Delete all non '/' characters from PWD
         local numPaths="${pwdDesired//[^\/]}"
         # Count how many '/' characters there were in PWD (a rough estimate of how many directories
         # there were in our trimmed PWD) and set $PROMPT_DIRTRIM to this number
         PROMPT_DIRTRIM="${#numPaths}"
-		if [[ $PROMPT_DIRTRIM -lt 1 ]]; then PROMPT_DIRTRIM=1; fi
+        if [[ $PROMPT_DIRTRIM -lt 1 ]]; then PROMPT_DIRTRIM=1; fi
 
         __SHORTENED_PWD="$PWD"
     fi
