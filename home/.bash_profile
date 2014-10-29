@@ -262,6 +262,21 @@ function resize_prompt_dirtrim() {
 case $- in
 *i*)
     if [[ $TERM != dumb ]]; then
+        # Always print prompt on its own line.
+        # Checks current position of cursor and if not at column 1, prints "\n". Helps prevent $PS1
+        # from overprinting output of the last command if last output didn't end in "\n".
+        ensure_prompt_on_own_line() {
+            local CURPOS
+            # Print ASCII escape sequence to make terminal print the current position of the cursor
+            echo -en "\E[6n"
+            # Read the cursor position printed by terminal (will be something like `^[[45;1R`)
+            read -s -d R -t 0.25 CURPOS
+            # If the position doesn't have ';1R' in it, we're not at column 1 so print a newline
+            [[ $CURPOS == *\;1R ]] || printf '\n'
+        }
+        [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="$PROMPT_COMMAND; ensure_prompt_on_own_line"
+
+
         [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="$PROMPT_COMMAND; resize_prompt_dirtrim"
         PROMPT_DIRTRIM=3
 
