@@ -173,6 +173,9 @@ if [[ $OS == "Mac" ]]; then
         export VISUAL='mvim -f'
     fi
 
+    # bash-completion2 homebrew package init
+    [ -f $BREW_PREFIX/share/bash-completion/bash_completion ] && . $BREW_PREFIX/share/bash-completion/bash_completion
+    # bash-completion (i.e. v1.x) homebrew package init
     [ -f $BREW_PREFIX/etc/bash_completion ] && . $BREW_PREFIX/etc/bash_completion
 
     type -t rbenv>/dev/null && export RBENV_ROOT=/usr/local/var/rbenv && eval "$(rbenv init -)"
