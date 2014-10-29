@@ -4,6 +4,31 @@
 # their own script file in ~/bin. These commands are defined as functions, and this file is sourced
 # in ~/.bash_profile so that these functions are available globally in Bash.
 
+
+# Runs `ssh` as normal, but first sets the terminal title to be the name of the remote server
+ssh_and_set_title() {
+    local original_args="$*"
+    local arg=''
+    OPTIND=1
+
+    while getopts ':1246AaCfgKkMNnqsTtVvXxYyb:c:D:e:F:I:i:L:l:m:O:o:p:R:S:W:w:' arg; do
+        case $arg in
+            \?|:)
+                ssh ${original_args[*]}
+                return $?;;
+            *)
+                :;;
+        esac
+    done
+    shift $((OPTIND-1))
+
+    local server_name="${1##*@}"
+    printf '\e]1;SSH: %s\007' "$server_name" && ssh ${original_args[*]}
+    return $?
+}
+alias ssh=ssh_and_set_title
+
+
 # Search for files in <path> (defaults to '.') whose filename includes <name>
 # Usage: findfiles <name> [<path>]
 findfiles() {
