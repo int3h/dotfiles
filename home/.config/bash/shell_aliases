@@ -27,6 +27,9 @@ alias sudo='sudo '
 
 alias g='git'
 
+# Command to load the latest history from all terminals into this terminal's history buffer
+alias histup='history -a && history -c && history -r'
+
 # Sane defaults to rsync: archive mode (equals -rlptgoD; no -H,-A,-X), skip files that are newer on
 # the destination (update mode), verbose, recurse, preserve timestamp, preserve +x flag, compress
 # transfer, use ~/.rsync_eclude.conf to set excluded files
