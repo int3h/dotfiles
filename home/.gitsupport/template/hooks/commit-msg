@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if head -n 1 "$1" | grep -E '^.{51,}'; then
-	echo "Error: Summary too long (must be <= 50 characters)" >&2
+if head -n 1 "$1" | grep -E '^.{72,}'; then
+	echo "Error: Summary too long (must be <= 72 characters)" >&2
 	exit 1
 fi
 
