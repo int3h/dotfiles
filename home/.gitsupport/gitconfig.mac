@@ -68,5 +68,14 @@
 	stashes = stash list --pretty=format:'%C(yellow)%gd %C(green)%ar%C(reset) %gs'
 	# Tries to minimize the size on disk of the repo by delete unused git data & compressing things
 	diet = !git reflog expire --expire=now --all && git repack && git gc --prune=now --aggressive
+	switch = !legit switch \"$@\"
+	branches = !legit branches
+	sprout = !legit sprout \"$@\"
+	unpublish = !legit unpublish \"$@\"
+	harvest = !legit harvest \"$@\"
+	sync = !legit sync \"$@\"
+	publish = !legit publish \"$@\"
+	graft = !legit graft \"$@\"
+
 
 #  vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=gitconfig:
