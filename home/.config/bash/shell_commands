@@ -5,6 +5,12 @@
 # in ~/.bash_profile so that these functions are available globally in Bash.
 
 
+# Make a directory and immediately cd to it
+mkcd() {
+    mkdir -p -v "$@" && cd "$@"
+}
+
+
 # Runs `ssh` as normal, but first sets the terminal title to be the name of the remote server
 ssh_and_set_title() {
     local original_args="$*"
