@@ -18,12 +18,6 @@
 [push]
 	default = simple
 
-[filter "email"]
-    smudge = ~/.gitsupport/filters/email/smudge_filter_email
-    clean = ~/.gitsupport/filters/email/clean_filter_email
-[diff "email"]
-    textconv = ~/.gitsupport/filters/email/diff_filter_email
-
 
 [difftool "Kaleidoscope"]
 	cmd = ~/bin/mac/ksdiff-fixed --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"

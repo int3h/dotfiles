@@ -16,12 +16,6 @@
 [push]
 	default = simple
 
-[filter "email"]
-    smudge = ~/.gitsupport/filters/email/smudge_filter_email
-    clean = ~/.gitsupport/filters/email/clean_filter_email
-[diff "email"]
-    textconv = ~/.gitsupport/filters/email/diff_filter_email
-
 [alias]
 	# Shows log in pretty, one-line-per-commit format
     l = log --pretty=format:'%C(yellow)%h %C(green)%ad%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)' --decorate --date=relative
