@@ -1,26 +1,2 @@
-__get_hosts() {
-    if [[ -f ~/.ssh/known_hosts ]]; then
-        cut -d " " -f1 ~/.ssh/known_hosts | cut -d "," -f1
-    fi
-}
- 
-_ssh() 
-{
-    local cur prev opts server
-    COMPREPLY=()
-    cur="${COMP_WORDS[COMP_CWORD]}"
-    hosts="$(__get_hosts)";
- 
-    if [[ ! ${cur} == -* ]] ; then
-        # Check if we have a user@host argument and ignore the "user@" part for matching
-        if [[ ! "${cur#*@}" == "${cur}" ]]; then
-            COMPREPLY=( $(compgen -P "${cur%@*}@" -W "${hosts}" -- ${cur#*@}) )
-        else
-            COMPREPLY=( $(compgen -W "${hosts}" -- ${cur}) )
-        fi
-        return 0
-    fi
-}
-complete -F _ssh ssh
 
-complete -F _man hman
+# vim: set tabstop=4 shiftwidth=4 textwidth=100 expandtab foldmethod=manual filetype=sh:
