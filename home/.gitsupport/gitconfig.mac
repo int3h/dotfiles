@@ -1,67 +1,44 @@
-[user]
-	name = Matt Torok
-	email = github@overblown.net
-[github]
-	user = int3h
 [core]
-	excludesfile = ~/.gitsupport/gitignore
-    editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
-	prompt = false
-[init]
-	templatedir = ~/.gitsupport/template
-[color]
-	ui = true
-[commit]
-	cleanup = strip
+	editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
 [credential]
 	helper = osxkeychain
-[push]
-	default = simple
-
 
 [difftool "Kaleidoscope"]
 	cmd = ~/bin/mac/ksdiff-fixed --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-[difftool "sourcetree"]
-	cmd = ~/bin/mac/ksdiff-fixed -w \"$LOCAL\" \"$REMOTE\"
-	path = 
-[difftool]
-	prompt = false
-[diff]
-	;tool = araxis
-	tool = Kaleidoscope
-
 [mergetool "Kaleidoscope"]
 	cmd = ~/bin/mac/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
+
+[difftool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/araxiscompare-w.sh -2 \"$LOCAL\" \"$REMOTE\"
+	path =.
 [mergetool "sourcetree"]
-	cmd = ~/bin/mac/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	cmd = /Applications/SourceTree.app/Contents/Resources/araxisgitmerge-w.sh \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\"
 	trustExitCode = true
+
+[difftool "bcomp"]
+	cmd = ~/bin/mac/bcomp-wrap \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+[mergetool "bcomp"]
+	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+	trustExitCode = true
+
+[difftool]
+	prompt = false
+[diff]
+	# During diff, detect copies and renames of files
+	renames = copies
+	tool = araxis
+	;tool = Kaleidoscope
+
 [mergetool]
 	keepBackup = true
 [merge]
-	;tool = araxis
-	tool = Kaleidoscope
-	conflictstyle = diff3
-
+	tool = araxis
+	;tool = Kaleidoscope
+	;conflictstyle = diff3
 
 [alias]
-	# Shows log in pretty, one-line-per-commit format
-    l = log --pretty=format:'%C(yellow)%h %C(green)%ad%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)' --decorate --date=relative
-	# Shows log in pretty, one-line commit message, followed by a multi-line list of files changed
-	# in that commit and their stats (additions/deletions)
-    ld = log --pretty=format:'%C(yellow)%h%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)' --decorate --numstat --date=relative
-	# Shows the log, with ASCII graph of branches and merges next to commit messages
-    graph = log --pretty=format:'%C(yellow)%h %C(green)%ad %C(red)%d%C(reset)%s %C(blue)[%an]%C(reset)' --decorate --date=relative --graph
-	# Short status (removes most of the explanatory text)
-	s = status -sb
-	# Shortcut to do an amend commit
-    amend = commit --amend
-	# Shows short hash of current checkout
-    hash = rev-parse --short --verify HEAD
-	# Shows a pretty list of stashes (adds relative date, color coding, vs. regular `stash list`)
-	stashes = stash list --pretty=format:'%C(yellow)%gd %C(green)%ar%C(reset) %gs'
-	# Tries to minimize the size on disk of the repo by delete unused git data & compressing things
-	diet = !git reflog expire --expire=now --all && git repack && git gc --prune=now --aggressive
+	# legit aliases
 	switch = !legit switch \"$@\"
 	branches = !legit branches
 	sprout = !legit sprout \"$@\"
@@ -71,5 +48,9 @@
 	publish = !legit publish \"$@\"
 	graft = !legit graft \"$@\"
 
+[filter "media"]
+	clean = git media clean %f
+	smudge = git media smudge %f
+	required = true
 
 #  vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=gitconfig:

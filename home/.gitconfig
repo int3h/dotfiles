@@ -1,0 +1,46 @@
+[user]
+	name = Matt Torok
+	email = github@overblown.net
+[github]
+	user = int3h
+[core]
+	excludesfile = ~/.gitsupport/gitignore
+[init]
+	templatedir = ~/.gitsupport/template
+[color]
+	ui = true
+[log]
+	date = relative
+	decorate = short
+	abbrevCommit = true
+
+[commit]
+	cleanup = strip
+[push]
+	default = simple
+
+[alias]
+	# Shows log in pretty, one-line-per-commit format
+    l = log --color --graph --author-date-order --pretty=format:'%C(yellow)%h %C(green)%cr%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)'
+	# Same as `l`, but shows all branches, not just current
+    la = log --all --reflog --color --graph --author-date-order --pretty=format:'%C(yellow)%h %C(green)%cr%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)'
+	# Shows `l` log - branch graph + list of changed files + bar graph of adds/deletes to each file
+    ld = log --color --stat --author-date-order --pretty=format:'%C(yellow)%h %C(green)%cr%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)'
+	# Short status (removes most of the explanatory text)
+	s = status -sb
+	# Shortcut to do an amend commit
+    amend = commit --amend
+	# Shows short hash of current checkout
+    hash = rev-parse --short --verify HEAD
+	# Shows a pretty list of stashes (adds relative date, color coding, vs. regular `stash list`)
+	stashes = stash list --pretty=format:'%C(yellow)%gd %C(green)%ar%C(reset) %gs'
+	# Tries to minimize the size on disk of the repo by delete unused git data & compressing things
+	diet = !git reflog expire --expire=now --all && git repack && git gc --prune=now --aggressive
+
+[include]
+	# Include system-specific config. You must manually create this symlink to Mac or Linux config.
+	path = ~/.gitsupport/gitconfig.active
+	# Include sensitive config options (this file not stored in dotfiles repo)
+	path = ~/.gitsupport/gitconfig.private
+
+#  vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=gitconfig:
