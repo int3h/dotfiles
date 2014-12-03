@@ -3,8 +3,10 @@
 # Use '{}' as a placeholder for arguments to xargs
 alias xargs='xargs -0 -I{}'
 
+# Alias `grep` to automatically enable color output
+alias grep='grep --color=auto'
 # Shorter alias to grep a fixed string; case insensitive; ignore binary files.
-alias fgrep='grep -Fi'
+alias fgrep='grep --color=auto -Fi'
 
 # Run 'less' but disable line wrapping (and enable horizontal scrolling)
 alias lesw='less -S'

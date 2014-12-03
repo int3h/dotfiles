@@ -287,9 +287,6 @@ case $- in
         export CLICOLOR=1
         #export LSCOLORS=ExFxCxDxBxegedabagacad
 
-        # Tell grep to highlight matches
-        export GREP_OPTIONS='--color=auto'
-
 
         ########## Prompt config
         case "$TERM" in
