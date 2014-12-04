@@ -8,7 +8,7 @@
 [init]
 	templatedir = ~/.gitsupport/template
 [color]
-	ui = true
+	ui = auto
 [log]
 	date = relative
 	decorate = short
