@@ -22,8 +22,6 @@
 [alias]
 	# Shows log in pretty, one-line-per-commit format
     l = log --color --graph --author-date-order --pretty=format:'%C(yellow)%h %C(green)%cr%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)'
-	# Same as `l`, but shows all branches, not just current
-    la = log --all --reflog --color --graph --author-date-order --pretty=format:'%C(yellow)%h %C(green)%cr%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)'
 	# Shows `l` log - branch graph + list of changed files + bar graph of adds/deletes to each file
     ld = log --color --stat --author-date-order --pretty=format:'%C(yellow)%h %C(green)%cr%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)'
 	# Short status (removes most of the explanatory text)
