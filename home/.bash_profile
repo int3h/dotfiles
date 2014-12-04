@@ -76,7 +76,7 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
     ## Low weight (last added = lowest priority)
 
     # Araxis Merge command line utilities (if they're installed)
-    [[ -d "$HOME/bin/araxis" ]] && PATH="$PATH:$HOME/bin/araxis"
+    [[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && PATH="$PATH:/Applications/Araxis Merge.app/Contents/Utilities"
     # Binaries in the CWD
     export PATH="$PATH:."
 fi
