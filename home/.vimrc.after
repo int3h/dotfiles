@@ -6,7 +6,7 @@ colorscheme jellybeans+
 set softtabstop=4
 set tabstop=4
 set shiftwidth=4
-set noexpandtab
+set expandtab
 
 " Put in a highlight after column 100
 set colorcolumn=101
