@@ -221,6 +221,8 @@ fi
 
 # Add in Grunt completions
 type -t grunt >/dev/null && eval "$(grunt --completion=bash)"
+# npm completion
+type -t npm >/dev/null && . <(npm completion)
 
 
 #################################
