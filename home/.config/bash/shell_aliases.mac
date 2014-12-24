@@ -4,6 +4,8 @@ if [[ "$OS" == "Linux" ]]; then
 	printf 'WARNING: Mac shell aliases sourced on Linux system\n' >&2
 fi
 
+alias b='brew'
+
 # Detailed file listing; show hidden files; append a '/' to directories; use human-readable sizes
 alias ls='command ls -lAOph'
 # Like our regular detailed `ls`, but also show extended attributes
