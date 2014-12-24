@@ -89,10 +89,10 @@ if type -t 'npm' >/dev/null; then
     __npm_local_bin_path=""
 
     add_npm_to_path() {
-        local npmRoot="$(npm root 2>/dev/null)/.bin"
+        local npmBin="$(npm bin 2>/dev/null)"
 
         # If the new npm bin path matches the old path, then nothing needs to be done
-        if [[ $npmRoot == $__npm_local_bin_path ]]; then return; fi
+        if [[ $npmBin == $__npm_local_bin_path ]]; then return; fi
 
         # Remove old npm bin path from $PATH, if we previously added it
         if [[ -n "$__npm_local_bin_path" ]]; then
@@ -101,9 +101,9 @@ if type -t 'npm' >/dev/null; then
         fi
 
         # If there's an npm bin path for the current dir, add that to the path
-        if [[ -d "${npmRoot}" ]]; then
-            PATH="$PATH:${npmRoot}"
-            __npm_local_bin_path="${npmRoot}"
+        if [[ -d "${npmBin}" ]]; then
+            PATH="$PATH:${npmBin}"
+            __npm_local_bin_path="${npmBin}"
         fi
     }
 
