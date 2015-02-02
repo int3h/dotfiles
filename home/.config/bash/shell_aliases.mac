@@ -16,7 +16,7 @@ alias lsd='command ls -lOph'
 # Run n make processes in parallel, where n = (number of CPUs) + 1
 alias make="make -j$(( $(sysctl -n hw.ncpu) + 1 ))"
 
-alias psa='ps -Axww -o pid,user,cpu,command'
+alias psa='ps -Axww -o pid,command'
 alias psal='ps -Axww -o pid,user,cpu,command | less -S'
 
 alias bashrc="find ~/.config/bash -not -name 'shell_history' -not -type d -print0 | command xargs -0 mvim ~/.bash_profile ~/.bashrc ~/.bash_logout "
