@@ -213,6 +213,9 @@ if [[ $OS == "Mac" ]]; then
         unset ec2_symlink ec2_abs_path ec2_libexec
     fi
 
+    # Enable auto-completion of AWS cli tools
+    type -t aws_completer >/dev/null && complete -C aws_completer aws
+
 
     # Always print prompt on its own line.
     # Checks current position of cursor and if not at column 1, prints "\n". Helps prevent $PS1
