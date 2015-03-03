@@ -49,3 +49,6 @@
 [submodule "home/.janus/tern_for_vim"]
 	path = home/.janus/tern_for_vim
 	url = git@github.com:marijnh/tern_for_vim.git
+[submodule "home/.janus/vim-ansible-yaml"]
+	path = home/.janus/vim-ansible-yaml
+	url = git@github.com:chase/vim-ansible-yaml.git

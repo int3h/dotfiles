@@ -273,7 +273,7 @@ endfunction
 
 "" All code files
 " Enable 'strip whitespace on save' functionality
-autocmd FileType c,cpp,java,php,ruby,python,javascript,sh,vim autocmd BufWritePre <buffer> FixWhitespace
+autocmd FileType c,cpp,java,php,ruby,python,javascript,sh,vim,ansible,yaml autocmd BufWritePre <buffer> FixWhitespace
 
 "" Superconductor
 au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
