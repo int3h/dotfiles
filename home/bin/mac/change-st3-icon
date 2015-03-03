@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
 
+NEWICON_DEFAULT="$HOME/Pictures/Icons/Sublime/Sublime Text.icns"
+NEWICON=${1-$NEWICON_DEFAULT}
+OLDICON_DEFAULT='/Applications/Sublime Text.app/Contents/Resources/Sublime Text.icns'
+OLDICON=${2-$OLDICON_DEFAULT}
+
 if [ $# -gt 2 ] || [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
     echo "Usage: `basename $0` [<source icon> [<target icon>]]"
     echo "Replace Sublime Text 3's icon with a better one"
-    echo "Default to \"/Users/mtorok/Pictures/Creations/ST2_Icons/Sublime Text.icn\" for the source and \"/Applications/Sublime Text.app/Contents/Resources/Sublime Text.icns\" for the target."
+    echo "Default to \"$NEWICON_DEFAULT\" for the source and \"$OLDICON_DEFAULT\" for the target."
     exit 1
 fi
 
-NEWICON=${1-"/Users/mtorok/Pictures/Creations/ST2_Icons/Sublime Text.icns"}
-OLDICON=${2-"/Applications/Sublime Text.app/Contents/Resources/Sublime Text.icns"}
-
+if [[ ! -f "$NEWICON" ]] || [[ ! -f "$OLDICON" ]]; then
+    echo "Could not find new icon '$NEWICON' and/or old icon '$OLDICON'. Exiting..." >&2
+    exit 1
+fi
 
 echo -e "Replacing Sublime Text icon at \"$OLDICON\" with icon at \"$NEWICON\"...\n"
 
