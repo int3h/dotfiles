@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Open a man page as a PDF in Preview.app
+pman () {
+    man -t $@ | open -f -a /Applications/Preview.app
+}
+
+
+# If the man page is just a reference to "Bash built-in commands" man page, use `help` instead
+man_or_help() {
+    # Get the filename of the manfile
+    manfile="$(command man -w $2 "$1")"
+    [[ $? == 0 ]] || return
+
+
+    # If the command is a Bash builtin, display `help` instead of a HTML manpage
+    if [[ "$(basename $manfile)" == 'builtin.1' ]]; then
+        help "$1"
+    else
+        command man $@
+    fi
+}
+alias man="man_or_help"
+
+# vim: set tabstop=4 shiftwidth=4 textwidth=100 expandtab foldmethod=manual filetype=sh:
