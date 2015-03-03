@@ -183,6 +183,13 @@ if [[ $OS == "Mac" ]]; then
     # bash-completion (i.e. v1.x) homebrew package init
     [ -f $BREW_PREFIX/etc/bash_completion ] && . $BREW_PREFIX/etc/bash_completion
 
+    # Enable auto-completion of AWS cli tools
+    type -t aws_completer >/dev/null && complete -C aws_completer aws
+    # Enable auto-completion of `hman`
+    if type -t hman >/dev/null && [[ -f /usr/local/share/bash-completion/completions/man ]]; then
+        source /usr/local/share/bash-completion/completions/man && complete -F _man hman
+    fi
+
     type -t rbenv>/dev/null && export RBENV_ROOT=/usr/local/var/rbenv && eval "$(rbenv init -)"
 
     # Initialize 'autojump' utility
@@ -212,10 +219,6 @@ if [[ $OS == "Mac" ]]; then
         [[ -d "$ec2_libexec" ]] && export EC2_AMITOOL_HOME="$ec2_libexec"
         unset ec2_symlink ec2_abs_path ec2_libexec
     fi
-
-    # Enable auto-completion of AWS cli tools
-    type -t aws_completer >/dev/null && complete -C aws_completer aws
-
 
     # Always print prompt on its own line.
     # Checks current position of cursor and if not at column 1, prints "\n". Helps prevent $PS1
@@ -357,6 +360,8 @@ case $- in
 
             [ -x ~/mac-scripts/launchd-update-homebrew.sh ] && ~/mac-scripts/launchd-update-homebrew.sh display
         fi
+
+        export PATH="$(normalize_path "$PATH")"
 
         export _BASHRC_DID_RUN=1
 
