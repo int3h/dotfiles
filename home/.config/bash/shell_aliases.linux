@@ -17,8 +17,6 @@ alias rm='rm -Iv'
 # Run n make processes in parallel, where n = (number of CPUs) + 1
 alias make="make -j$(( $(nproc) + 1 ))"
 
-alias bashrc="$VISUAL ~/.bash_profile"
-
 
 #################################
 ##### Ubuntu default setup
