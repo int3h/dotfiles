@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# Notify you of a command's results when the command completes.
+#
+# Usage:
+#   notify <command to run> [<args to command>...]
+# or
+#   <command to run> [<args to command>...]; notify
+#
+# The first form tells `notify` to run the command passed in as arguments to it; the second form
+# runs the command directly in Bash, then runs `notify` when it completes. Both forms should be
+# equivalent, but the first form allows `notify` to report the name and arguments of the command
+# when it notifies you, while the second may be more robust since Bash executes your command.
+
+exit_code=$?
+
+success() {
+    if type -t terminal-notifier >/dev/null; then
+        terminal-notifier -sound Glass -sender com.googlecode.iterm2 "$@"
+    else
+        say "Command finished"
+    fi
+}
+
+failure() {
+    if type -t terminal-notifier >/dev/null; then
+        terminal-notifier -sound Basso -sender com.googlecode.iterm2 "$@"
+    else
+        say "Command failed"
+    fi
+}
+
+
+if [[ $# > 0 ]]; then
+    "$@"
+    exit_code=$?
+
+    #escaped_cmd="$@"
+    for arg in "$@"; do
+        escaped_cmd="${escaped_cmd}$(printf '%q' "$arg") "
+    done
+
+    if [[ $exit_code == 0 ]]; then
+        success -title "$1 completed" -message "$escaped_cmd"
+    else
+        failure -title "$1 failed!" -subtitle "Error code: $exit_code" -message "$escaped_cmd"
+    fi
+else
+    if [[ $exit_code == 0 ]]; then
+        success -title "Command completed" -message "The command completed with a normal exit code."
+    else
+        failure -title "Command failed!" -message "The command exited with the error code $exit_code."
+    fi
+fi
