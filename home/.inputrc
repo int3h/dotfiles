@@ -5,12 +5,15 @@ set editing-mode vi
 set show-all-if-ambiguous on
 # Ignore case
 set completion-ignore-case on
-# on menu-complete, first display the common prefix, then cycle through the 
+# on menu-complete, first display the common prefix, then cycle through the
 # options when hitting TAB
 set menu-complete-display-prefix on
 
 # Append a '/' to completed symlinks to directories
 set mark-symlinked-directories on
+
+# Display completions using different colors for their file types
+set colored-stats on
 
 ###########################################################
 # Keymaps for when we're in command mode (e.g., after hitting ESC)
@@ -23,9 +26,9 @@ set keymap vi-command
 # which start with the prefix you've entered, rather than just cycling through
 # the last entered commands.
 # In OS X's Terminal.app preferences, I have 'Use option as meta key' off, and
-# have mapped "option cursor up" to "\033\033[A" and "option cursor down" to 
+# have mapped "option cursor up" to "\033\033[A" and "option cursor down" to
 # "\033\033[B".
-# Feel free to bind to whatever you want, or delete the first '\e' in the keymap, 
+# Feel free to bind to whatever you want, or delete the first '\e' in the keymap,
 # and then plain up/down will do a history search.
 "\e\e[A": history-search-backward
 "\e\e[B": history-search-forward
