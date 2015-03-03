@@ -232,7 +232,9 @@ if [[ $OS == "Mac" ]]; then
         # If the position doesn't have ';1R' in it, we're not at column 1 so print a newline
         [[ $CURPOS == *\;1 ]] || echo ""
     }
-    [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="$PROMPT_COMMAND; ensure_prompt_on_own_line"
+    if [[ $_BASHRC_DID_RUN ]] && [[ $TERM_PROGRAM != "iTerm.app" ]]; then
+        export PROMPT_COMMAND="$PROMPT_COMMAND; ensure_prompt_on_own_line"
+    fi
 fi
 
 
@@ -289,7 +291,9 @@ function resize_prompt_dirtrim() {
 case $- in
 *i*)
     if [[ $TERM != dumb ]]; then
-        [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="$PROMPT_COMMAND; resize_prompt_dirtrim"
+        if [[ $_BASHRC_DID_RUN != 1 ]]; then
+            export PROMPT_COMMAND="$PROMPT_COMMAND; resize_prompt_dirtrim"
+        fi
         PROMPT_DIRTRIM=3
 
         export CLICOLOR=1
@@ -359,6 +363,12 @@ case $- in
             fi
 
             [ -x ~/mac-scripts/launchd-update-homebrew.sh ] && ~/mac-scripts/launchd-update-homebrew.sh display
+
+            # Enable iTerm terminal integration (must be done at end because it locks
+            # $PROMPT_COMMAND & $PS1)
+            if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+                [[ -f ~/.iterm2_shell_integration.bash ]] && source ~/.iterm2_shell_integration.bash
+            fi
         fi
 
         export PATH="$(normalize_path "$PATH")"
