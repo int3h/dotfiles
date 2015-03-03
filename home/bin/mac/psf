@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+##!/usr/bin/env awk -f
+
+ps -Axww -o pid,command | awk '
+BEGIN {
+    line_no = 0;
+    "tput cols" | getline width;
+}
+{
+    line_no++;
+    if(line_no <= 1) {
+        ignore;
+    } else {
+
+        pid = $1;
+        pid_length = index($0,$2) - 3;
+        $1 = "";
+
+        #out = pid " ┋";# $0;
+        #print out;
+
+        #if(length(out) > width) { print ""; }
+
+        printf("%-" pid_length "s |", pid);
+
+        out = $0
+        pre_length = pid_length + 3
+        out_length = width - pre_length;
+
+        while((length(out)) > out_length) {
+            # FIXME: My attempt at wrapping the output at the last space, rather than hard breaking
+            # at `width`. But it does not work because `index()` finds the first, not last, space.
+            # We should probably be using the UNIX `fmt` or `fold` commands, but calling them from
+            # awk would be complicated and slow. Maybe it would be easier to rewrite this in Bash?
+            #out_length = width - pre_length;
+            #space_index = index(substr()out, " ");
+            #if(( space_index > 50 ) && ( space_index < (out_length - 1) )) {
+                #out_length = space_index;
+            #}
+
+            printf("%s\n", substr(out, 0, out_length));
+            printf("%" (pre_length - 3) "s | ", " ");
+
+            out = substr(out, out_length);
+        }
+
+        printf("%s\n", out);
+    }
+}
+'
