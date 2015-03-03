@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+
+default_ignore=(
+    "$HOME/Library/Mail/*"
+    "$HOME/Library/Application Support/Google/Chrome*/*/File System/*"
+    "$HOME/Library/Application Support/Google/Chrome*/*/IndexedDB/*"
+    "$HOME/Library/Application Support/Google/Chrome*/*/Local Storage/*"
+    "$HOME/Library/Application Support/Google/Chrome*/*/Pepper Data/*"
+    "$HOME/Library/Calendars/*"
+    "/Volumes/*"
+    "/cores/*"
+    "/dev/*"
+)
+
+if [[ -z "${SEARCH_IGNORE_PATHS+x}" ]]; then
+    declare -a SEARCH_IGNORE_PATHS
+    SEARCH_IGNORE_PATHS=("${default_ignore[@]}")
+fi
+
+get_user_predicate() {
+    local user_predicate=""
+    local user_pred_type=""
+
+    if [[ "$@" =~ / ]]; then user_pred_type='-ipath' ; else user_pred_type='-iname' ; fi
+
+    while [[ $# > 0 ]]; do
+        user_predicate="$user_predicate $user_pred_type '$1'"
+        shift
+    done
+
+    printf '%s' "$user_predicate"
+}
+
+
+get_ignore_predicate() {
+    local ignore_predicate='\( '
+    local ignore_path=""
+    local first_item=1
+
+    for ignore_path in "${SEARCH_IGNORE_PATHS[@]}"; do
+        [[ $first_item != 1 ]] && ignore_predicate="$ignore_predicate -or"
+        first_item=0
+
+        ignore_predicate="$ignore_predicate -path '$ignore_path'"
+    done
+
+    ignore_predicate="$ignore_predicate \\) -prune -or"
+    printf '%s' "$ignore_predicate"
+}
+
+
+find_cmd=""
+find_path=""
+find_ignore=""
+find_user=""
+last_action="-print"
+
+if [[ $# < 2 ]]; then
+    find_path="."
+else
+    find_path="${@:-1}"
+    # Remove last arg
+    set -- "${@:1:$(($#-1))}"
+fi
+
+find_ignore="$(get_ignore_predicate)"
+find_cmd="$find_ignore"
+
+if [[ "$1" =~ ^- ]]; then
+    find_cmd="$find_cmd $@"
+else
+    if [[ "${@:-1}" =~ -print ]]; then
+        last_action="${@:-1}"
+        set -- "${@:1:$(($#-1))}"
+    fi
+
+    find_user="$(get_user_predicate "$@")"
+
+    find_cmd="$find_cmd $find_user $last_action"
+fi
+
+find $find_path $find_cmd
