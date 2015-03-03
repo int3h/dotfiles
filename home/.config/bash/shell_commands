@@ -73,6 +73,15 @@ psgrep() {
 }
 
 
+# Takes in a PATH-like argument (defaults to $PATH itself if no arguments are given), removes
+# duplicate entries, and prints it (still in PATH-like format) to stdout. The path components are
+# kept in original order. If a component is duplicated, it is ordered according to its first
+# occurrence.
+normalize_path() {
+    local to_norm="$PATH"
+    [[ $# > 0 ]] && to_norm="$1"
+    printf '%s' "$to_norm" | sed -e 's/:$/:TRAILINGNULL/' | awk 'BEGIN { RS=":"; } {n[$0]++; if(NR > 1) { printf(":"); } printf("%s", $0); }' | sed -e 's/:TRAILINGNULL$/:/'
+}
 
 
 if [[ "$OS" == "Mac" ]] && [[ -f ~/.config/bash/shell_commands.mac ]]; then
