@@ -359,7 +359,7 @@ case $- in
                 # Initialize the 'Generic Colouriser' utility
                 . $BREW_PREFIX/etc/grc.bashrc
                 # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
-                alias make="make -j $(( $(sysctl -n hw.ncpu) + 1 ))"
+                alias make="colourify make -j $(( $(sysctl -n hw.ncpu) + 1 ))"
             fi
 
             [ -x ~/mac-scripts/launchd-update-homebrew.sh ] && ~/mac-scripts/launchd-update-homebrew.sh display
