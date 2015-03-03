@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+if [[ $# < 1 ]] || [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
+    printf 'Usage: run-all <cmd> [<cmd>...]\n'
+    printf 'Runs one or more command(s) simultaneously and kills all when any exit, or Ctrl+C is pressed.\n'
+    exit 0
+fi
+
+pids=
+
+exit_all() {
+	printf "\n\nCommand exited or Ctrl+C sent. Exiting all processes...\n"
+
+    for pid in "$pids"; do
+        kill $pid 2>/dev/null
+    done
+
+	exit
+}
+
+trap exit_all SIGINT
+trap exit_all SIGTERM
+
+
+primary_cmd="$1"
+shift
+
+for cmd in "$@"; do
+    ($cmd; kill -2 $$) &
+    pids="$pids $!"
+done
+
+
+$primary_cmd &
+pids="$pids $!"
+wait
+
+
+exit_all
