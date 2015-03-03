@@ -6,6 +6,28 @@ pman () {
 }
 
 
+ansible_notify() {
+    local do_notify=0
+    local full_command="$@"
+
+    for current_arg in "$@"; do
+        case "$current_arg" in
+            -h) do_notify=1 ;;
+            --help) do_notify=1 ;;
+            --step) do_notify=1 ;;
+            --syntax-check) do_notify=1 ;;
+        esac
+    done
+
+    if [[ $do_notify == 0 ]]; then
+        time notify "$@"
+    else
+        "$@"
+    fi
+}
+#alias ansible-playbook='ansible_notify ansible-playbook'
+
+
 # If the man page is just a reference to "Bash built-in commands" man page, use `help` instead
 man_or_help() {
     # Get the filename of the manfile
