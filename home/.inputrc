@@ -15,6 +15,9 @@ set mark-symlinked-directories on
 # Display completions using different colors for their file types
 set colored-stats on
 
+# Don't expand '~' into the absolute path to our home directory when doing word completion
+set expand-tilde off
+
 ###########################################################
 # Keymaps for when we're in command mode (e.g., after hitting ESC)
 set keymap vi-command
