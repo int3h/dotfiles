@@ -246,6 +246,7 @@ fi
 type -t grunt >/dev/null && eval "$(grunt --completion=bash)"
 # npm completion
 type -t npm >/dev/null && . <(npm completion)
+export GIT_SSH_COMMAND="ssh -o PermitLocalCommand=no -o ServerAliveInterval=0"
 
 
 #################################
