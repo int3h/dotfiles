@@ -377,8 +377,12 @@ case $- in
         export _BASHRC_DID_RUN=1
 
         ########## Launch tmux by default
-        if type -t tmux 2>&1 >/dev/null && test -z "$TMUX"; then
-            tmux new-session -A -s "$USER"
+        if type -t tmux 2>&1 >/dev/null; then
+            if test -z "$TMUX"; then
+                tmux new-session -A -s "$USER"
+            else
+                [[ -f /var/run/motd.dynamic ]] && cat /var/run/motd.dynamic && echo
+            fi
         fi
     fi
     ;;
