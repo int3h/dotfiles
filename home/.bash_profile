@@ -116,6 +116,10 @@ fi
 #################################
 
 if [[ $OS == "Linux" ]]; then
+    if type -t python27 >/dev/null; then
+        alias python='python27'
+    fi
+
     # make less more friendly for non-text input files, see lesspipe(1)
     [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
