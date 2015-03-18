@@ -69,4 +69,4 @@ colors, and prints them to stdout (separated by a space).""".format(os.path.base
     else:
         name = " ".join(sys.argv[1:])
         bg, fg = nameToColor(name)
-        print("{} {}".format(bg, fg))
+        print("{0} {1}".format(bg, fg))
