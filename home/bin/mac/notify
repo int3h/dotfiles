@@ -24,7 +24,7 @@ success() {
 
 failure() {
     if type -t terminal-notifier >/dev/null; then
-        terminal-notifier -sound Basso -sender com.googlecode.iterm2 "$@"
+        terminal-notifier -sound Basso -sender com.googlecode.iterm2 -appIcon '/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/AlertStopIcon.icns' "$@"
     else
         say "Command failed"
     fi
