@@ -25,7 +25,7 @@ ansible_notify() {
         "$@"
     fi
 }
-#alias ansible-playbook='ansible_notify ansible-playbook'
+alias ansible-playbook='ansible_notify ansible-playbook'
 
 
 # If the man page is just a reference to "Bash built-in commands" man page, use `help` instead
