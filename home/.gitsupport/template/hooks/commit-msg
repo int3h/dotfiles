@@ -5,6 +5,7 @@ if head -n 1 "$1" | grep -E '^.{72,}'; then
 	exit 1
 fi
 
-MSG="$(cat "$1")"
-echo "$MSG" | expand | fold -s -w 72 > "$1"
+#MSG="$(cat "$1")"
+#echo "$MSG" | expand | fold -s -w 72 > "$1"
+echo "$1"
 exit 0
