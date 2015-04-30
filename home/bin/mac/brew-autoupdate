@@ -88,7 +88,7 @@ get_outdated() {
         if [[ -n "pkg" ]]; then
             # Construct a regex that matches lines starting with our package name, followed by
             # whitespace or the end of the line (to prevent matching on word prefixes)
-            regex="$(printf '^foo%s([\s]|$)' "$pkg")"
+            regex="$(printf '^%s([\s]|$)' "$pkg")"
 
             # Use `grep` with negation to filter out lines matching our regex for the pinned package
             outdated="$(printf '%s' "$outdated" | grep -Pv "$regex")"
