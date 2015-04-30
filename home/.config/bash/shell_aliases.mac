@@ -19,6 +19,8 @@ alias make="make -j$(( $(sysctl -n hw.ncpu) + 1 ))"
 alias psa='ps -Axww -o pid,command'
 alias psal='ps -Axww -o pid,user,cpu,command | less -S'
 
+# Always run `htop` as root
+type -t htop >/dev/null 2>/dev/null && alias htop='sudo htop'
 
 # List all the preferences domains currently available
 alias domains='defaults domains | sed "s:, :\\`echo -e "\n\r"`:g"'
