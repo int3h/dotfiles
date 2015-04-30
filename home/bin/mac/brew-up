@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+brew update
+brew upgrade --all
+~/Documents/code/mac-scripts/launchd-update-homebrew.sh
