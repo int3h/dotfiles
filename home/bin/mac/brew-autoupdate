@@ -1,0 +1,205 @@
+#!/usr/bin/env bash
+
+AGENT_NAME="com.matthewtorok.brew-update"
+AGENT_PATH="${HOME}/Library/LaunchAgents/${AGENT_NAME}.plist"
+OUTDATED_FILE="${HOME}/.brew-outdated"
+NOTIFICATION_GROUP_ID="com.matthewtorok.homebrew.updates_available"
+
+
+# Install launch agent to regularly update list out outdated homebrew packages in $OUTDATED_FILE
+agent_install() {
+    [[ -f "$AGENT_PATH" ]] && agent_uninstall
+
+    echo "Installing LaunchAgent to $AGENT_PATH"
+
+    # Find absolute path to this script
+    pushd `dirname $0` 2>/dev/null >/dev/null
+    local script_path="${PWD}/$(basename $0)"
+    popd 2>/dev/null >/dev/null
+
+    # Installs a launch agent that will run this script w/o arguments at login and again every
+    # 12 hours. It will have low priority ('10' nice value, low priority I/O), won't be kept
+    # alive, won't be launched more than once every 10 minutes, and will run from /Users/mtorok.
+    cat > "$AGENT_PATH" <<- AGENTEOF
+		<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+		<plist version="1.0">
+		<dict>
+		    <key>ExitTimeOut</key>
+		    <integer>240</integer>
+		    <key>KeepAlive</key>
+		    <false/>
+		    <key>Label</key>
+		    <string>com.matthewtorok.brew-update</string>
+		    <key>LimitLoadToSessionType</key>
+		    <string>Aqua</string>
+		    <key>LowPriorityBackgroundIO</key>
+		    <true/>
+		    <key>LowPriorityIO</key>
+		    <true/>
+		    <key>Nice</key>
+		    <integer>10</integer>
+		    <key>ProcessType</key>
+		    <string>Background</string>
+		    <key>ProgramArguments</key>
+		    <array>
+		        <string>$script_path</string>
+		    </array>
+		    <key>StartInterval</key>
+		    <integer>43200</integer>
+		    <key>ThrottleInterval</key>
+		    <integer>600</integer>
+		    <key>WorkingDirectory</key>
+		    <string>/Users/mtorok/</string>
+		</dict>
+		</plist>
+	AGENTEOF
+
+    launchctl load "$AGENT_PATH"
+}
+
+
+# Uninstall launch agent
+agent_uninstall() {
+    echo "Uninstalling agent at $AGENT_PATH"
+
+    launchctl unload "$AGENT_PATH"
+    rm "$AGENT_PATH"
+}
+
+
+# Retrieves the list of packages which are currently outdated from brew
+get_outdated() {
+    local outdated="$(/usr/local/bin/brew outdated --verbose)"
+
+    # Remove any pinned packages (packages the user has asked brew not to upgrade) from the list of
+    # ostensibly outdated packages.
+    local pinned="$(/usr/local/bin/brew ls --pinned)"
+
+    # `brew ls --pinned` (when piped) prints a package name per line. We change $IFS to be \n so we
+    # can easily loop over this with a `for` loop
+    local oldIFS="$IFS"
+    IFS=$(printf '\n')
+
+    local regex='$^'
+
+    for pkg in $pinned; do
+        # Ensure the package name isn't empty
+        if [[ -n "pkg" ]]; then
+            # Construct a regex that matches lines starting with our package name, followed by
+            # whitespace or the end of the line (to prevent matching on word prefixes)
+            regex="$(printf '^foo%s([\s]|$)' "$pkg")"
+
+            # Use `grep` with negation to filter out lines matching our regex for the pinned package
+            outdated="$(printf '%s' "$outdated" | grep -Pv "$regex")"
+        fi
+    done
+
+    # Reset $IFS back to its normal value
+    IFS="$oldIFS"
+
+    printf '%s' "$outdated"
+}
+
+
+# Display list of outdated packages from $OUTDATED_FILE (updated regularly by launch agent.)
+#display_outdated() {
+    ## Only display in interactive shells, and if $OUTDATED_FILE exists
+    #if [[ -t 0 ]]  && [[ -f "$OUTDATED_FILE" ]]; then
+        #local outdated_packages
+
+        ## Check to see if $OUTDATED_FILE is was last modified more than an hour ago
+        #if [[ $(( $(date +%s) - $(stat -f "%m" "$OUTDATED_FILE") )) -gt 3600 ]]; then
+            ## TODO: Do something to ensure that only one `brew update` (which is expensive) is done,
+            ## even if multiple shells are started at once (as when restoring a iTerm session.)
+
+            ## If the file is stale, then fetch the current list of outdated packages and update
+            ## the file with that data.
+            #outdated_packages="$(get_outdated)"
+
+            #if [[ -z "$outdated_packages" ]]; then
+                ## If there are no longer any outdated packages, delete the file and return before
+                ## printing anything.
+                #rm "$OUTDATED_FILE"
+                #return 0
+            #else
+                ## Update the file with the latest outdated packages
+                #echo "$outdated_packages" > "$OUTDATED_FILE"
+            #fi
+        #else
+            ## If the file has been updated recently, just read outdated packages from it
+            #outdated_packages="$(cat "$OUTDATED_FILE")"
+        #fi
+
+        #local color_reset="$(tput sgr0)"
+        #local sigil="$(tput bold)$(tput setab 214)$(tput setaf 233)==>${color_reset}"
+        #local secondary="   "
+        #local color_headline="$(tput bold)"
+
+        #printf '%s %sThe following homebrew-installed packages are outdated:%s\n' \
+            #"$sigil" "$color_headline" "$color_reset"
+        #printf '%s' "$outdated_packages" | awk "{printf \"%s %s\\n\", \"${secondary}\", \$0}"
+        #printf '%s %sRun `brew upgrade` to upgrade these packages to the latest version.%s\n\n' \
+            #"$sigil" "$color_headline" "$color_reset"
+    #fi
+#}
+
+
+show_notification() {
+    local outdated_packages="$1"
+    [[ -x /usr/local/bin/terminal-notifier ]] || return 1
+
+    if [[ -z "$outdated_packages" ]]; then
+        /usr/local/bin/terminal-notifier -remove "$NOTIFICATION_GROUP_ID"
+        return 0
+    fi
+
+    # Format the outdated package name from 'package (old < new)' to 'package vnew'
+    local outdated_text="$(printf '%s' "$outdated_packages" | sed -E -e 's/^(.+) \(([^ ]+) < ([^ )]+)\)$/\1 \3/g')"
+    # Replace newlines with ', '
+    local outdated_merged="${outdated_text//\\n/, }"
+
+    /usr/local/bin/terminal-notifier -title '🍺 Outdated Packages' -message "$outdated_merged" -group "$NOTIFICATION_GROUP_ID" -activate com.googlecode.iterm2
+}
+
+
+# The code that is run by the LaunchAgent nightly:
+update_outdated() {
+    # We probably aren't running in normal bash shell, so source my ~/.bash_profile
+    export PATH="/usr/local/bin:$PATH"
+
+    # Find existing list of outdated packages, if it exists
+    local old_outdated=''
+    [[ -f "$OUTDATED_FILE" ]] && old_outdated="$(cat "$OUTDATED_FILE")"
+
+    # Update package list
+    /usr/local/bin/brew update 2>/dev/null >/dev/null
+    local outdated_formulas=$(get_outdated)
+
+    if [[ -n "$outdated_formulas" ]]; then
+        echo "$outdated_formulas" > "$OUTDATED_FILE"
+    else
+        [[ -f "$OUTDATED_FILE" ]] && rm "$OUTDATED_FILE"
+    fi
+
+    if [[ "$outdated_formulas" != "$old_outdated" ]]; then
+        show_notification "$outdated_formulas"
+    fi
+
+    # If we exit quicker than 10 seconds, launchd thinks there's an error and will try to re-launch
+    [[ -t 0 ]] || sleep 10
+}
+
+
+if [ $# -gt 0 ]; then
+    if [ $1 == "install" ]; then
+        agent_install
+    elif [ $1 == "uninstall" ]; then
+        agent_uninstall
+    else
+        echo "Usage: $0 [install|uninstall|display]" >&2
+    fi
+else
+    update_outdated
+fi
+

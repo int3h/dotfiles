@@ -371,8 +371,6 @@ case $- in
                 alias make="colourify make -j $(( $(sysctl -n hw.ncpu) + 1 ))"
             fi
 
-            [ -x ~/mac-scripts/launchd-update-homebrew.sh ] && ~/mac-scripts/launchd-update-homebrew.sh display
-
             # Enable iTerm terminal integration (must be done at end because it locks
             # $PROMPT_COMMAND & $PS1)
             if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
