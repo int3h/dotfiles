@@ -155,11 +155,15 @@ show_notification() {
     fi
 
     # Format the outdated package name from 'package (old < new)' to 'package vnew'
-    local outdated_text="$(printf '%s' "$outdated_packages" | sed -E -e 's/^(.+) \(([^ ]+) < ([^ )]+)\)$/\1 \3/g')"
+    local outdated_formatted="$(printf '%s' "$outdated_packages" | sed -E -e 's/^(.+) \(([^<)]+) < ([^ )]+)\)$/\1 (\3)/g')"
     # Replace newlines with ', '
-    local outdated_merged="${outdated_text//\\n/, }"
+    local outdated_text="$(printf '%s %s, ' $outdated_formatted)"
+    # Cut off the last ", "
+    local outdated_merged="${outdated_text:0:-2}"
 
-    /usr/local/bin/terminal-notifier -title '🍺 Outdated Packages' -message "$outdated_merged" -group "$NOTIFICATION_GROUP_ID" -activate com.googlecode.iterm2
+    local beer_emoji='🍺'
+
+    /usr/local/bin/terminal-notifier -title "${beer_emoji} Updates Available" -message "$outdated_merged" -group "$NOTIFICATION_GROUP_ID" -activate com.googlecode.iterm2
 }
 
 
