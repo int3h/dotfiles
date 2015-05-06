@@ -61,7 +61,7 @@ normalize_path() {
 
 
 # `xssh`: shortcut for `ssh -O exit`, to quickly close a shared master SSH connection
-xssh() {
+sshq() {
     if ssh -O check $* 2>/dev/null >/dev/null; then
         ssh -O exit $*
     fi
@@ -69,7 +69,7 @@ xssh() {
 # Enable standard `ssh` bash command competions for `sshe`
 [[ -f /usr/local/share/bash-completion/completions/ssh ]] && \
     source /usr/local/share/bash-completion/completions/ssh && \
-    complete -F _ssh xssh
+    complete -F _ssh sshq
 
 
 if [[ "$OS" == "Mac" ]] && [[ -f ~/.config/bash/shell_commands.mac ]]; then
