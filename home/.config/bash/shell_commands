@@ -84,7 +84,7 @@ fi
 #   `pip install --upgrade setuptools && pip install --upgrade pip && \
 #    pip install -I --force-reinstall pygments && pip install mistune`
 # On Linux, it's just: `sudo apt-get install python-pygments`
-cats() {
+scat() {
     # TODO: Support piped intput in addition to file path arguments
     local source_file="$@"
 
