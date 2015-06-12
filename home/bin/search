@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+#set -x
+#set -v
+
+script_name="$(basename "$0")"
+
+if [[ $# < 1 ]] || [[ $# == 1 ]] && ([[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]); then
+    printf 'Sane wrapper over the standard system `find` command\n\n'
+
+    printf 'Usage:\n'
+    printf '1. %s fooBar\n' "$scriptname"
+    printf '2. %s /var/logs fooBar\n' "$scriptname"
+    printf '3. %s /var/logs -ipath fooBar\n' "$scriptname"
+    printf '4. %s /var/logs -ipath fooBar -print0\n' "$scriptname"
+fi
 
 default_ignore=(
     "$HOME/Library/Mail/*"
@@ -22,39 +36,36 @@ get_user_predicate() {
     local user_predicate=""
     local user_pred_type=""
 
-    if [[ "$@" =~ / ]]; then user_pred_type='-ipath' ; else user_pred_type='-iname' ; fi
+    if [[ $@ =~ / ]]; then user_pred_type='-ipath' ; else user_pred_type='-iname' ; fi
 
     while [[ $# > 0 ]]; do
         user_predicate="$user_predicate $user_pred_type '$1'"
         shift
     done
 
-    printf '%s' "$user_predicate"
+    echo $user_predicate
 }
 
 
 get_ignore_predicate() {
     local ignore_predicate='\( '
     local ignore_path=""
-    local first_item=1
+    local items_added=0
 
     for ignore_path in "${SEARCH_IGNORE_PATHS[@]}"; do
-        [[ $first_item != 1 ]] && ignore_predicate="$ignore_predicate -or"
-        first_item=0
-
-        ignore_predicate="$ignore_predicate -path '$ignore_path'"
+        if [[ $items_added > 0 ]]; then
+            ignore_predicate="$ignore_predicate -or -path \"$ignore_path\""
+        else
+            ignore_predicate="$ignore_predicate -path \"$ignore_path\""
+        fi
+        items_added="$(( ${items_added} + 1 ))"
     done
 
     ignore_predicate="$ignore_predicate \\) -prune -or"
-    printf '%s' "$ignore_predicate"
+    #printf '%b' "$ignore_predicate"
+    echo $ignore_predicate
 }
 
-
-find_cmd=""
-find_path=""
-find_ignore=""
-find_user=""
-last_action="-print"
 
 if [[ $# < 2 ]]; then
     find_path="."
@@ -64,20 +75,21 @@ else
     set -- "${@:1:$(($#-1))}"
 fi
 
-find_ignore="$(get_ignore_predicate)"
-find_cmd="$find_ignore"
 
 if [[ "$1" =~ ^- ]]; then
-    find_cmd="$find_cmd $@"
+    # If the first argument starts with a '-', assume it's a find predicate, and that the user knows
+    # what they're doing. In this case, just get out of their way and simply pass our ignore
+    # predicates, and all of their arguments without modification.
+    eval find "$find_path" $(get_ignore_predicate) $@
 else
+    # Check if the last user-supplied predicate is `-print` or `-print0`
     if [[ "${@:-1}" =~ -print ]]; then
-        last_action="${@:-1}"
+        # Use that -print/-print0 at the end of our find command
+        output_pred="${@:-1}"
+        # Remove it from our script's argument list to clean that up for other parsing functions
         set -- "${@:1:$(($#-1))}"
+    else
+        output_pred="-print"
     fi
-
-    find_user="$(get_user_predicate "$@")"
-
-    find_cmd="$find_cmd $find_user $last_action"
+    eval find "$find_path" $(get_ignore_predicate) $(get_user_predicate $@) $output_pred
 fi
-
-find $find_path $find_cmd
