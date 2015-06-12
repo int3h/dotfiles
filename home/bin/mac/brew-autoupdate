@@ -24,21 +24,22 @@ agent_install() {
 		<?xml version="1.0" encoding="UTF-8"?>
 		<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 		<plist version="1.0">
-		<dict>
-		    <key>ExitTimeOut</key>
-		    <integer>240</integer>
+		    <dict>
+		    <key>EnvironmentVariables</key>
+		    <dict>
+		        <key>GIT_SSH_COMMAND</key>
+		        <string>$GIT_SSH_COMMAND</string>
+		        <key>HOMEBREW_GITHUB_API_TOKEN</key>
+		        <string>$HOMEBREW_GITHUB_API_TOKEN</string>
+		        <key>PATH</key>
+		        <string>${PATH/:.:/:}</string>
+		    </dict>
 		    <key>KeepAlive</key>
 		    <false/>
 		    <key>Label</key>
 		    <string>com.matthewtorok.brew-update</string>
 		    <key>LimitLoadToSessionType</key>
 		    <string>Aqua</string>
-		    <key>LowPriorityBackgroundIO</key>
-		    <true/>
-		    <key>LowPriorityIO</key>
-		    <true/>
-		    <key>Nice</key>
-		    <integer>10</integer>
 		    <key>ProcessType</key>
 		    <string>Background</string>
 		    <key>ProgramArguments</key>
