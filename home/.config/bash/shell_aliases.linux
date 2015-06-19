@@ -12,7 +12,7 @@ alias ls='ls -lAph --color=auto'
 alias lsd='command ls -lph --color=auto --group-directories-first'
 
 # Require confirmation when deleting >3 files or a directory; be verbose.
-alias rm='rm -Iv'
+alias rm='rm -IRv'
 
 # Run n make processes in parallel, where n = (number of CPUs) + 1
 alias make="make -j$(( $(nproc) + 1 ))"
