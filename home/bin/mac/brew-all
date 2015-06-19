@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+br="$(which brew)"
+
+clr_headline="$(tput bold)$(tput setab 214)$(tput setaf 231)==> "
+clr_reset="$(tput sgr0)"
+
+
+printf '%sUpdating Package Cache%s\n' "$clr_headline" "$clr_reset"
+$br update
+
+printf '\n%sUpgrading Packages%s\n' "$clr_headline" "$clr_reset"
+$br upgrade --all;
+
+printf '\n\n%sResetting Update Notifications%s\n' "$clr_headline" "$clr_reset"
+/usr/bin/env bash $HOME/bin/mac/brew-autoupdate
+printf '\n'

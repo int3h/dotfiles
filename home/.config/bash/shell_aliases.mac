@@ -19,11 +19,8 @@ alias make="make -j$(( $(sysctl -n hw.ncpu) + 1 ))"
 alias psa='ps -Axww -o pid,command'
 alias psal='ps -Axww -o pid,user,cpu,command | less -S'
 
-# Homebrew's `brew` command is a single monolithic binary that processes all homebrew commands, so
-# we can't modify/add commands via aliases. This script wraps brew and allows us to do so.
-if [[ -x ${HOME}/bin/mac/brew-wrapper ]]; then
-    alias brew="$HOME/bin/mac/brew-wrapper"
-fi
+# Always run `htop` as root
+type -t htop >/dev/null 2>/dev/null && alias htop='sudo htop'
 
 # List all the preferences domains currently available
 alias domains='defaults domains | sed "s:, :\\`echo -e "\n\r"`:g"'

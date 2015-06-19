@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+. ~/bin/helpers.sh
+
+
+if [[ $# != 1 || $1 == -h || $1 == --help ]]; then
+    echo "	Usage: brew new <date>"
+    wrap 'Shows new formula since <date> (where <date> is a Git date, like "1 week ago" or "1/1/2012")'
+    echo
+    exit
+fi
+
+formulas=""
+for repo in $HOMEBREW_LIBRARY_PATH/Taps/* $HOMEBREW_LIBRARY_PATH/Formula; do
+    cd "${repo}"
+    oldrev=$(git log --pretty='%H'	--since="$2" --reverse | head -n 1)
+    currentrev=$(git rev-parse -q --verify HEAD)
+    # By changing the '--diff-filter=' line to 'M' for modified or 'R' for removed, we can
+    # control which files we get back. We can use this to create a more full-features
+    # change report, if we wanted.
+    formulas="$formulas$(git diff-tree --name-only -r -M85% --diff-filter=A --relative ${oldrev} ${currentrev} | grep -P -o '^[^.]+')\n"
+done
+echo -e "$formulas" | column
+
