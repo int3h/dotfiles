@@ -75,10 +75,10 @@ display_www() {
         fi
 	fi
 
-	if [[ $1 =~ git-[^\/]+\.[0-9]+ ]]; then
+    if [[ $1 =~ git(-[^\/]+)?\.[0-9]+ ]]; then
 		print_verbosely "Command is a git command. Attempting to open man page on the Git website."
 
-		local URL="http://git-scm.com/docs/$(echo "$1" | sed 's/.*\(git-[^\/]\{1,\}\)\.[0-9]\{1,\}/\1/')"
+        local URL="http://git-scm.com/docs/$(echo "$1" | sed 's/.*\(git\(-[^\/]\{1,\}\)\{0,1\}\)\.[0-9]\{1,\}/\1/')"
         check_url $URL
         if [[ $? -eq 0 ]]; then
 			print_verbosely "Man page found on Git website. Opening."
