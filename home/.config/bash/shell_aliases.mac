@@ -20,7 +20,11 @@ alias lsd='command ls -lOph'
 alias make="make -j$(( $(sysctl -n hw.ncpu) + 1 ))"
 
 alias psa='ps -Axww -o pid,ruser,command'
+if type -t grc >/dev/null; then
+	alias psless='grc -es --colour=on ps -Axww -o pid,ruser,command | less -SR'
+else
 	alias psless='ps -Axww -o pid,ruser,command | less -S'
+fi
 
 # Always run `htop` as root
 type -t htop >/dev/null 2>/dev/null && alias htop='sudo htop'
