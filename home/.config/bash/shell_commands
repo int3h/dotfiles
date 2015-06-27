@@ -84,31 +84,31 @@ fi
 #   `pip install --upgrade setuptools && pip install --upgrade pip && \
 #    pip install -I --force-reinstall pygments && pip install mistune`
 # On Linux, it's just: `sudo apt-get install python-pygments`
-scat() {
-    # TODO: Support piped intput in addition to file path arguments
-    local source_file="$@"
+#scat() {
+    ## TODO: Support piped intput in addition to file path arguments
+    #local source_file="$@"
 
-    # Options passed to pygments. `-P style=native` uses the color scheme named "native",
-    # `-f terminal256` tells it to out the results in 256-color terminal mode, and `-g` tells it to
-    # guess the syntax of the sourcefile.
-    local pygments_opts='-P style=native -f terminal256 -g'
+    ## Options passed to pygments. `-P style=native` uses the color scheme named "native",
+    ## `-f terminal256` tells it to out the results in 256-color terminal mode, and `-g` tells it to
+    ## guess the syntax of the sourcefile.
+    #local pygments_opts='-P style=native -f terminal256 -g'
 
-    # Check if the length of the source file is greater then the height of the terminal
-    if [[ $(wc -l "$source_file" | sed -e 's/[^0-9]//g') -gt $(tput lines) ]]; then
-        # Long sources use `less -RNS` (-R turns on support for ANSI colors, -N adds line numbers,
-        # and -S tells it to not wrap lines.)
-        local viewer="less -RNS"
-    else
-        # Short source files just use `cat -n`. The `-n` option turns on line numbers.
-        local viewer="cat -n"
-    fi
+    ## Check if the length of the source file is greater then the height of the terminal
+    #if [[ $(wc -l "$source_file" | sed -e 's/[^0-9]//g') -gt $(tput lines) ]]; then
+        ## Long sources use `less -RNS` (-R turns on support for ANSI colors, -N adds line numbers,
+        ## and -S tells it to not wrap lines.)
+        #local viewer="less -RNS"
+    #else
+        ## Short source files just use `cat -n`. The `-n` option turns on line numbers.
+        #local viewer="cat -n"
+    #fi
 
-    if type -t pygmentize >/dev/null; then
-        pygmentize $pygments_opts "$source_file" | $viewer
-    else
-        $viewer "$source_file"
-    fi
-}
+    #if type -t pygmentize >/dev/null; then
+        #pygmentize $pygments_opts "$source_file" | $viewer
+    #else
+        #$viewer "$source_file"
+    #fi
+#}
 
 
 # `mkcd`: runs `mkdir` with the given arguments, then `cd`s to the newly-created directory
