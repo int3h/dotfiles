@@ -163,6 +163,27 @@ if [[ $OS == "Linux" ]]; then
 fi
 
 
+show_dynamic_motd() {
+    # Check if we can `sudo` successfully without a password (-n)
+    local dosudo="$(sudo -n printf 'sudo' 2>/dev/null)"
+
+    # Check which flavor of Linux we're running under
+    if [[ -f /etc/os-release ]]; then
+        local os_type="$(. /etc/os-release; echo $ID_LIKE)"
+    fi
+
+    if [[ "$os_type" == "debian" ]] && [[ -d /etc/update-motd.d ]]; then
+        # On Ubuntu, run the update-motd.d scripts directly, since there's no `update-motd` utility
+         $dosudo run-parts /etc/update-motd.d 2>/dev/null
+         return
+    elif [[ "$os_type" =~ rhel ]] && [[ -x /usr/sbin/update-motd ]] && [[ -n "$dosudo" ]]; then
+        # On RedHat-like run `update-motd` if we can sudo to update /etc/motd.
+        sudo -n /usr/sbin/update-motd --force >/dev/null 2>/dev/null
+    fi
+
+    [[ -f /etc/motd ]] && cat /etc/motd && printf '\n'
+}
+
 #################################
 ##### OS X setup
 #################################
@@ -387,9 +408,7 @@ case $- in
             if test -z "$TMUX"; then
                 tmux new-session -A -s "$USER"
             else
-                if [[ -d /etc/update-motd.d ]] && type -t run-parts >/dev/null; then
-                    run-parts --lsbsysinit /etc/update-motd.d 2>/dev/null
-                fi
+                show_dynamic_motd
             fi
         fi
     fi
