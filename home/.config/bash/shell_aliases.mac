@@ -6,6 +6,9 @@ fi
 
 alias b='brew'
 
+# Require confirmation when deleting a file (or for each dir); recursively delete dirs; be verbose.
+alias rm='rm -iRv'
+
 # Detailed file listing; show hidden files; append a '/' to directories; use human-readable sizes
 alias ls='command ls -lAOph'
 # Like our regular detailed `ls`, but also show extended attributes
@@ -16,8 +19,12 @@ alias lsd='command ls -lOph'
 # Run n make processes in parallel, where n = (number of CPUs) + 1
 alias make="make -j$(( $(sysctl -n hw.ncpu) + 1 ))"
 
-alias psa='ps -Axww -o pid,command'
-alias psal='ps -Axww -o pid,user,cpu,command | less -S'
+alias psa='ps -Axww -o pid,ruser,command'
+if type -t grc >/dev/null; then
+	alias psless='grc -es --colour=on ps -Axww -o pid,ruser,command | less -SR'
+else
+	alias psless='ps -Axww -o pid,ruser,command | less -S'
+fi
 
 # Always run `htop` as root
 type -t htop >/dev/null 2>/dev/null && alias htop='sudo htop'
@@ -26,7 +33,7 @@ type -t htop >/dev/null 2>/dev/null && alias htop='sudo htop'
 alias domains='defaults domains | sed "s:, :\\`echo -e "\n\r"`:g"'
 
 # Show all items currently excluded from backup by their HFS+ extended attributes
-alias backup-excluded="sudo mdfind \"com_apple_backup_excludeItem = 'com.apple.backupd'\";\
+alias tmexcluded="sudo mdfind \"com_apple_backup_excludeItem = 'com.apple.backupd'\";\
 defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist UserPathsExcluded | grep -oE --color=never -e '\"[^\"]+\"' | xargs -I {} printf \"$HOME/{}\n\";\
 defaults read /Library/Preferences/com.apple.TimeMachine.plist ExcludeByPath | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\
 defaults read /Library/Preferences/com.apple.TimeMachine.plist SkipPaths | grep -oE --color=never -e '^\\W*\"\\K[^\"]+';\

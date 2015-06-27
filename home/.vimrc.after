@@ -51,6 +51,8 @@ set hidden
 " If more than one file is passed to Vim on startup, open each in its own tab
 function! Open_all_files_in_tabs()
 	if len(argv()) > 1
+		" Allow up to 20 tabs to be created at startup (more will split the last tab)
+		set tabpagemax=20
 		" Save the current tab
 		let l:currentTab = tabpagenr()
 		" `tab`: run the following command and create tabs when it

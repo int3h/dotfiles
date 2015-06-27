@@ -40,7 +40,7 @@ alias mrsync="rsync -auvrtEz --exclude-from=$HOME/.rsync_exclude.conf --progress
 # `bashrc`: Open up all our Bash configuration files at once in our editor
 # $VISUAL is set to 'mvim -f' in OS X by default, but we don't want the '-f' here (it tells MacVim
 # to not fork, and the command will not return until MacVim is closed.)
-alias bashrc="command find ~/.config/bash -not -name 'shell_history' -not -type d -print0 | command xargs -0 $( ([[ "$VISUAL" == 'mvim -f' ]] && printf 'mvim') || printf '%s' "$VISUAL") ~/.bash_profile ~/.bashrc ~/.bash_logout ~/.inputrc ~/.ssh/config"
+alias bashrc="command find ~/.config/bash -not -name 'shell_history' -not -type d -print0 | command xargs -0 -J % $( ([[ "$VISUAL" == 'mvim -f' ]] && printf 'mvim') || printf '%s' "$VISUAL") ~/.bash_profile ~/.inputrc ~/.ssh/config % ~/.bashrc ~/.bash_logout"
 
 # Source our OS-specific aliases
 [[ "$OS" == "Mac" ]] && . ~/.config/bash/shell_aliases.mac
