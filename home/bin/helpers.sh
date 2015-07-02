@@ -85,3 +85,16 @@ check_url() {
     #   --output /dev/null  Write output to /dev/null
     curl --silent --fail --max-time 3 --head --output /dev/null "$1" 2>&1 >/dev/null
 }
+
+
+# Checks if the user can run `sudo` without requiring a password. If yes, prints 'sudo' and returns
+# 0; if not, prints '' (empty string) and returns 1.
+can_sudo() {
+    if [[ "$(sudo -n printf 'sudo' 2>/dev/null)" == "sudo" ]]; then
+        echo 'sudo'
+        return 0
+    else
+        echo ''
+        return 1
+    fi
+}
