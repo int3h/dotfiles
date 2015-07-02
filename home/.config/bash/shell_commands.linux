@@ -1,2 +1,18 @@
 #!/usr/bin/env bash
 
+# Runs `apt-get update && apt-get upgrade && apt-get autoremove`. Will automatically prepend 'sudo'
+# to commands if not run as root. Will pass any args given to each apt-get command run (try '-y' to
+# assume "yes" answers to all apt-get prompts).
+apt-all() {
+    local args="$@"
+
+    local apt_cmd='apt-get'
+    [[ $UID != 0 ]] && apt_cmd="sudo apt-get"
+
+    $apt_cmd update $args && \
+        $apt_cmd upgrade $args && \
+        $apt_cmd autoremove $args && \
+        $apt_cmd autoclean $args
+
+    return $?
+}
