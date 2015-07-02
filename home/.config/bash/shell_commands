@@ -74,6 +74,8 @@ sshq() {
 
 if [[ "$OS" == "Mac" ]] && [[ -f ~/.config/bash/shell_commands.mac ]]; then
     source ~/.config/bash/shell_commands.mac
+elif [[ "$OS" == "Linux" ]]; then
+    source ~/.config/bash/shell_commands.linux
 fi
 
 
