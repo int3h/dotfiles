@@ -1,5 +1,5 @@
 [core]
-	editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
+	editor = mvim -f --nomru -c \"au VimLeave * !open -a iTerm\"
 [credential]
 	helper = osxkeychain
 
