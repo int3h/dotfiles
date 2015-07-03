@@ -100,3 +100,9 @@ else
     printf 'Warning: `npm` not installed. Could not install tern_for_vim\n'
 fi
 
+printHeader "Updating Janus"
+if [[ -e "$HOME/.vim/Rakefile" ]]; then
+    cd "$HOME/.vim/" && rake
+else
+    printf 'Warning: Janus not installed. Not running Janus update command.\n'
+fi
