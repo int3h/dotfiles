@@ -92,9 +92,12 @@ if [[ "$OLD_YCM_REV" != "$NEW_YCM_REV" ]]; then
 fi
 
 printHeader "Installing tern_for_vim npm dependencies"
-pushd home/.janus/tern_for_vim >/dev/null
-npm install
-popd >/dev/null
-
+if type -t npm >/dev/null; then
+    pushd home/.janus/tern_for_vim >/dev/null
+    npm install
+    popd >/dev/null
+else
+    printf 'Warning: `npm` not installed. Could not install tern_for_vim\n'
+fi
 
 popd >/dev/null
