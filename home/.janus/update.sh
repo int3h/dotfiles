@@ -18,7 +18,7 @@ fi
 function getRev {
 	# The submodule isn't checked out if its .git file doesn't exist, so return '0' in that case
 	if [[ -f "${1}/.git" ]]; then
-		SUBMOD_REV="$(git submodule status $1 | grep -o -P '^[ +-]\K[0-9a-f]+')"
+        SUBMOD_REV="$(cd $(dirname "$1") && git submodule status -- "$(basename "$1")" | grep -o -P '^[ +-]\K[0-9a-f]+' || echo '0')"
 	else
 		SUBMOD_REV="0"
 	fi
@@ -51,7 +51,7 @@ git submodule update --recursive --init
 
 # Save the current YCM revision (before updating) so we can later tell if it was updated
 
-getRev "home/.janus/YouCompleteMe/"
+getRev "home/.janus/YouCompleteMe/third_party/ycmd"
 OLD_YCM_REV="$SUBMOD_REV"
 
 if [[ $install_only != 1 ]]; then
@@ -72,12 +72,15 @@ fi
 git stash pop -q
 
 
-getRev "home/.janus/YouCompleteMe"
+getRev "home/.janus/YouCompleteMe/third_party/ycmd"
 NEW_YCM_REV="$SUBMOD_REV"
 
 # Only if we've updated YCM, rebuild it
 if [[ "$OLD_YCM_REV" != "$NEW_YCM_REV" ]]; then
 	printHeader "Rebuilding YouCompleteMe"
+    printf 'Detected change in YouCompleteMe/third_party/ycmd submodule that contains native bindings for YCM.\n'
+    printf 'Rebuilding YCM native bindings to ensure binary compatability.\n\n'
+
 	pushd home/.janus/YouCompleteMe >/dev/null
 	# On Linux, don't install clang completer (may not have the libs available)
 	if [[ $OS == "Linux" ]]; then
