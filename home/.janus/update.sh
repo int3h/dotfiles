@@ -57,10 +57,26 @@ OLD_YCM_REV="$SUBMOD_REV"
 if [[ $install_only != 1 ]]; then
 	printHeader "Pulling latest commit of each submodule"
 	# Updates each submodule to the latest version
-	# The 'git pull' could cause a submodule's submodules to need to be updated. Do it with the foreach
-	# so that we only update the 2nd-level submodules, and don't accidentally revert our top-level
-	# submodules back to their recorded commit (undoing the `git pull` here.)
-	git submodule foreach 'git pull origin master; git submodule update --recursive --init'
+
+    # The 'git pull' could cause a submodule's submodules to need to be updated. Do it with the
+    # foreach so that we only update the 2nd-level submodules, and don't accidentally revert our
+    # top-level submodules back to their recorded commit (undoing the `git pull` here.)
+
+	#git submodule foreach 'git pull origin master; git submodule update --recursive --init'
+
+    # This version has git print the path to each submodule, then uses xargs in parallel mode to
+    # actually execute the pull and submodule update, for faster execution.
+
+    # Measure the number of CPUs in the system, to determine the number of parallel processes to run
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+        numCPU="$(sysctl -n hw.ncpu)"
+    elif [[ "$(uname -s)" == "Linux" ]]; then
+        numCPU="$(nproc)"
+    else
+        numCPU="1"
+    fi
+
+    git submodule --quiet foreach 'printf "./%s\0" "$path"' | command xargs -0 -I{} -n 1 -P "$numCPU" bash -c 'cd "{}" && git pull origin master && git submodule update --recursive --init'
 
 
 	printHeader "Committing updates to git repo"
