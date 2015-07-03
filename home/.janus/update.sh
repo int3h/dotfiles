@@ -29,7 +29,7 @@ function printHeader {
 }
 
 
-pushd `git rev-parse --show-toplevel` > /dev/null
+cd "$(git rev-parse --show-toplevel)"
 
 if [[ $(git status -s .gitmodules) ]]; then
 	printf 'ERROR: Your .gitmodules file has uncommitted changes. This prevents us from\n' >&2
@@ -100,4 +100,3 @@ else
     printf 'Warning: `npm` not installed. Could not install tern_for_vim\n'
 fi
 
-popd >/dev/null
