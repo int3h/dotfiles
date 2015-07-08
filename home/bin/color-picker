@@ -1,43 +1,63 @@
 #!/usr/bin/env bash
 
-#USERPROMPT="\e[1m"
-USERPROMPT=""
+foreground="0"
+background="15"
 
-function printColors {
-    for color in {0..256} ; do #Colors
-		printf "${USERPROMPT}\e[${1};5;${color}m %10s \e[0m" "${color}"
-		#printf "${USERPROMPT}%s%s %10s \e[0m" "$(tput sgr0)" "$(tput setaf $color)" "${color}"
-        #Display 10 colors per lines
-        if [ $((($color + 1) % 8)) == 0 ] ; then
-            echo
-        fi
-    done
-    echo
-}
+bold="$(tput bold)"
+reset="$(tput sgr0)"
 
-function printForegrounds {
-    printColors 38
-}
-function printBackgrounds {
-    printColors 48
-}
+#color_charwidth=12
+#colors_per_line="$(( $(tput cols) / $color_charwidth ))"
+colors_per_line=6
 
-#USERPROMPT="\e[1m"
-USERPROMPT="\e[0m"
-printBackgrounds
-echo
-read -p "Enter the value of the background color of the prompt: " USERBG
-USERPROMPT="${USERPROMPT}\e[48;5;${USERBG}m"
-echo
-echo -ne "\e[48;5;${USERBG}m\e[1m"
-printForegrounds
-echo -ne "\e[0m"
-echo
-echo -n "Enter the value of the foreground color of the prompt: "
-read USERFG
-USERPROMPT="${USERPROMPT}\e[38;5;${USERFG}m"
-echo
-echo "Your prompt will look like:"
-echo -e "${USERPROMPT}user@host (~/example)\$\e[0m "
-echo
-echo "Color code: ${USERPROMPT}"
+# We use the raw shell escape codes below to set color because `tput` is too slow
+
+# Print all the backgrounds
+for color in {0..256} ; do
+    #printf '%s%s %10s %s' "$bold" "$(tput setab $color)" $color "$reset"
+    printf '%s\e[48;5;%sm %10s %s' "$bold" $color $color "$reset"
+
+    if [[ $color == 15 ]]; then
+        printf '\n\n'
+    elif [[ $color -le 15 ]]; then
+        [[ $color != 14 ]] && [[ $(( ($color + 1) % 5 )) == 0 ]] && printf '\n'
+    else
+        [[ $(( $color % $colors_per_line )) == 3 ]] && printf '\n'
+    fi
+done
+printf '\n\n'
+
+read -p "Enter the value of the background color of the prompt: " background
+
+if ! [[ $background =~ ^[0-9]+$ ]] || [[ $background -lt 0 ]] || [[ $background -gt 256 ]]; then
+    printf 'Error: selection "%s" is not a valid color value.\n\n' "$background"
+    exit 1
+fi
+
+# Print all the foregrounds
+background_code="$(tput setab $background)"
+for color in {0..256} ; do
+    #printf '%s %10s %s' "${bold}${background_code}$(tput setaf $color)" $color "$reset"
+    printf '%s\e[38;5;%sm %10s %s' "${bold}${background_code}" $color $color "$reset"
+
+    if [[ $color == 15 ]]; then
+        printf '\n\n'
+    elif [[ $color -le 15 ]]; then
+        [[ $color != 14 ]] && [[ $(( ($color + 1) % 5 )) == 0 ]] && printf '\n'
+    else
+        [[ $(( $color % $colors_per_line )) == 3 ]] && printf '\n'
+    fi
+done
+printf '\n\n'
+
+read -p "Enter the value of the foreground color of the prompt: " foreground
+
+if ! [[ $foreground =~ ^[0-9]+$ ]] || [[ $foreground -lt 0 ]] || [[ $foreground -gt 256 ]]; then
+    printf 'Error: selection "%s" is not a valid color value.\n\n' "$foreground"
+    exit 2
+fi
+
+printf '\nYour prompt will look like:\n'
+printf '%s%s@%s (~/example)$%s \n' "${bold}$(tput setab $background)$(tput setaf $foreground)" "$USER" "$HOSTNAME" "$reset"
+
+printf '\n%sColor codes:%s $(tput bold)$(tput setab %s)$(tput setaf %s)\n' "$bold$(tput setab 15)$(tput setaf 16)" "$reset" "$background" "$foreground"
