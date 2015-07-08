@@ -92,7 +92,7 @@ getRev "home/.janus/YouCompleteMe/third_party/ycmd"
 NEW_YCM_REV="$SUBMOD_REV"
 
 # Only if we've updated YCM, rebuild it
-if [[ "$OLD_YCM_REV" != "$NEW_YCM_REV" ]]; then
+if [[ "$OLD_YCM_REV" != "$NEW_YCM_REV" ]] || ! [[ -e home/.janus/YouCompleteMe/third_party/ycmd/ycm_core.so ]]; then
 	printHeader "Rebuilding YouCompleteMe"
     printf 'Detected change in YouCompleteMe/third_party/ycmd submodule that contains native bindings for YCM.\n'
     printf 'Rebuilding YCM native bindings to ensure binary compatability.\n\n'
