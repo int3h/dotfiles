@@ -359,7 +359,7 @@ case $- in
             if [[ $OS == "Mac" ]]; then
                 PROMPT_TEXT='\u (\w)'
             else
-                PROMPT_TEXT='\u@\H (\w)'
+                PROMPT_TEXT="\\u@$(hostname -f) (\\w)"
             fi
         fi
 
