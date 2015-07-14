@@ -41,14 +41,14 @@ if [[ $# > 0 ]]; then
     done
 
     if [[ $exit_code == 0 ]]; then
-        success -title "$1 completed" -message "$escaped_cmd"
+        success -title "$1 completed" -message "$escaped_cmd" -group "$1"
     else
-        failure -title "$1 failed!" -subtitle "Error code: $exit_code" -message "$escaped_cmd"
+        failure -title "$1 failed!" -subtitle "Error code: $exit_code" -message "$escaped_cmd" -group "$1"
     fi
 else
     if [[ $exit_code == 0 ]]; then
-        success -title "Command completed" -message "The command completed with a normal exit code."
+        success -title "Command completed" -message "The command completed with a normal exit code." -group "$1"
     else
-        failure -title "Command failed!" -message "The command exited with the error code $exit_code."
+        failure -title "Command failed!" -message "The command exited with the error code $exit_code." -group "$1"
     fi
 fi
