@@ -99,10 +99,14 @@ display_www() {
 #   $2: the path to save generated secondary files (images, etc.)
 # Returns: a string of the HTML via stdout
 generate_html() {
+    local catcmd="cat"
+    # If the man file in GZipped, use `zcat` instead of `cat`
+    [[ "$1" =~ \.gz$ ]] && catcmd="zcat"
+
     # Use groff
     # Enable ALL the pre-processors! (Except grap, that gave me an error.)
     # -t -p -k -e -g -R -s : preprocess with gtbl, gpic, preconv, geqn, ggrn, grefer, gsoelim
-    local rawhtml="$(groff -mandoc -t -p -k -e -g -R -s -Txhtml -N -P"-D${2}" "$1")"
+    local rawhtml="$($catcmd < "$1" | groff -mandoc -t -p -k -e -g -R -s -Txhtml -N -P"-D${2}" -)"
     if [ $? -ne 0 ]; then
       echo "Error generating HTML from man page" >&2
       exit -1
