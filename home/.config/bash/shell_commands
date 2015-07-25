@@ -56,7 +56,7 @@ psgrep() {
 normalize_path() {
     local to_norm="$PATH"
     [[ $# > 0 ]] && to_norm="$1"
-    printf '%s' "$to_norm" | sed -e 's/:$/:TRAILINGNULL/' | awk 'BEGIN { RS=":"; } {n[$0]++; if(NR > 1) { printf(":"); } printf("%s", $0); }' | sed -e 's/:TRAILINGNULL$/:/'
+    echo $to_norm | sed -e 's/:\(:\|$\)/:.\1/g'  | awk 'BEGIN { RS=":";   } { path=$0; if($0 == "" || $0 == "\n") {path="."} n[path]++; if(n[path] < 2) { printf(":%s", $0);  }   }' | cut -c 2-
 }
 
 
