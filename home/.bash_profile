@@ -63,20 +63,28 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
 
     # Homebrew (overrides system tools)
     [[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
+
     # `pip install --user` binaries
     [[ -d $HOME/.local/bin ]] && PATH="$HOME/.local/bin:$PATH"
-	# In Linux, `npm install -g` normally requires `sudo`. We set the global path to ~/.npm_global
-	# and add its bin directory to our $PATH.
-	[[ "$OS" == "Linux" ]] && [[ -d ~/.npm_global ]] && PATH="$HOME/.npm_global/bin:$PATH"
+
+	if [[ "$OS" == "Linux" ]]; then
+        [[ -d /opt/splunkforwarder/bin ]] && PATH="/opt/splunkforwarder/bin:$PATH"
+        [[ -d /opt/splunk/bin ]] && PATH="/opt/splunk/bin:$PATH"
+        # In Linux, `npm install -g` normally requires `sudo`. We set the global path to
+        # ~/.npm_global and add its bin directory to our $PATH.
+        [[ -d ~/.npm_global ]] && PATH="$HOME/.npm_global/bin:$PATH"
+        [[ -d "$HOME/bin/linux" ]] && PATH="$HOME/bin/linux:$PATH"
+    elif [[ "$OS" == "Mac" ]]; then
+        [[ -d "$HOME/bin/mac" ]] && PATH="$HOME/bin/mac:$PATH"
+        # Araxis Merge command line utilities (if they're installed)
+        [[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && PATH="$PATH:/Applications/Araxis Merge.app/Contents/Utilities"
+    fi
+
     # My own user bin directory (highest priority)
     [[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
-	[[ "$OS" == "Mac" ]] && [[ -d "$HOME/bin/mac" ]] && PATH="$HOME/bin/mac:$PATH"
-	[[ "$OS" == "Linux" ]] && [[ -d "$HOME/bin/linux" ]] && PATH="$HOME/bin/linux:$PATH"
 
     ## Low weight (last added = lowest priority)
 
-    # Araxis Merge command line utilities (if they're installed)
-    [[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && PATH="$PATH:/Applications/Araxis Merge.app/Contents/Utilities"
     # Binaries in the CWD
     export PATH="$PATH:."
 fi
