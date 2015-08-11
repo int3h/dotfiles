@@ -14,8 +14,8 @@ esac
 ##### Shell options
 #################################
 
-# Set the default mode of new files to u=rwx,g=rx,o=
-umask 0027
+# Set the default mode of new files to u=rwx,g=,o=
+umask 0077
 
 # Set the LANG to "C" so that `ls` output is ordered to have dotfiles first, among other things
 export LANG="C"
