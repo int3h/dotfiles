@@ -285,6 +285,13 @@ export GIT_SSH_COMMAND="ssh -o PermitLocalCommand=no -o ServerAliveInterval=0"
 # Enable "The Fuck" (https://github.com/nvbn/thefuck)
 type -t thefuck >/dev/null && alias fuck='$(thefuck $(fc -ln -1))'
 
+# Configure npm (~/.npmrc contains encoded login tokens, so can't commit that publically)
+export npm_config_loglevel='warn'
+export npm_config_rollback='false'
+export npm_config_searchsort='-date'
+export npm_config_save_prefix='~'
+export npm_config_depth=0
+
 
 #################################
 ##### Source secondary config files
