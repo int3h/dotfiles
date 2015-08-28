@@ -103,8 +103,3 @@ elif [[ "$OS" == "Linux" ]]; then
 fi
 
 
-# `mkcd`: runs `mkdir` with the given arguments, then `cd`s to the newly-created directory
-mkcd() {
-    local newdir="$@"
-    mkdir "$newdir" && cd "$newdir"
-}
