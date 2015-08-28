@@ -52,6 +52,14 @@ unset -f make_bashrc_alias
 
 type -t n >/dev/null && alias iorepl='n io use $(n io --stable) -i'
 
+if type -t jupyter >/dev/null; then
+    alias pynote='jupyter notebook'
+elif type -t ipython3 >/dev/null; then
+    alias pynote='ipython3 notebook'
+elif type -t ipython >/dev/null; then
+    alias pynote='ipython notebook'
+fi
+
 # Source our OS-specific aliases
 [[ "$OS" == "Mac" ]] && . ~/.config/bash/shell_aliases.mac
 [[ "$OS" == "Linux" ]] && . ~/.config/bash/shell_aliases.linux
