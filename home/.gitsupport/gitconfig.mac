@@ -18,9 +18,10 @@
 	trustExitCode = true
 
 [difftool "bcomp"]
-	cmd = ~/bin/mac/bcomp-wrap \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+	cmd = /usr/local/bin/bcomp -fv=\"Text Compare\" -ro1 -vcs1=\"$REMOTE\" \"$LOCAL\" \"$REMOTE\"
+	path = 
 [mergetool "bcomp"]
-	cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+	cmd = /usr/local/bin/bcomp -fv=\"Text Merge\" -mergeoutput=\"$MERGED\" -vcs1=\"$MERGED\" -title1=\"Mine\" -title2=\"Yours\" -title3=\"Common Parent\" -center=\"$BASE\" \"$LOCAL\" \"$REMOTE\"
 	trustExitCode = true
 
 [difftool]
