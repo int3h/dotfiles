@@ -14,8 +14,8 @@ esac
 ##### Shell options
 #################################
 
-# Set the default mode of new files to u=rwx,g=rx,o=
-umask 0027
+# Set the default mode of new files to u=rwx,g=,o=
+umask 0077
 
 # Set the LANG to "C" so that `ls` output is ordered to have dotfiles first, among other things
 export LANG="C"
@@ -284,6 +284,13 @@ export GIT_SSH_COMMAND="ssh -o PermitLocalCommand=no -o ServerAliveInterval=0"
 
 # Enable "The Fuck" (https://github.com/nvbn/thefuck)
 type -t thefuck >/dev/null && alias fuck='$(thefuck $(fc -ln -1))'
+
+# Configure npm (~/.npmrc contains encoded login tokens, so can't commit that publically)
+export npm_config_loglevel='warn'
+export npm_config_rollback='false'
+export npm_config_searchsort='-date'
+export npm_config_save_prefix='~'
+export npm_config_depth=0
 
 
 #################################

@@ -1,5 +1,5 @@
 " Set font
-set guifont=InputMono:h11
+set guifont=InputCode:h11
 "set guifont=Meslo\ LG\ S\ Regular\ for\ Powerline:h11
 "set guifont=Source\ Code\ Pro\ for\ Powerline:h12
 "set guifont=Inconsolata:h11			 " Decent font.
