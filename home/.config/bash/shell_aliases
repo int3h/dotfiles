@@ -19,7 +19,7 @@ alias la='ls'
 type -t homesick >/dev/null && alias castle='cd $(homesick show_path)'
 
 # `tm` will open (and create, if necessary) a tmux session named for the current user
-type -t tmux 2>&1 >/dev/null && alias tm="tmux new-session -A -s \"$USER\""
+type -t tmux >/dev/null && alias tm="tmux new-session -A -s \"$USER\""
 
 # Show public IP address
 alias whatismyip="curl -s 'http://ipecho.net/plain' && echo"
@@ -42,7 +42,7 @@ alias mrsync="rsync -auvrtEz --exclude-from=$HOME/.rsync_exclude.conf --progress
 # to not fork, and the command will not return until MacVim is closed.)
 alias bashrc="command find ~/.config/bash -not -name 'shell_history' -not -type d -print0 | command xargs -0 -J % $( ([[ "$VISUAL" == 'mvim -f' ]] && printf 'mvim') || printf '%s' "$VISUAL") ~/.bash_profile ~/.inputrc ~/.ssh/config % ~/.bashrc ~/.bash_logout"
 
-type -t n 2>&1 >/dev/null && alias iorepl='n io use $(n io --stable) -i'
+type -t n >/dev/null && alias iorepl='n io use $(n io --stable) -i'
 
 # Source our OS-specific aliases
 [[ "$OS" == "Mac" ]] && . ~/.config/bash/shell_aliases.mac
