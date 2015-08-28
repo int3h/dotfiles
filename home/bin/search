@@ -1,95 +1,64 @@
 #!/usr/bin/env bash
 
-#set -x
-#set -v
 
-script_name="$(basename "$0")"
+bin_name="$(basename "$0")"
 
-if [[ $# < 1 ]] || [[ $# == 1 ]] && ([[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]); then
-    printf 'Sane wrapper over the standard system `find` command\n\n'
-
-    printf 'Usage:\n'
-    printf '1. %s fooBar\n' "$scriptname"
-    printf '2. %s /var/logs fooBar\n' "$scriptname"
-    printf '3. %s /var/logs -ipath fooBar\n' "$scriptname"
-    printf '4. %s /var/logs -ipath fooBar -print0\n' "$scriptname"
-fi
-
-default_ignore=(
-    "$HOME/Library/Mail/*"
-    "$HOME/Library/Application Support/Google/Chrome*/*/File System/*"
-    "$HOME/Library/Application Support/Google/Chrome*/*/IndexedDB/*"
-    "$HOME/Library/Application Support/Google/Chrome*/*/Local Storage/*"
-    "$HOME/Library/Application Support/Google/Chrome*/*/Pepper Data/*"
-    "$HOME/Library/Calendars/*"
-    "/Volumes/*"
-    "/cores/*"
-    "/dev/*"
-)
-
-if [[ -z "${SEARCH_IGNORE_PATHS+x}" ]]; then
-    declare -a SEARCH_IGNORE_PATHS
-    SEARCH_IGNORE_PATHS=("${default_ignore[@]}")
-fi
-
-get_user_predicate() {
-    local user_predicate=""
-    local user_pred_type=""
-
-    if [[ $@ =~ / ]]; then user_pred_type='-ipath' ; else user_pred_type='-iname' ; fi
-
-    while [[ $# > 0 ]]; do
-        user_predicate="$user_predicate $user_pred_type '$1'"
-        shift
-    done
-
-    echo $user_predicate
-}
-
-
-get_ignore_predicate() {
-    local ignore_predicate='\( '
-    local ignore_path=""
-    local items_added=0
-
-    for ignore_path in "${SEARCH_IGNORE_PATHS[@]}"; do
-        if [[ $items_added > 0 ]]; then
-            ignore_predicate="$ignore_predicate -or -path \"$ignore_path\""
-        else
-            ignore_predicate="$ignore_predicate -path \"$ignore_path\""
-        fi
-        items_added="$(( ${items_added} + 1 ))"
-    done
-
-    ignore_predicate="$ignore_predicate \\) -prune -or"
-    #printf '%b' "$ignore_predicate"
-    echo $ignore_predicate
+print_help() {
+    printf 'Usage: %s STRING PATH\n' "$bin_name" >&2
+    printf '   or: %s -EXPRESSION... PATH\n' "$bin_name" >&2
+    printf 'Use `find` to search PATH for STRING or EXPRESSIONs, using sane defaults.\n\n' >&2
+    printf 'If the first argument starts with a "-", it will be used as a `find`-compatible\n' >&2
+    printf 'search EXPRESSION (see `man 1 find`). Otherwise, will be used as a STRING to\n' >&2
+    printf 'match against file names.\n\n' >&2
 }
 
 
 if [[ $# < 2 ]]; then
-    find_path="."
-else
-    find_path="${@:-1}"
-    # Remove last arg
-    set -- "${@:1:$(($#-1))}"
+    printf 'Error: not enough arguments\n\n' >&2
+    print_help
+    exit 1
+fi
+if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
+    print_help
+    exit 0
 fi
 
 
-if [[ "$1" =~ ^- ]]; then
-    # If the first argument starts with a '-', assume it's a find predicate, and that the user knows
-    # what they're doing. In this case, just get out of their way and simply pass our ignore
-    # predicates, and all of their arguments without modification.
-    eval find "$find_path" $(get_ignore_predicate) $@
-else
-    # Check if the last user-supplied predicate is `-print` or `-print0`
-    if [[ "${@:-1}" =~ -print ]]; then
-        # Use that -print/-print0 at the end of our find command
-        output_pred="${@:-1}"
-        # Remove it from our script's argument list to clean that up for other parsing functions
-        set -- "${@:1:$(($#-1))}"
-    else
-        output_pred="-print"
+prune_expression=(\( \
+    -path $HOME/Library/Mail -or \
+    -path $HOME/Library/Calendars -or \
+    -path /Volumes -or \
+    -path /cores -or \
+    -path /dev -or \
+    -path "$HOME/Library/Application Support/Google/*" \( \
+        -name "File System" -or \
+        -name IndexedDB -or \
+        -name Extensions -or \
+        -name "Local Storage" -or \
+        -name "Pepper Data" \
+    \) \
+\) -prune)
+
+
+find_expression=''
+while [[ $# > 1 ]]; do
+    if [[ $# == 2 ]]; then
+        if [[ "$1" == "-print" ]] || [[ "$1" == "-print0" ]] || [[ "$1" == "-ls" ]]; then
+            action=''
+        else
+            action='-print'
+        fi
     fi
-    eval find "$find_path" $(get_ignore_predicate) $(get_user_predicate $@) $output_pred
+
+    find_expression="${find_expression}$1 "
+    shift
+done
+
+if [[ "$find_expression" != -* ]]; then
+    find_expression="-iname $find_expression"
 fi
+
+search_path="${1%\/}"
+
+
+command find $search_path "${prune_expression[@]}" -or $find_expression $action
