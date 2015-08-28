@@ -72,6 +72,30 @@ sshq() {
     complete -F _ssh sshq
 
 
+# npm shortcuts
+if type -t npm >/dev/null; then
+    __npm_version() {
+        if [[ $# < 1 ]]; then
+            echo "Error: missing package name" >&2
+            return 1
+        fi
+        npm view $@ dist-tags
+    }
+    alias 'npm-version'='__npm_version'
+
+    if type -t jq >/dev/null; then
+        __npm_brief() {
+            if [[ $# < 1 ]]; then
+                echo "Error: missing package name" >&2
+                return 1
+            fi
+            npm view --json $@ | jq 'del(.["author", "bugs", "bundleDependencies", "contributors", "maintainers", "man", "users", "time", "versions", "readmeFilename", "repository", "keywords", "homepage", "license", "gitHead", "dist"]) | .dependencies=(.dependencies|keys|join(", ")) | .devDependencies=(.devDependencies|keys|join(", "))'
+        }
+        alias 'npm-brief'='__npm_brief'
+    fi
+fi
+
+
 if [[ "$OS" == "Mac" ]] && [[ -f ~/.config/bash/shell_commands.mac ]]; then
     source ~/.config/bash/shell_commands.mac
 elif [[ "$OS" == "Linux" ]]; then
