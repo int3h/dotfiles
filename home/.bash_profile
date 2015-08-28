@@ -406,12 +406,6 @@ case $- in
                 # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
                 alias make="colourify make -j $(( $(sysctl -n hw.ncpu) + 1 ))"
             fi
-
-            # Enable iTerm terminal integration (must be done at end because it locks
-            # $PROMPT_COMMAND & $PS1)
-            if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-                [[ -f ~/.iterm2_shell_integration.bash ]] && source ~/.iterm2_shell_integration.bash
-            fi
         fi
 
         export PATH="$(normalize_path "$PATH")"
@@ -430,5 +424,6 @@ case $- in
     ;;
 esac
 
+[[ -f ~/.iterm2_shell_integration.bash ]] && source ~/.iterm2_shell_integration.bash
 
 export _BASHRC_DID_RUN=1
