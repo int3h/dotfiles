@@ -49,17 +49,6 @@ psgrep() {
 }
 
 
-# Takes in a PATH-like argument (defaults to $PATH itself if no arguments are given), removes
-# duplicate entries, and prints it (still in PATH-like format) to stdout. The path components are
-# kept in original order. If a component is duplicated, it is ordered according to its first
-# occurrence.
-normalize_path() {
-    local to_norm="$PATH"
-    [[ $# > 0 ]] && to_norm="$1"
-    echo $to_norm | sed -e 's/:\(:\|$\)/:.\1/g'  | awk 'BEGIN { RS=":";   } { path=$0; if($0 == "" || $0 == "\n") {path="."} n[path]++; if(n[path] < 2) { printf(":%s", $0);  }   }' | cut -c 2-
-}
-
-
 # `xssh`: shortcut for `ssh -O exit`, to quickly close a shared master SSH connection
 sshq() {
     if ssh -O check $* 2>/dev/null >/dev/null; then

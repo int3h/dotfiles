@@ -408,7 +408,13 @@ case $- in
             fi
         fi
 
-        export PATH="$(normalize_path "$PATH")"
+        # Remove duplicate entries from $PATH. Maintains current $PATH component ordering, using
+        # first occurrence
+        export PATH="$(echo "$PATH" \
+            | sed -e 's/:\(:\|$\)/:.\1/g' \
+            | awk 'BEGIN { RS=":";   } { path=$0; if($0 == "" || $0 == "\n") {path="."} n[path]++; if(n[path] < 2) { printf(":%s", $0);  }   }' \
+            | cut -c 2- \
+        )"
 
         export _BASHRC_DID_RUN=1
 
