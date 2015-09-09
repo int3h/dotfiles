@@ -11,18 +11,6 @@ mkcd() {
 }
 
 
-# Search for files in <path> (defaults to '.') whose filename includes <name>
-# Usage: findfiles <name> [<path>]
-findfiles() {
-    if [[ $# -gt 1 ]]; then
-        local search_path=$2
-    else
-        local search_path='.'
-    fi
-    find $search_path -iname "*$1*"
-}
-
-
 # Make a tmp directory, switch to it and copy its name to the system's paste buffer
 delme () {
     local TMPDIR="$(mktemp -d -t delme)"
