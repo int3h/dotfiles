@@ -37,18 +37,6 @@ alias histup='history -a && history -c && history -r'
 # transfer, use ~/.rsync_eclude.conf to set excluded files
 alias mrsync="rsync -auvrtEz --exclude-from=$HOME/.rsync_exclude.conf --progress --rsh=ssh"
 
-# `bashrc`: Open up all our Bash configuration files at once in our editor
-make_bashrc_alias() {
-    local rc_editor="$VISUAL"
-    # We usually add the -h option to mvim when used as $VISUAL. Edit files here w/ plain cmd.
-    [[ "$VISUAL" == mvim* ]] && local rc_editor='mvim'
-
-    local found_rcfiles="$(command find ~/.config/bash -not -name 'shell_history' -not -type d -print0 | command xargs -0 -I {} printf "\"%s\" " '{}')"
-
-    alias bashrc="$rc_editor ~/.bash_profile ~/.inputrc ~/.ssh/config $found_rcfiles ~/.bashrc ~/.bash_logout"
-}
-make_bashrc_alias
-unset -f make_bashrc_alias
 
 type -t n >/dev/null && alias iorepl='n io use $(n io --stable) -i'
 
