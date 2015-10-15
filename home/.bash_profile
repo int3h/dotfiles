@@ -67,6 +67,11 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
     # `pip install --user` binaries
     [[ -d $HOME/.local/bin ]] && PATH="$HOME/.local/bin:$PATH"
 
+    # `gem install --user-install` binaries
+    if which ruby >/dev/null && which gem >/dev/null; then
+        PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+    fi
+
 	if [[ "$OS" == "Linux" ]]; then
         [[ -d /opt/splunkforwarder/bin ]] && PATH="/opt/splunkforwarder/bin:$PATH"
         [[ -d /opt/splunk/bin ]] && PATH="/opt/splunk/bin:$PATH"
