@@ -228,8 +228,12 @@ if [[ $OS == "Mac" ]]; then
     # Initialize 'autojump' utility
     [[ -s $BREW_PREFIX/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
-    # Needed for ec2 api tools; otherwise nice to have
-    export JAVA_HOME="$(/usr/libexec/java_home)"
+    # If Java is installed, export the JRE path as $JAVA_HOME, which apps like ec2-cli use.
+    # The `java_home` utility is a standard part of OS X, and will either print Java's home path, if
+    # Java is installed, or print an error and exit non-zero. Only export $JAVA_HOME if it succeeds.
+    installed_java_home="$(/usr/libexec/java_home --failfast 2>/dev/null)"
+    [[ $? == 0 ]] && [[ -n "$installed_java_home" ]] && export JAVA_HOME="$installed_java_home"
+    unset installed_java_home
 
     # Setup ec2 api tools
     # $AWS_ACCESS_KEY and $AWS_SECRET_KEY should be set in shell_local or similar
