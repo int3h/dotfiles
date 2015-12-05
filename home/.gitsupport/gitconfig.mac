@@ -10,16 +10,9 @@
 	cmd = ~/bin/mac/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 	trustExitCode = true
 
-[difftool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/araxiscompare-w.sh -2 \"$LOCAL\" \"$REMOTE\"
-	path =.
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/araxisgitmerge-w.sh \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\"
-	trustExitCode = true
-
 [difftool "bcomp"]
 	cmd = /usr/local/bin/bcomp -fv=\"Text Compare\" -ro1 -vcs1=\"$REMOTE\" \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "bcomp"]
 	cmd = /usr/local/bin/bcomp -fv=\"Text Merge\" -mergeoutput=\"$MERGED\" -vcs1=\"$MERGED\" -title1=\"Mine\" -title2=\"Yours\" -title3=\"Common Parent\" -center=\"$BASE\" \"$LOCAL\" \"$REMOTE\"
 	trustExitCode = true
