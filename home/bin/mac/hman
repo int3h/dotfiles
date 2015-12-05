@@ -64,6 +64,7 @@ display_www() {
 		print_verbosely "Command is a Mac OS X standard command. Attempting to open man page on Apple's developer web portal."
 
         local URL="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/${1#/usr/share/man/}.html"
+        print_verbosely "... checking URL: $URL"
         check_url $URL
         if [[ $? -eq 0 ]]; then
 			print_verbosely "Man page found on Apple's developer portal. Opening."
