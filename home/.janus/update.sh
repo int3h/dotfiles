@@ -100,9 +100,9 @@ if [[ "$OLD_YCM_REV" != "$NEW_YCM_REV" ]] || ! [[ -e home/.janus/YouCompleteMe/t
 	pushd home/.janus/YouCompleteMe >/dev/null
 	# On Linux, don't install clang completer (may not have the libs available)
 	if [[ $OS == "Linux" ]]; then
-		./install.sh
+		./install.py
 	else
-		./install.sh --clang-completer
+		./install.py --clang-completer
 	fi
 	popd >/dev/null
 fi
