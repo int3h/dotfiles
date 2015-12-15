@@ -431,7 +431,7 @@ case $- in
         export _BASHRC_DID_RUN=1
 
         ########## Launch tmux by default
-        if type -t tmux 2>&1 >/dev/null; then
+        if type -t tmux 2>&1 >/dev/null && [[ -n "$SSH_CLIENT" ]]; then
             if test -z "$TMUX"; then
                 tmux new-session -A -s "$USER"
             else
