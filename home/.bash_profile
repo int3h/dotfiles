@@ -325,8 +325,9 @@ function resize_prompt_dirtrim() {
         # the dirtrim'ed PWD.)
         local maxLength="$(( ( ( $COLUMNS * $PWD_WIDTH_MAX ) / 100 ) - 4 ))"
 
-        # Turn $HOME in PWD into '~'
-        local pwdHomed="${PWD/#$HOME/\~\/}"
+        # Turn $HOME in PWD into '~' (linebroken to fix bug with Vim's bash syntax highlighting)
+        local pwdHomed="${PWD/#\
+$HOME/\~\/}"
         [[ $maxLength -ge ${#pwdHomed} ]] && maxLength="${#pwdHomed}"
         # Trim PWD to have the maximum desired characters, taken from the end
         local pwdDesired="${pwdHomed:(-$maxLength)}"
