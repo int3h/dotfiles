@@ -177,6 +177,8 @@ fi
 
 
 show_dynamic_motd() {
+    [[ "$OS" == "Linux" ]] || return 0
+
     # Check if we can `sudo` successfully without a password (-n)
     local dosudo="$(sudo -n printf 'sudo' 2>/dev/null)"
 
