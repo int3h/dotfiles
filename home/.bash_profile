@@ -67,6 +67,11 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
     # `pip install --user` binaries
     [[ -d $HOME/.local/bin ]] && PATH="$HOME/.local/bin:$PATH"
 
+    # `gem install --user-install` binaries
+    if which ruby >/dev/null && which gem >/dev/null; then
+        PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+    fi
+
 	if [[ "$OS" == "Linux" ]]; then
         [[ -d /opt/splunkforwarder/bin ]] && PATH="/opt/splunkforwarder/bin:$PATH"
         [[ -d /opt/splunk/bin ]] && PATH="/opt/splunk/bin:$PATH"
@@ -172,6 +177,8 @@ fi
 
 
 show_dynamic_motd() {
+    [[ "$OS" == "Linux" ]] || return 0
+
     # Check if we can `sudo` successfully without a password (-n)
     local dosudo="$(sudo -n printf 'sudo' 2>/dev/null)"
 
@@ -226,10 +233,14 @@ if [[ $OS == "Mac" ]]; then
     type -t rbenv>/dev/null && export RBENV_ROOT=/usr/local/var/rbenv && eval "$(rbenv init -)"
 
     # Initialize 'autojump' utility
-    [[ -s $BREW_PREFIX/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+    [[ -s $BREW_PREFIX/etc/autojump.sh ]] && . $BREW_PREFIX/etc/autojump.sh
 
-    # Needed for ec2 api tools; otherwise nice to have
-    export JAVA_HOME="$(/usr/libexec/java_home)"
+    # If Java is installed, export the JRE path as $JAVA_HOME, which apps like ec2-cli use.
+    # The `java_home` utility is a standard part of OS X, and will either print Java's home path, if
+    # Java is installed, or print an error and exit non-zero. Only export $JAVA_HOME if it succeeds.
+    installed_java_home="$(/usr/libexec/java_home --failfast 2>/dev/null)"
+    [[ $? == 0 ]] && [[ -n "$installed_java_home" ]] && export JAVA_HOME="$installed_java_home"
+    unset installed_java_home
 
     # Setup ec2 api tools
     # $AWS_ACCESS_KEY and $AWS_SECRET_KEY should be set in shell_local or similar
@@ -251,22 +262,6 @@ if [[ $OS == "Mac" ]]; then
         ec2_libexec="$(printf '%s/../libexec' "$(dirname "$ec2_abs_path")")"
         [[ -d "$ec2_libexec" ]] && export EC2_AMITOOL_HOME="$ec2_libexec"
         unset ec2_symlink ec2_abs_path ec2_libexec
-    fi
-
-    # Always print prompt on its own line.
-    # Checks current position of cursor and if not at column 1, prints "\n". Helps prevent $PS1
-    # from overprinting output of the last command if last output didn't end in "\n".
-    ensure_prompt_on_own_line() {
-        local CURPOS
-        # Print ASCII escape sequence to make terminal print the current position of the cursor
-        echo -en "\E[6n"
-        # Read the cursor position printed by terminal (will be something like `^[[45;1R`)
-        read -s -d R -t 0.25 CURPOS
-        # If the position doesn't have ';1R' in it, we're not at column 1 so print a newline
-        [[ $CURPOS == *\;1 ]] || echo ""
-    }
-    if [[ $_BASHRC_DID_RUN ]] && [[ $TERM_PROGRAM != "iTerm.app" ]]; then
-        export PROMPT_COMMAND="$PROMPT_COMMAND; ensure_prompt_on_own_line"
     fi
 fi
 
@@ -316,8 +311,9 @@ function resize_prompt_dirtrim() {
         # the dirtrim'ed PWD.)
         local maxLength="$(( ( ( $COLUMNS * $PWD_WIDTH_MAX ) / 100 ) - 4 ))"
 
-        # Turn $HOME in PWD into '~'
-        local pwdHomed="${PWD/#$HOME/\~\/}"
+        # Turn $HOME in PWD into '~' (linebroken to fix bug with Vim's bash syntax highlighting)
+        local pwdHomed="${PWD/#\
+$HOME/\~\/}"
         [[ $maxLength -ge ${#pwdHomed} ]] && maxLength="${#pwdHomed}"
         # Trim PWD to have the maximum desired characters, taken from the end
         local pwdDesired="${pwdHomed:(-$maxLength)}"
@@ -406,20 +402,20 @@ case $- in
                 # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
                 alias make="colourify make -j $(( $(sysctl -n hw.ncpu) + 1 ))"
             fi
-
-            # Enable iTerm terminal integration (must be done at end because it locks
-            # $PROMPT_COMMAND & $PS1)
-            if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-                [[ -f ~/.iterm2_shell_integration.bash ]] && source ~/.iterm2_shell_integration.bash
-            fi
         fi
 
-        export PATH="$(normalize_path "$PATH")"
+        # Remove duplicate entries from $PATH. Maintains current $PATH component ordering, using
+        # first occurrence
+        export PATH="$(echo "$PATH" \
+            | sed -e 's/:\(:\|$\)/:.\1/g' \
+            | awk 'BEGIN { RS=":";   } { path=$0; if($0 == "" || $0 == "\n") {path="."} n[path]++; if(n[path] < 2) { printf(":%s", $0);  }   }' \
+            | cut -c 2- \
+        )"
 
         export _BASHRC_DID_RUN=1
 
         ########## Launch tmux by default
-        if type -t tmux 2>&1 >/dev/null; then
+        if type -t tmux 2>&1 >/dev/null && [[ -n "$SSH_CLIENT" ]]; then
             if test -z "$TMUX"; then
                 tmux new-session -A -s "$USER"
             else
@@ -430,5 +426,6 @@ case $- in
     ;;
 esac
 
+[[ -f ~/.iterm2_shell_integration.bash ]] && source ~/.iterm2_shell_integration.bash
 
 export _BASHRC_DID_RUN=1

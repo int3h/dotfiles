@@ -83,7 +83,7 @@ check_url() {
     #   --max-time 5        Limit the maximim time for the whole operation to 5 second
     #   --head              Only fetch the headers (saves time if the file at the URL is large)
     #   --output /dev/null  Write output to /dev/null
-    curl --silent --fail --max-time 3 --head --output /dev/null "$1" 2>&1 >/dev/null
+    curl --silent --fail --max-time 3 --output /dev/null "$1" 2>&1 >/dev/null
 }
 
 
