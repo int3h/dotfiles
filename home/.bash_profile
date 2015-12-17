@@ -233,7 +233,7 @@ if [[ $OS == "Mac" ]]; then
     type -t rbenv>/dev/null && export RBENV_ROOT=/usr/local/var/rbenv && eval "$(rbenv init -)"
 
     # Initialize 'autojump' utility
-    [[ -s $BREW_PREFIX/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
+    [[ -s $BREW_PREFIX/etc/autojump.sh ]] && . $BREW_PREFIX/etc/autojump.sh
 
     # If Java is installed, export the JRE path as $JAVA_HOME, which apps like ec2-cli use.
     # The `java_home` utility is a standard part of OS X, and will either print Java's home path, if
@@ -262,22 +262,6 @@ if [[ $OS == "Mac" ]]; then
         ec2_libexec="$(printf '%s/../libexec' "$(dirname "$ec2_abs_path")")"
         [[ -d "$ec2_libexec" ]] && export EC2_AMITOOL_HOME="$ec2_libexec"
         unset ec2_symlink ec2_abs_path ec2_libexec
-    fi
-
-    # Always print prompt on its own line.
-    # Checks current position of cursor and if not at column 1, prints "\n". Helps prevent $PS1
-    # from overprinting output of the last command if last output didn't end in "\n".
-    ensure_prompt_on_own_line() {
-        local CURPOS
-        # Print ASCII escape sequence to make terminal print the current position of the cursor
-        echo -en "\E[6n"
-        # Read the cursor position printed by terminal (will be something like `^[[45;1R`)
-        read -s -d R -t 0.25 CURPOS
-        # If the position doesn't have ';1R' in it, we're not at column 1 so print a newline
-        [[ $CURPOS == *\;1 ]] || echo ""
-    }
-    if [[ $_BASHRC_DID_RUN ]] && [[ $TERM_PROGRAM != "iTerm.app" ]]; then
-        export PROMPT_COMMAND="$PROMPT_COMMAND; ensure_prompt_on_own_line"
     fi
 fi
 
