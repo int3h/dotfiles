@@ -55,8 +55,8 @@ bashrc() {
 
     (
         printf "$HOME/.bash_profile\0$HOME/.inputrc\0$HOME/.ssh/config\0"
-        command find ~/.config/bash -not -name 'shell_history' -not -type d -print0
-        printf "$HOME/.bashrc\0$HOME/.bash_logout\0"
+        command find ~/.config/bash -not -name 'shell_history' -not -type d -not -name '.DS_Store' -print0
+        printf "$HOME/.bash_completion\0$HOME/.bashrc\0$HOME/.bash_logout\0"
     ) | command xargs -0 $rc_editor
 }
 
