@@ -23,4 +23,9 @@ __jupyter() {
 } && type -t jupyter >/dev/null &&
 complete -F __jupyter jupyter
 
+if [[ -f /usr/local/share/bash-completion/completions/brew ]]; then
+    . /usr/local/share/bash-completion/completions/brew
+    complete -o bashdefault -o default -F _brew b
+fi
+
 # vim: set tabstop=4 shiftwidth=4 textwidth=100 expandtab foldmethod=manual filetype=sh:
