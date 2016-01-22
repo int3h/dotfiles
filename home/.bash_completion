@@ -1,2 +1,31 @@
+# bash completion for jupyter
+
+__jupyter() {
+    local cur prev words cword
+    _init_completion || return
+
+    # '--paths' and '--json' are the only two core options that can be used together
+    if [[ "$prev" == "--paths" ]]; then
+        COMPREPLY+=( $( compgen -W "--json" -- "$cur" ) )
+        return 0
+    fi
+
+    # Only suggest core options/subcommands for the first word, since core options and subcommands
+    # can't be used together, and none of the core options can be combined (save --json, see above)
+    if [[ $cword -eq 1 ]]; then
+        local subcommands="$(jupyter --help | sed -n -e '/Available subcommands: /,$ { s/Available subcommands: //; p; }' | tr '\n' ' ')"
+        local core_options="$( _parse_help "$1")"
+        COMPREPLY+=( $( compgen -W "${subcommands} ${core_options}" -X '--json' -- "$cur" ) )
+        return 0
+    fi
+
+    return 0
+} && type -t jupyter >/dev/null &&
+complete -F __jupyter jupyter
+
+if [[ -f /usr/local/share/bash-completion/completions/brew ]]; then
+    . /usr/local/share/bash-completion/completions/brew
+    complete -o bashdefault -o default -F _brew b
+fi
 
 # vim: set tabstop=4 shiftwidth=4 textwidth=100 expandtab foldmethod=manual filetype=sh:

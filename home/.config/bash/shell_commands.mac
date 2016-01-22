@@ -44,4 +44,12 @@ man_or_help() {
 }
 alias man="man_or_help"
 
+sshmux() {
+    ssh $@ -t "tmux -CC new-session -A -s '$USER'"
+}
+# Enable standard `ssh` bash command competions for `sshe`
+[[ -f /usr/local/share/bash-completion/completions/ssh ]] && \
+    source /usr/local/share/bash-completion/completions/ssh && \
+    complete -F _ssh sshmux
+
 # vim: set tabstop=4 shiftwidth=4 textwidth=100 expandtab foldmethod=manual filetype=sh:

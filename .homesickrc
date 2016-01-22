@@ -4,68 +4,91 @@ require 'fileutils'
 
 
 module OS
-    def OS.mac?; (/darwin/ =~ RUBY_PLATFORM) != nil; end
-    def OS.linux?; (/linux/ =~ RUBY_PLATFORM) != nil; end
+    def self.mac?() (/darwin/ =~ RUBY_PLATFORM) != nil end
+    def self.linux?() (/linux/ =~ RUBY_PLATFORM) != nil end
+    def self.unknown?() !(OS.mac? || OS.linux?) end
 
     def OS.to_s
-        return "Mac" if OS.mac?
+        return "Mac OS X" if OS.mac?
         return "Linux" if OS.linux?
-        return "unknown"
+        return "unknown OS (#{RUBY_PLATFORM})"
     end
 end
 
 
-# Taken from homebrew's Library/Homebrew/
 class Say
   class << self
-    def action(msg)
-        puts unless @@first # Print a blank line to seperate this message
-        @@first = false
-        puts "#{blue}==>#{white} #{msg}#{reset}"
-    end
+    def heading(msg) say_msg("#{bold}#{msg}", "#{@@heading_separator}==>", blue) end
+    def action(msg) say_msg(msg, "✔", green) end
+    def warning(msg) say_msg(msg, "!", yellow) end
+    def error(msg) say_msg(msg, "✘", red) end
 
     private
+    def say_msg(msg, sigil="", color="")
+        puts "#{color}#{bold}#{sigil}#{reset} #{msg}#{reset}"
+        @@heading_separator = "\n"
+    end
 
-    @@first = true
-
-    def blue; bold 34; end
-    def white; bold 39; end
-    def red; underline 31; end
-    def yellow; underline 33; end
-    def reset; escape 0; end
-    def em; underline 39; end
-    def green; bold 32; end
-    def gray; bold 30; end
-
-    def color n; escape "0;#{n}"; end
-    def bold n; escape "1;#{n}"; end
-    def underline n; escape "4;#{n}"; end
-    def escape n; "\033[#{n}m" if $stdout.tty?; end
+    @@heading_separator = ""
+    def blue() color 34 end
+    def white()  color 39  end
+    def red() color 31 end
+    def yellow() color 33 end
+    def green() color 32 end
+    def gray() color 30 end
+    def color(n) escape "#{n}" end
+    def bold() escape "1" end
+    def underline() escape "4" end
+    def reset() escape 0 end
+    def escape(n) "\033[#{n}m" if $stdout.tty? end
   end
 
 end
 
 
-# Symlink the right system-specific gitconfig to ~/.gitsupport/gitconfig.active
-unless File.exist?("#{Dir.home}/.gitsupport/gitconfig.active")
-    Say.action "Symlinking #{OS.to_s} gitconfig as active gitconfig"
+class Configurator
+    def do_config
+        puts
 
-    if OS.mac?
-        FileUtils.ln_s "gitconfig.mac", "#{Dir.home}/.gitsupport/gitconfig.active"
-    elsif OS.linux?
-        FileUtils.ln_s "gitconfig.linux", "#{Dir.home}/.gitsupport/gitconfig.active"
+        if OS.unknown?
+            Say.error "Unknown OS '#{OS.to_s}. Not configuring.'"
+            return 1
+        end
+
+        config_git
+        config_home_dir
+        # TODO: Install Janus
+        # TODO: Run ~/.janus/update.sh to pull & compile my own Vim modules
+
+        Say.heading "Configuration complete"
+    end
+
+
+    # Symlink the right system-specific gitconfig to ~/.gitsupport/gitconfig.active
+    def config_git
+        Say.heading "Configuring git"
+
+        git_support_dir = "#{Dir.home}/.gitsupport"
+        git_os_config_file = "gitconfig.mac" if OS.mac?
+        git_os_config_file = "gitconfig.linux" if OS.linux?
+
+        return Say.warning "Not symlinking #{OS.to_s} gitconfig because an active gitconfig already exists" if File.exist?("#{git_support_dir}/gitconfig.active")
+        return Say.error "Could not find OS-specific Git config file at '#{git_support_dir}/#{git_os_config_file}'. Aborting git config." unless File.exist?("#{git_support_dir}/#{git_os_config_file}")
+
+        Say.action "Symlinking #{OS.to_s} gitconfig as active gitconfig"
+        FileUtils.ln_s git_os_config_file, "#{git_support_dir}/gitconfig.active"
+    end
+
+
+    def config_home_dir
+        Say.heading "Configuring home directory"
+        return unless OS.mac?
+
+        Say.action "Setting ~/bin to hidden"
+        `chflags hidden ~/bin`
     end
 end
 
-if OS.mac?
-    Say.action "Setting ~/bin to hidden"
-    `chflags hidden ~/bin`
-end
 
-# TODO: Add ~/mac-scripts to repo. Have this rc hide it
-#
-# TODO: Install Janus
-#
-# TODO: Init ~/.janus and build YCM (requires Xcode tools, perhaps Homebrew Python.)
-
-Say.action "Configuration complete"
+rc = Configurator.new()
+rc.do_config

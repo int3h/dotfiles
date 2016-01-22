@@ -11,18 +11,6 @@ mkcd() {
 }
 
 
-# Search for files in <path> (defaults to '.') whose filename includes <name>
-# Usage: findfiles <name> [<path>]
-findfiles() {
-    if [[ $# -gt 1 ]]; then
-        local search_path=$2
-    else
-        local search_path='.'
-    fi
-    find $search_path -iname "*$1*"
-}
-
-
 # Make a tmp directory, switch to it and copy its name to the system's paste buffer
 delme () {
     local TMPDIR="$(mktemp -d -t delme)"
@@ -49,17 +37,6 @@ psgrep() {
 }
 
 
-# Takes in a PATH-like argument (defaults to $PATH itself if no arguments are given), removes
-# duplicate entries, and prints it (still in PATH-like format) to stdout. The path components are
-# kept in original order. If a component is duplicated, it is ordered according to its first
-# occurrence.
-normalize_path() {
-    local to_norm="$PATH"
-    [[ $# > 0 ]] && to_norm="$1"
-    echo $to_norm | sed -e 's/:\(:\|$\)/:.\1/g'  | awk 'BEGIN { RS=":";   } { path=$0; if($0 == "" || $0 == "\n") {path="."} n[path]++; if(n[path] < 2) { printf(":%s", $0);  }   }' | cut -c 2-
-}
-
-
 # `xssh`: shortcut for `ssh -O exit`, to quickly close a shared master SSH connection
 sshq() {
     if ssh -O check $* 2>/dev/null >/dev/null; then
@@ -71,6 +48,42 @@ sshq() {
     source /usr/local/share/bash-completion/completions/ssh && \
     complete -F _ssh sshq
 
+bashrc() {
+    local rc_editor="$VISUAL"
+    # We usually add the -h option to mvim when used as $VISUAL. Edit files here w/ plain cmd.
+    [[ "$VISUAL" == mvim* ]] && local rc_editor='mvim'
+
+    (
+        printf "$HOME/.bash_profile\0$HOME/.inputrc\0$HOME/.ssh/config\0"
+        command find ~/.config/bash -not -name 'shell_history' -not -type d -not -name '.DS_Store' -print0
+        printf "$HOME/.bash_completion\0$HOME/.bashrc\0$HOME/.bash_logout\0"
+    ) | command xargs -0 $rc_editor
+}
+
+
+# npm shortcuts
+if type -t npm >/dev/null; then
+    __npm_version() {
+        if [[ $# < 1 ]]; then
+            echo "Error: missing package name" >&2
+            return 1
+        fi
+        npm view $@ dist-tags
+    }
+    alias 'npm-version'='__npm_version'
+
+    if type -t jq >/dev/null; then
+        __npm_brief() {
+            if [[ $# < 1 ]]; then
+                echo "Error: missing package name" >&2
+                return 1
+            fi
+            npm view --json $@ | jq 'del(.["author", "bugs", "bundleDependencies", "contributors", "maintainers", "man", "users", "time", "versions", "readmeFilename", "repository", "keywords", "homepage", "license", "gitHead", "dist"]) | .dependencies=(.dependencies|keys|join(", ")) | .devDependencies=(.devDependencies|keys|join(", "))'
+        }
+        alias 'npm-brief'='__npm_brief'
+    fi
+fi
+
 
 if [[ "$OS" == "Mac" ]] && [[ -f ~/.config/bash/shell_commands.mac ]]; then
     source ~/.config/bash/shell_commands.mac
@@ -79,42 +92,3 @@ elif [[ "$OS" == "Linux" ]]; then
 fi
 
 
-# `cats`: view a file with syntax highlighting.
-# Requires `pygments` to be installed to work. On OS X: You need to upgrade pip first. IPython also
-# installs a conflicting version of pygments, so if that has been installed, it can cause problems.
-# The full command is:
-#   `pip install --upgrade setuptools && pip install --upgrade pip && \
-#    pip install -I --force-reinstall pygments && pip install mistune`
-# On Linux, it's just: `sudo apt-get install python-pygments`
-#scat() {
-    ## TODO: Support piped intput in addition to file path arguments
-    #local source_file="$@"
-
-    ## Options passed to pygments. `-P style=native` uses the color scheme named "native",
-    ## `-f terminal256` tells it to out the results in 256-color terminal mode, and `-g` tells it to
-    ## guess the syntax of the sourcefile.
-    #local pygments_opts='-P style=native -f terminal256 -g'
-
-    ## Check if the length of the source file is greater then the height of the terminal
-    #if [[ $(wc -l "$source_file" | sed -e 's/[^0-9]//g') -gt $(tput lines) ]]; then
-        ## Long sources use `less -RNS` (-R turns on support for ANSI colors, -N adds line numbers,
-        ## and -S tells it to not wrap lines.)
-        #local viewer="less -RNS"
-    #else
-        ## Short source files just use `cat -n`. The `-n` option turns on line numbers.
-        #local viewer="cat -n"
-    #fi
-
-    #if type -t pygmentize >/dev/null; then
-        #pygmentize $pygments_opts "$source_file" | $viewer
-    #else
-        #$viewer "$source_file"
-    #fi
-#}
-
-
-# `mkcd`: runs `mkdir` with the given arguments, then `cd`s to the newly-created directory
-mkcd() {
-    local newdir="$@"
-    mkdir "$newdir" && cd "$newdir"
-}

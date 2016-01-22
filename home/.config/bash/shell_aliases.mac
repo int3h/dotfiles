@@ -56,13 +56,5 @@ alias opencl-check='/System/Library/Frameworks/OpenCL.framework/Versions/A/Libra
 
 alias defs='defaults read'
 
-#alias findlib="find $HOME/Library \
-#\( -path '$HOME/Library/Mail/*' -or -path '$HOME/Library/Application Support/Google/Chrome*/Default/File System/*' \
-#-or -path '$HOME/Library/Application Support/Google/Chrome*/Default/IndexedDB/*' \
-#-or -path '$HOME/Library/Application Support/Google/Chrome*/Default/Local Storage/*' \
-#-or -path '$HOME/Library/Application Support/Google/Chrome*/Default/Pepper Data/*' \
-#-or -path '$HOME/Library/Calendars/*' \) -prune -or \
-#-iname "
-
 
 # vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=sh:
