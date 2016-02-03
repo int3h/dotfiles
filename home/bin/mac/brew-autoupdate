@@ -17,9 +17,7 @@ agent_install() {
     local script_path="${PWD}/$(basename $0)"
     popd 2>/dev/null >/dev/null
 
-    # Installs a launch agent that will run this script w/o arguments at login and again every
-    # 12 hours. It will have low priority ('10' nice value, low priority I/O), won't be kept
-    # alive, won't be launched more than once every 10 minutes, and will run from /Users/mtorok.
+    # Installs a launch agent that runs this script w/o arguments at login & again every 12 hours.
     cat > "$AGENT_PATH" <<- AGENTEOF
 		<?xml version="1.0" encoding="UTF-8"?>
 		<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -31,8 +29,10 @@ agent_install() {
 		        <string>$GIT_SSH_COMMAND</string>
 		        <key>HOMEBREW_GITHUB_API_TOKEN</key>
 		        <string>$HOMEBREW_GITHUB_API_TOKEN</string>
+                <key>LAUNCHD_ENV</key>
+                <string>1</string>
 		        <key>PATH</key>
-		        <string>${PATH/:.:/:}</string>
+		        <string>${PATH#:.}</string>
 		    </dict>
 		    <key>KeepAlive</key>
 		    <false/>
@@ -41,17 +41,19 @@ agent_install() {
 		    <key>LimitLoadToSessionType</key>
 		    <string>Aqua</string>
 		    <key>ProcessType</key>
-		    <string>Background</string>
+		    <string>Standard</string>
 		    <key>ProgramArguments</key>
 		    <array>
 		        <string>$script_path</string>
 		    </array>
 		    <key>StartInterval</key>
 		    <integer>43200</integer>
-		    <key>ThrottleInterval</key>
-		    <integer>600</integer>
+            <key>RunAtLoad</key>
+            <true/>
 		    <key>WorkingDirectory</key>
 		    <string>/Users/mtorok/</string>
+            <key>Nice</key>
+            <integer>1</integer>
 		</dict>
 		</plist>
 	AGENTEOF
@@ -170,6 +172,11 @@ show_notification() {
 
 # The code that is run by the LaunchAgent nightly:
 update_outdated() {
+    # When run under launchd, sleep 120s so RunAtLoad doesn't cause undue stress at boot time
+    if [[ $LAUNCHD_ENV == 1 ]]; then
+        sleep 120
+    fi
+
     # We probably aren't running in normal bash shell, so source my ~/.bash_profile
     export PATH="/usr/local/bin:$PATH"
 
@@ -188,7 +195,10 @@ update_outdated() {
     fi
 
     if [[ "$outdated_formulas" != "$old_outdated" ]]; then
+        logger -t "$AGENT_NAME" -p "user.notice" "Some Homebrew packages have available updates: $outdated_formulas"
         show_notification "$outdated_formulas"
+    else
+        logger -t "$AGENT_NAME" -p "user.notice" "No Homebrew packages need updating"
     fi
 
     # If we exit quicker than 10 seconds, launchd thinks there's an error and will try to re-launch
