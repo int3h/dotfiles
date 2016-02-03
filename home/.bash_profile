@@ -286,6 +286,8 @@ export npm_config_rollback='false'
 export npm_config_searchsort='-date'
 export npm_config_save_prefix='~'
 export npm_config_depth=0
+export npm_config_progress='false'
+export npm_config_spin='false'
 
 
 #################################
