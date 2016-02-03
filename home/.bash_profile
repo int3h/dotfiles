@@ -331,7 +331,7 @@ $HOME/\~\/}"
 
 case $- in
 *i*)
-    if [[ $TERM != dumb ]]; then
+    if [[ $TERM != dumb ]] && tput cols >/dev/null 2>/dev/null; then
         if [[ $_BASHRC_DID_RUN != 1 ]]; then
             export PROMPT_COMMAND="$PROMPT_COMMAND; resize_prompt_dirtrim"
         fi
