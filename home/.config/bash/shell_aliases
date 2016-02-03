@@ -29,6 +29,8 @@ alias sudo='sudo '
 
 alias g='git'
 
+type -t hub >/dev/null && alias git='hub'
+
 # Command to load the latest history from all terminals into this terminal's history buffer
 alias histup='history -a && history -c && history -r'
 
