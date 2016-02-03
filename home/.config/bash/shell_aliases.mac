@@ -13,6 +13,8 @@ else
 	alias rm='rm -Rv'
 fi
 
+type -t mvim >/dev/null && alias v='mvim'
+
 # When using `chmod` on a symlink, always change the permissions of the link itself, not its target
 alias chmod='chmod -hvv'
 
