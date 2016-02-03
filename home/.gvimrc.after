@@ -21,6 +21,7 @@ if has("gui_macvim")
 	set guioptions-=T				" MacVim: hide toolbar.
 	set guioptions-=L				" MacVim: hide left scrollbar.
 	set vb							" MacVim: disable audible bell
+    set macligatures                " MacVim: turn on (OS native) ligatures in fonts
 endif
 
 " Always show tab bar
