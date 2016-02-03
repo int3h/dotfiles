@@ -59,4 +59,9 @@ alias opencl-check='/System/Library/Frameworks/OpenCL.framework/Versions/A/Libra
 alias defs='defaults read'
 
 
+# Search (with regex) list of all open files to find out which processes are using it. Uses sudo.
+# Usage: who-opened /Volumes/IveDrive
+alias 'who-opened'='sudo lsof / | grep -i'
+
+
 # vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=sh:
