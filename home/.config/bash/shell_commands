@@ -85,6 +85,15 @@ if type -t npm >/dev/null; then
 fi
 
 
+tssh() {
+    ssh $@ -t 'tmux -CC new-session -A -s "$USER"'
+}
+if  [[ -f /usr/local/share/bash-completion/completions/ssh ]]; then
+    source /usr/local/share/bash-completion/completions/ssh
+    shopt -u hostcomplete && complete -F _ssh tssh
+fi
+
+
 if [[ "$OS" == "Mac" ]] && [[ -f ~/.config/bash/shell_commands.mac ]]; then
     source ~/.config/bash/shell_commands.mac
 elif [[ "$OS" == "Linux" ]]; then
