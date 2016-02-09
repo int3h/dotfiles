@@ -5,8 +5,6 @@
 	user = int3h
 [core]
 	excludesfile = ~/.gitsupport/gitignore
-[init]
-	templatedir = ~/.gitsupport/template
 [color]
 	ui = auto
 [log]
