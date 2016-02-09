@@ -35,17 +35,23 @@
 	# Tries to minimize the size on disk of the repo by delete unused git data & compressing things
 	diet = !git reflog expire --expire=now --all && git repack && git gc --prune=now --aggressive
 
-[include]
-	# Include system-specific config. You must manually create this symlink to Mac or Linux config.
-	path = ~/.gitsupport/gitconfig.active
-	# Include sensitive config options (this file not stored in dotfiles repo)
-	path = ~/.gitsupport/gitconfig.private
-
 [difftool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/araxiscompare-w.sh -2 \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/araxisgitmerge-w.sh \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\"
 	trustExitCode = true
+
+# Added by GitHub's app and/or SourceTree
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+
+[include]
+	# Include system-specific config. You must manually create this symlink to Mac or Linux config.
+	path = ~/.gitsupport/gitconfig.active
+	# Include sensitive config options (this file not stored in dotfiles repo)
+	path = ~/.gitsupport/gitconfig.private
 
 #  vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=gitconfig:
