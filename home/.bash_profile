@@ -233,7 +233,7 @@ if [[ $OS == "Mac" ]]; then
     type -t rbenv>/dev/null && export RBENV_ROOT=/usr/local/var/rbenv && eval "$(rbenv init -)"
 
     # Initialize 'autojump' utility
-    [[ -s $BREW_PREFIX/etc/autojump.sh ]] && . $BREW_PREFIX/etc/autojump.sh
+    [[ -s $BREW_PREFIX/etc/profile.d/autojump.sh ]] && . $BREW_PREFIX/etc/profile.d/autojump.sh
 
     # If Java is installed, export the JRE path as $JAVA_HOME, which apps like ec2-cli use.
     # The `java_home` utility is a standard part of OS X, and will either print Java's home path, if
