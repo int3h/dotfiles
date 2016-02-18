@@ -416,6 +416,9 @@ case $- in
 
         export _BASHRC_DID_RUN=1
 
+        # Initialize iTerm2 integration (works on Linux over SSH, too)
+        [[ -f ~/.iterm2_shell_integration.bash ]] && source ~/.iterm2_shell_integration.bash
+
         ########## Launch tmux by default
         if type -t tmux 2>&1 >/dev/null && [[ -n "$SSH_CLIENT" ]]; then
             if test -z "$TMUX"; then
@@ -428,6 +431,5 @@ case $- in
     ;;
 esac
 
-[[ -f ~/.iterm2_shell_integration.bash ]] && source ~/.iterm2_shell_integration.bash
 
 export _BASHRC_DID_RUN=1
