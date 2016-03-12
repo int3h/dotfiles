@@ -38,6 +38,9 @@ fi
 # Always run `htop` as root
 type -t htop >/dev/null 2>/dev/null && alias htop='sudo htop'
 
+# Flush OS X's DNS cache
+alias flushdns='sudo killall -HUP mDNSResponder'
+
 # List all the preferences domains currently available
 alias domains='defaults domains | sed "s:, :\\`echo -e "\n\r"`:g"'
 
