@@ -41,6 +41,8 @@ type -t htop >/dev/null 2>/dev/null && alias htop='sudo htop'
 # Flush OS X's DNS cache
 alias flushdns='sudo killall -HUP mDNSResponder'
 
+# Reads the setting for a given domain (find domains with `domains` alias)
+alias defs='defaults read'
 # List all the preferences domains currently available
 alias domains='defaults domains | sed "s:, :\\`echo -e "\n\r"`:g"'
 
@@ -57,9 +59,6 @@ defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/Std
 # Check an OpenCL file for compilation errors. (Preprocesses, compiles, and assembles the file, with
 # all warnings, and discards the generated file.)
 alias opencl-check='/System/Library/Frameworks/OpenCL.framework/Versions/A/Libraries/openclc -c -x cl -cl-std=CL1.1 -Weverything -o /dev/null'
-
-
-alias defs='defaults read'
 
 
 # Search (with regex) list of all open files to find out which processes are using it. Uses sudo.
