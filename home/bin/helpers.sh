@@ -36,6 +36,38 @@ wrap() {
 }
 
 
+printmsg() {
+    local msg="$*"
+    printf '%s%s==>%s %b%s\n' \
+        "$(tput bold)" "$(tput setaf 32)" \
+        "$(tput setaf 15)" \
+        "$msg" \
+        "$(tput sgr0)"
+}
+alias ohai=printmsg
+
+
+printwarning() {
+    local msg="$*"
+    printf '%s%sWarning:%s %b%s\n' \
+        "$(tput bold)" "$(tput setaf 227)" \
+        "$(tput setaf 15)" \
+        "$msg" \
+        "$(tput sgr0)"
+}
+alias opoo=printwarning
+
+
+printerror() {
+    local msg="$*"
+    printf '%s%sError:%s %b%s\n' \
+        "$(tput bold)" "$(tput setaf 196)" \
+        "$(tput setaf 15)" \
+        "$msg" \
+        "$(tput sgr0)"
+}
+alias onoe=printerror
+
 
 # Given a filename, prints a version which does not conflict with any existing files by appending
 # a number to the filename. If the original filename doesn't conflict to begin with, returns the
