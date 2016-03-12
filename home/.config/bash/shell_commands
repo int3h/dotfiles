@@ -94,6 +94,32 @@ if  [[ -f /usr/local/share/bash-completion/completions/ssh ]]; then
 fi
 
 
+# Command to remove a host from ~/.ssh/known_hosts
+ssh-forget() {
+    # `ssh-keygen -R` deletes a host from known_hosts, but you need to use the exact hostname with
+    # port, which is annoying. SSH also will add hosts by IP automatically, meaning you can still
+    # get a key ID mistmatch even if you delete the hostname fingerprint.
+    #
+    # This command works by first connecting to the host via SSH, using a new custom known_hosts
+    # file path. We then scrape the hosts SSH saves to this file from that connection, and remove
+    # each from the real known_hosts using `ssh-keygen`.
+
+    local ssh_host="$@"
+    local tmpfile="$(mktemp -t ssh_hosts_to_remove)"
+
+    # If we have a SSH control connection running to the server, close it so SSH will reconnect
+    ssh -q -O exit $ssh_host >/dev/null 2>/dev/null
+    # Connect to the server and save the server key ID to a custom location
+    ssh -q -o "StrictHostKeyChecking no" -o "UserKnownHostsFile $tmpfile" $ssh_host exit || return 1
+
+    # Scrape the hosts from that custom known_hosts (splitting on ',' since each entry can have
+    # multiple hostnames listed, separated by a ',') and delete using `ssh-keygen`.
+    ssh-keygen -l -f $tmpfile | awk '{print $3}' | tr ',' "\n" | command xargs -I{} ssh-keygen -R '{}'
+
+    command rm $tmpfile
+}
+
+
 if [[ "$OS" == "Mac" ]] && [[ -f ~/.config/bash/shell_commands.mac ]]; then
     source ~/.config/bash/shell_commands.mac
 elif [[ "$OS" == "Linux" ]]; then
