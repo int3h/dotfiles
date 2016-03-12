@@ -17,6 +17,13 @@ alias rm='rm -IRv'
 # Run n make processes in parallel, where n = (number of CPUs) + 1
 alias make="make -j$(( $(nproc) + 1 ))"
 
+# Better `ps` defaults
+if type -t grc >/dev/null; then
+    alias ps="grc -es --colour=on ps --forest --format euser,egroup,%cpu,%mem,start_time,pid,ppid,pgid,sess,args --sort ppid,pid -N --ppid 2 --cols $(tput cols)"
+else
+    alias ps="ps --forest --format euser,egroup,%cpu,%mem,start_time,pid,ppid,pgid,sess,args --sort ppid,pid -N --ppid 2 --cols $(tput cols)"
+fi
+
 
 #################################
 ##### Ubuntu default setup
