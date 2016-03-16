@@ -66,4 +66,8 @@ alias opencl-check='/System/Library/Frameworks/OpenCL.framework/Versions/A/Libra
 alias 'who-opened'='sudo lsof / | grep -i'
 
 
+# Toggles WiFi on or off
+alias wifi='networksetup -getairportpower en0 | grep "On\$" >/dev/null && networksetup -setairportpower en0 off || networksetup -setairportpower en0 on'
+
+
 # vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=sh:
