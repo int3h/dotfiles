@@ -12,8 +12,10 @@ elif [[ $2 == '-d' ]] || [[ $2 == '--delete' ]]; then
     ACTION='-exec rm -i {} +'
     LOCATION="$1"
 else
-    ACTION=''
+    ACTION='-print'
     LOCATION="$1"
 fi
 
-find -L "$LOCATION" -type l $ACTION
+# Filter out 'Containers' directory (on OS X, ~/Library/Containers will always contain broken
+# symlinks, due to how OS X's sandbox works. It's OK, and we shouldn't report on this.)
+find -L "$LOCATION" -name 'Containers' -prune -or -type l $ACTION
