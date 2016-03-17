@@ -45,4 +45,12 @@ man_or_help() {
 alias man="man_or_help"
 
 
+# Takes a search regex, and prints all the processes with open files whose path matches the regex
+using() {
+    local search_path='/Volumes'
+    [[ $# -gt 0 ]] && search_path="$@"
+    sudo lsof | awk -v path="$search_path" '{if($9 ~ path) print;}'
+}
+
+
 # vim: set tabstop=4 shiftwidth=4 textwidth=100 expandtab foldmethod=manual filetype=sh:
