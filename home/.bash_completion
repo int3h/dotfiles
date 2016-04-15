@@ -24,8 +24,8 @@ __jupyter() {
 complete -F __jupyter jupyter
 
 
-if [[ "$OS" == "Mac" ]] && [[ -f /usr/local/share/bash-completion/completions/brew ]]; then
-    . /usr/local/share/bash-completion/completions/brew
+if [[ "$OS" == "Mac" ]] && [[ -f /usr/local/etc/bash_completion.d/brew ]]; then
+    . /usr/local/etc/bash_completion.d/brew
     complete -o bashdefault -o default -F _brew b
 fi
 
