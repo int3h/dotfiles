@@ -29,13 +29,19 @@ printf '\n\n'
 
 read -p "Enter the value of the background color of the prompt: " background
 
-if ! [[ $background =~ ^[0-9]+$ ]] || [[ $background -lt 0 ]] || [[ $background -gt 256 ]]; then
-    printf 'Error: selection "%s" is not a valid color value.\n\n' "$background"
-    exit 1
+if [[ -z $background ]] || [[ $background == '-' ]]; then
+    background_code=""
+    background_text=''
+else
+    if ! [[ $background =~ ^[0-9]+$ ]] || [[ $background -lt 0 ]] || [[ $background -gt 256 ]]; then
+        printf 'Error: selection "%s" is not a valid color value.\n\n' "$background"
+        exit 1
+    fi
+    background_code="$(tput setab $background)"
+    background_text="\$(tput setab $background)"
 fi
 
 # Print all the foregrounds
-background_code="$(tput setab $background)"
 for color in {0..256} ; do
     #printf '%s %10s %s' "${bold}${background_code}$(tput setaf $color)" $color "$reset"
     printf '%s\e[38;5;%sm %10s %s' "${bold}${background_code}" $color $color "$reset"
@@ -52,12 +58,19 @@ printf '\n\n'
 
 read -p "Enter the value of the foreground color of the prompt: " foreground
 
-if ! [[ $foreground =~ ^[0-9]+$ ]] || [[ $foreground -lt 0 ]] || [[ $foreground -gt 256 ]]; then
-    printf 'Error: selection "%s" is not a valid color value.\n\n' "$foreground"
-    exit 2
+if [[ -z $foreground ]] || [[ $foreground == '-' ]]; then
+    foreground_code=""
+    foreground_text=''
+else
+    if ! [[ $foreground =~ ^[0-9]+$ ]] || [[ $foreground -lt 0 ]] || [[ $foreground -gt 256 ]]; then
+        printf 'Error: selection "%s" is not a valid color value.\n\n' "$foreground"
+        exit 2
+    fi
+    foreground_code="$(tput setaf $foreground)"
+    foreground_text="\$(tput setaf $foreground)"
 fi
 
 printf '\nYour prompt will look like:\n'
-printf '%s%s@%s (~/example)$%s \n' "${bold}$(tput setab $background)$(tput setaf $foreground)" "$USER" "$HOSTNAME" "$reset"
+printf '%s%s@%s (~/example)$%s \n' "${bold}${background_code}${foreground_code}" "$USER" "$HOSTNAME" "$reset"
 
-printf '\n%sColor codes:%s $(tput bold)$(tput setab %s)$(tput setaf %s)\n' "$bold$(tput setab 15)$(tput setaf 16)" "$reset" "$background" "$foreground"
+printf '\n%sColor codes:%s $(tput bold)%s%s\n' "$bold$(tput setab 15)$(tput setaf 16)" "$reset" "$background_text" "$foreground_text"
