@@ -65,4 +65,11 @@
 	# Include sensitive config options (this file not stored in dotfiles repo)
 	path = ~/.gitsupport/gitconfig.private
 
+[difftool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/araxiscompare-w.sh -2 \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/araxisgitmerge-w.sh \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\"
+	trustExitCode = true
+
 #  vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=gitconfig:
