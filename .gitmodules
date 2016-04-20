@@ -62,10 +62,6 @@
 	path = home/.janus/vim-latex
 	url = http://git.code.sf.net/p/vim-latex/vim-latex
 	ignore = dirty
-[submodule "home/.janus/tern_for_vim"]
-	path = home/.janus/tern_for_vim
-	url = git@github.com:marijnh/tern_for_vim.git
-	ignore = dirty
 [submodule "home/.janus/vim-ansible-yaml"]
 	path = home/.janus/vim-ansible-yaml
 	url = git@github.com:chase/vim-ansible-yaml.git
