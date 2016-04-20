@@ -1,124 +1,98 @@
 #!/usr/bin/env bash
 
-if [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
+install_only=
+
+################################################################################
+# Helper Functions
+################################################################################
+
+# Takes the path to a Git repo as $1, and prints the hash of the HEAD checkout
+function getRev {
+	git -C "$1" rev-parse HEAD 2>/dev/null || printf '0'
+}
+
+function printHeader {
+	printf '%b%s==>%s %s%s\n' "$header_prefix" "$(tput bold)$(tput setaf 4)" "$(tput setaf 15)" "$@" "$(tput sgr0)"
+	header_prefix="\n"
+}
+
+function print_help() {
 	printf 'Usage: %s [install]\n\n' "$(basename "$0")"
 	printf 'Install and/or update Vim Janus plugin submodules.\n\n'
 	printf 'Options:\n'
 	printf "  install     don't update submodules to latest version; install as-is\n\n"
-	exit 0
-fi
-
-install_only=
-if [[ $1 == "install" ]]; then
-	install_only=1
-fi
-
-# Takes in a submodule path as an argument, and sets $SUBMOD_REV to the hash of the currently
-# checked out revision of that submodule (if any.)
-function getRev {
-	# The submodule isn't checked out if its .git file doesn't exist, so return '0' in that case
-	if [[ -f "${1}/.git" ]]; then
-        SUBMOD_REV="$(cd $(dirname "$1") && git submodule status -- "$(basename "$1")" | grep -o -P '^[ +-]\K[0-9a-f]+' || echo '0')"
-	else
-		SUBMOD_REV="0"
-	fi
-}
-
-function printHeader {
-    printf "\n\e[1m\e[48;5;17m\e[38;5;256m\n=== $1\e[0m\n\n"
 }
 
 
+################################################################################
+# Setup
+################################################################################
+
+case "$1" in
+	"-h" | "--help")
+		print_help
+		exit 0
+		;;
+	"install")
+		install_only=1
+		;;
+	"")
+		;;
+	*)
+		printf 'Error: unrecognized option "%s"\n\n' "$1" >&2
+		print_help >&2
+		exit 1
+esac
+
+cd "$(dirname "$0")"
 cd "$(git rev-parse --show-toplevel)"
 
+# We stash uncommited changes before doing updates. Since .gitmodules changes affect updates, if we
+# stash it, then our updates will not be what the user exepcts.
 if [[ $(git status -s .gitmodules) ]]; then
-	printf 'ERROR: Your .gitmodules file has uncommitted changes. This prevents us from\n' >&2
-	printf 'recording the changes from pulling the latest revision of the submodules. Please\n' >&2
-	printf 'commit or revert your changes to this file (listed as changes to the submodules.)\n\n' >&2
+	printf 'ERROR: Unable to update Vim plugins because of uncommited changes in dotfile repo .gitmodules\n' >&2
+	printf 'Please commit or revert the pending changes in .gitmodules, and try again.\n' >&2
 	exit 1
 fi
 
+
+################################################################################
+# Actions
+################################################################################
+
+printHeader "Updating Janus core"
+(cd "$HOME/.vim/" && rake) || (printf 'Fatal Error: Janus not installed\n\n' && exit 2)
+
+printHeader "Stashing dotfile repo changes while we do updates"
 # So that we can later cleanly commit the changes this script makes (and only those changes)
-git stash -q
+git stash
+ycm_version_prev="$(getRev "home/.janus/YouCompleteMe/third_party/ycmd")"
 
-printHeader "Updating submodule URLs to match .gitconfig"
-git submodule sync
+printHeader "Syncing configured submodule URLs to match .gitmodules"
+git submodule sync --recursive
 
-printHeader "Checking out submodules to recorded commit"
-# This will make sure each submodule is initialized and checkout the commit currently recorded in
-# our repo.
-git submodule update --recursive --init
-
-# Save the current YCM revision (before updating) so we can later tell if it was updated
-
-getRev "home/.janus/YouCompleteMe/third_party/ycmd"
-OLD_YCM_REV="$SUBMOD_REV"
+# Fetch as a separate step, instead of during `update`, so we can take advantage of `--jobs=n`
+printHeader "Fetching submodules"
+git fetch --recurse-submodules --jobs=16
 
 if [[ $install_only != 1 ]]; then
-	printHeader "Pulling latest commit of each submodule"
-	# Updates each submodule to the latest version
+	printHeader "Updating submodules to latest versions"
+	git submodule update --checkout --force --init --remote --no-fetch
 
-    # The 'git pull' could cause a submodule's submodules to need to be updated. Do it with the
-    # foreach so that we only update the 2nd-level submodules, and don't accidentally revert our
-    # top-level submodules back to their recorded commit (undoing the `git pull` here.)
-
-	#git submodule foreach 'git pull origin master; git submodule update --recursive --init'
-
-    # This version has git print the path to each submodule, then uses xargs in parallel mode to
-    # actually execute the pull and submodule update, for faster execution.
-
-    # Measure the number of CPUs in the system, to determine the number of parallel processes to run
-    if [[ "$(uname -s)" == "Darwin" ]]; then
-        numCPU="$(sysctl -n hw.ncpu)"
-    elif [[ "$(uname -s)" == "Linux" ]]; then
-        numCPU="$(nproc)"
-    else
-        numCPU="1"
-    fi
-
-    git submodule --quiet foreach 'printf "./%s\0" "$path"' | command xargs -0 -I{} -n 1 -P "$numCPU" bash -c 'cd "{}" && git pull origin master && git submodule update --recursive --init'
-
-
-	printHeader "Committing updates to git repo"
-	git add -u
-	git commit -m "Vim: update plugins in ~/.janus to latest versions"
+	printHeader "Automatically committing submodule updates"
+	git commit --all --message "Vim: update plugins in ~/.janus to latest versions"
 fi
 
-# Re-apply the user's existing changes (stashed at the beginning of this script)
+printHeader "Checking out submodules and their dependencies"
+git submodule update --checkout --force --init --recursive
+
+# Re-apply the user's existing changes (stashed at the beginning of this script)\
+printHeader "Unstashing dotfile repo changes"
 git stash pop -q
 
-
-getRev "home/.janus/YouCompleteMe/third_party/ycmd"
-NEW_YCM_REV="$SUBMOD_REV"
-
-# Only if we've updated YCM, rebuild it
-if [[ "$OLD_YCM_REV" != "$NEW_YCM_REV" ]] || ! [[ -e home/.janus/YouCompleteMe/third_party/ycmd/ycm_core.so ]]; then
+# If YCM's native module hasn't been built yet, or has been updated above, (re-)build it
+if ! [[ -e home/.janus/YouCompleteMe/third_party/ycmd/ycm_core.so ]] || \
+     [[ "$ycm_version_prev" != "$(getRev "home/.janus/YouCompleteMe/third_party/ycmd")" ]]; then
 	printHeader "Rebuilding YouCompleteMe"
-    printf 'Detected change in YouCompleteMe/third_party/ycmd submodule that contains native bindings for YCM.\n'
-    printf 'Rebuilding YCM native bindings to ensure binary compatability.\n\n'
-
-	pushd home/.janus/YouCompleteMe >/dev/null
-	# On Linux, don't install clang completer (may not have the libs available)
-	if [[ $OS == "Linux" ]]; then
-		./install.py
-	else
-		./install.py --clang-completer
-	fi
-	popd >/dev/null
-fi
-
-printHeader "Installing tern_for_vim npm dependencies"
-if type -t npm >/dev/null; then
-    pushd home/.janus/tern_for_vim >/dev/null
-    npm install
-    popd >/dev/null
-else
-    printf 'Warning: `npm` not installed. Could not install tern_for_vim\n'
-fi
-
-printHeader "Updating Janus"
-if [[ -e "$HOME/.vim/Rakefile" ]]; then
-    cd "$HOME/.vim/" && rake
-else
-    printf 'Warning: Janus not installed. Not running Janus update command.\n'
+	(cd home/.janus/YouCompleteMe && ./install.py --tern-completer --clang-completer)
 fi
