@@ -1,54 +1,72 @@
 [submodule "home/.janus/YouCompleteMe"]
 	path = home/.janus/YouCompleteMe
 	url = git@github.com:Valloric/YouCompleteMe.git
+	ignore = dirty
 [submodule "home/.janus/editorconfig-vim"]
 	path = home/.janus/editorconfig-vim
 	url = git@github.com:editorconfig/editorconfig-vim.git
+	ignore = dirty
 [submodule "home/.janus/numbers.vim"]
 	path = home/.janus/numbers.vim
 	url = git@github.com:int3h/numbers.vim.git
+	ignore = dirty
 [submodule "home/.janus/sudo.vim"]
 	path = home/.janus/sudo.vim
 	url = git@github.com:vim-scripts/sudo.vim.git
+	ignore = dirty
 [submodule "home/.janus/tabular"]
 	path = home/.janus/tabular
 	url = git@github.com:godlygeek/tabular.git
+	ignore = dirty
 [submodule "home/.janus/ultisnips"]
 	path = home/.janus/ultisnips
 	url = git@github.com:SirVer/ultisnips.git
+	ignore = dirty
 [submodule "home/.janus/vim-session"]
 	path = home/.janus/vim-session
 	url = git@github.com:xolox/vim-session.git
+	ignore = dirty
 [submodule "home/.janus/vim-surround"]
 	path = home/.janus/vim-surround
 	url = git@github.com:tpope/vim-surround.git
+	ignore = dirty
 [submodule "home/.janus/vim-rename"]
 	path = home/.janus/vim-rename
 	url = git@github.com:wojtekmach/vim-rename.git
+	ignore = dirty
 [submodule "home/.janus/IndentConsistencyCop"]
 	path = home/.janus/IndentConsistencyCop
 	url = git@github.com:vim-scripts/IndentConsistencyCop.git
+	ignore = dirty
 [submodule "home/.janus/vim-nerdtree-tabs"]
 	path = home/.janus/vim-nerdtree-tabs
 	url = git@github.com:jistr/vim-nerdtree-tabs.git
+	ignore = dirty
 [submodule "home/.janus/vim-misc"]
 	path = home/.janus/vim-misc
 	url = git@github.com:xolox/vim-misc.git
+	ignore = dirty
 [submodule "home/.janus/vim-opencl"]
 	path = home/.janus/vim-opencl
 	url = git@github.com:int3h/vim-opencl.git
+	ignore = dirty
 [submodule "home/.janus/vim-indent-guides"]
 	path = home/.janus/vim-indent-guides
 	url = git@github.com:nathanaelkane/vim-indent-guides.git
+	ignore = dirty
 [submodule "home/.janus/auto-pairs"]
 	path = home/.janus/auto-pairs
 	url = git@github.com:jiangmiao/auto-pairs.git
+	ignore = dirty
 [submodule "home/.janus/vim-latex"]
 	path = home/.janus/vim-latex
 	url = http://git.code.sf.net/p/vim-latex/vim-latex
+	ignore = dirty
 [submodule "home/.janus/tern_for_vim"]
 	path = home/.janus/tern_for_vim
 	url = git@github.com:marijnh/tern_for_vim.git
+	ignore = dirty
 [submodule "home/.janus/vim-ansible-yaml"]
 	path = home/.janus/vim-ansible-yaml
 	url = git@github.com:chase/vim-ansible-yaml.git
+	ignore = dirty
