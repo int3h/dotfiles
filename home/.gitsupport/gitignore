@@ -9,3 +9,6 @@ projects/superconductor/opencl/bin
 *.ipynb
 .webkitwebcl.conf
 .idea
+.vscode
+typings
+.settings
