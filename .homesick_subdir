@@ -7,3 +7,4 @@ bin/mac
 .gitsupport
 .matplotlib
 .config/bash
+.atom

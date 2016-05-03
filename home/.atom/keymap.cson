@@ -1,0 +1,50 @@
+'.platform-darwin':
+  'cmd-t': 'application:new-file'
+
+  # This should really be "make two column layout", as in Sublime, but Atom only knows how to split
+  # and close panels, so this will have to do...
+  'alt-cmd-2': 'pane:split-right'
+  'alt-cmd-1': 'pane:close-other-items'
+
+  # Cmd-m normally minimizes the app, but since we bind "cmd-k cmd-m" to "minimap:toggle" in a text
+  # editor, if we have focus wrong, we can accidentally minimize the app. Disables cmd-m to fix.
+  'cmd-m': '!unset'
+
+  'cmd-alt-,': 'application:open-your-stylesheet'
+
+  # Disable the "keyboard resolver" shortcut
+  'cmd-.': '!unset'
+
+
+'body':
+  'cmd-=': 'window:increase-all-font-size'
+  'cmd--': 'window:decrease-all-font-size'
+  'alt-cmd-=': 'window:increase-ui-font-size'
+  'alt-cmd--': 'window:decrease-ui-font-size'
+
+
+'atom-workspace':
+  'alt-=': 'window:resize-panes-equally'
+
+
+'atom-workspace atom-pane':
+  'alt-cmd-=': 'window:increase-ui-font-size'
+  'alt-cmd--': 'window:decrease-ui-font-size'
+
+
+'atom-text-editor':
+  'cmd-k cmd-m': 'minimap:toggle'
+  'cmd-alt-k cmd-alt-m': 'minimap:toggle-package'
+  'alt-g g': 'git-diff:toggle-gutter-icons'
+  # Recent versions of Atom map Home/End to jump to the beginning/end of the screen, instead of file
+  'end': 'core:move-to-bottom'
+  'home': 'core:move-to-top'
+
+
+'.platform-darwin atom-text-editor[data-grammar="text md"]':
+  'ctrl-d': 'markdown:toggle-task'
+
+
+'.platform-darwin .tree-view':
+  # `i` is mapped to `tree-view:toggle-vcs-ignored-files`, so `I` is a natural choice here
+  'shift-i': 'tree-view:toggle-ignored-names'

@@ -1,0 +1,208 @@
+"*":
+  "atom-beautify":
+    general:
+      analytics: false
+      beautifyEntireFileOnSave: false
+    js:
+      break_chained_methods: true
+      end_with_newline: true
+      max_preserve_newlines: 4
+      space_before_conditional: false
+  "atom-material-ui":
+    fonts: {}
+    panels:
+      panelContrast: true
+    tabs: {}
+    treeView:
+      compactTreeView: true
+    ui: {}
+  "atom-ternjs":
+    displayAboveSnippets: true
+    inlineFnCompletion: false
+    lint: false
+    origins: false
+    urls: false
+    useSnippets: true
+    useSnippetsAndFunction: true
+  "atom-typescript": {}
+  "autocomplete-plus":
+    backspaceTriggersAutocomplete: true
+    builtinProviderBlacklist: ".source.gfm, .text.md"
+    fileBlacklist: [
+      ".*"
+      "*.md"
+    ]
+    includeCompletionsFromAllBuffers: false
+    scopeBlacklist: [
+      ".string"
+      ".comment"
+    ]
+  "base16-syntax":
+    matchUserInterfaceTheme: false
+    scheme: "Tomorrow"
+    style: "Dark"
+  core:
+    closeEmptyWindows: false
+    customFileTypes:
+      "source.json": [
+        "tern-project"
+      ]
+    disabledPackages: [
+      "linter-jshint"
+      "tree-view-open-files"
+      "select-quoted"
+      "metrics"
+      "autosave"
+      "merge-conflicts"
+      "autocomplete-glsl"
+      "markdown-scroll-sync"
+      "symbols-tree-view"
+      "language-javascript-better"
+      "encoding-selector"
+      "line-ending-selector"
+      "minimap-cursor-line"
+      "minimap-linter"
+      "minimap-bookmarks"
+    ]
+    followSymlinks: false
+    ignoredNames: [
+      ".git"
+      ".hg"
+      ".svn"
+      ".DS_Store"
+      "._*"
+      "Thumbs.db"
+      ".settings"
+      ".idea"
+      ".vscode"
+      "typings"
+      "*.js.map"
+      ".localized"
+      "*.sublime-project"
+      "*.sublime-workspace"
+    ]
+    projectHome: "/Users/mtorok/Documents/Graphistry/graphistry-repos/"
+    themes: [
+      "one-light-ui"
+      "gruvbox-syntax"
+    ]
+  docblockr:
+    deep_indent: true
+    indentation_spaces: 2
+    indentation_spaces_same_para: 4
+    min_spaces_between_columns: 2
+    spacer_between_sections: true
+  editor:
+    backUpBeforeSaving: true
+    fontFamily: "InputCode"
+    fontSize: 11
+    invisibles: {}
+    preferredLineLength: 100
+    scrollPastEnd: true
+    showIndentGuide: true
+    softWrapAtPreferredLineLength: true
+    tabLength: 4
+    undoGroupingInterval: 400
+  "exception-reporting":
+    userId: "7d6032c9-eadc-2080-379d-dc67ed8e23a6"
+  "file-icons": {}
+  "find-and-replace": {}
+  "fuzzy-finder":
+    preserveLastSearch: true
+    searchAllPanes: true
+    useAlternateScoring: true
+  "genesis-ui":
+    distractionFree: {}
+  "git-diff":
+    showIconsInEditorGutter: true
+  "git-plus":
+    gitPath: "/usr/local/bin/git"
+  "highlight-selected":
+    minimumLength: 2
+  "isotope-light-ui":
+    fontWeight: "Extra light / Thin"
+  "isotope-ui":
+    fontFamily: "Ubuntu"
+  "language-markdown":
+    disableLanguageGfm: false
+  linter:
+    ignoreMatchedFiles: "/**/*.min.{js,css}, /**/assets/**"
+    lintOnFly: false
+    showErrorInline: false
+    showErrorPanel: false
+    showErrorTabLine: true
+    showErrorTabProject: false
+    statusIconScope: "File"
+  "linter-eslint":
+    eslintrcPath: "/Users/mtorok/.eslintrc"
+    globalNodePath: "/usr/local"
+    useGlobalEslint: true
+  "markdown-preview":
+    breakOnSingleNewline: true
+    liveUpdate: false
+  minimap:
+    plugins:
+      cursorline: true
+      cursorlineDecorationsZIndex: 0
+      "find-and-replace": true
+      "find-and-replaceDecorationsZIndex": 0
+      "git-diff": true
+      "git-diffDecorationsZIndex": 0
+      selection: true
+      selectionDecorationsZIndex: 0
+    scrollAnimation: true
+    scrollAnimationDuration: 200
+    textOpacity: 0.45
+  "minimap-git-diff": {}
+  "one-dark-ui":
+    fontSize: 13
+  "one-light-ui":
+    fontSize: 13
+  "project-manager":
+    showPath: false
+  "source-preview": {}
+  "spell-check":
+    grammars: [
+      "source.asciidoc"
+      "source.gfm"
+      "text.md"
+      "text.git-commit"
+      "text.plain"
+      "text.plain.null-grammar"
+    ]
+  "status-bar":
+    cursorPositionFormat: "Line %L, Column %C"
+    selectionCountFormat: "(Lines: %L, Chars: %C)"
+  tabs:
+    addNewTabsAtEnd: true
+    usePreviewTabs: true
+  "todo-show":
+    ignoreThesePaths: [
+      "*/node_modules/"
+      "*/dist/"
+      "*/assets/"
+      "*/build/"
+    ]
+  "toggle-quotes": {}
+  "tree-view":
+    hideIgnoredNames: true
+    hideVcsIgnoredFiles: true
+    squashDirectoryNames: true
+  welcome:
+    showOnStartup: false
+".gfm.source":
+  editor:
+    preferredLineLength: 120
+    softWrapHangingIndent: 2
+".glsl.source":
+  editor:
+    preferredLineLength: 100
+    tabLength: 4
+".ini.source":
+  editor:
+    preferredLineLength: 100
+    tabLength: 4
+".md.text":
+  editor:
+    preferredLineLength: 120
+    softWrapHangingIndent: 2

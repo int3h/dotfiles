@@ -1,0 +1,311 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Variable import/defaults
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+@import (reference) "syntax-variables";
+// Default value if not defined
+@ui-fg: @syntax-text-color;
+@import (reference) "ui-variables";
+
+// Convenience to save us from having to add a `atom-text-editor::shadow` selector for editors
+atom-text-editor::shadow:extend(atom-text-editor all) {}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Sntax theme tweaks
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+.chalk-dark-tweaks() when (@syntax-background-color = #151515) {
+  // Lighten up the text color of comments
+  atom-text-editor {
+    .comment,
+    .punctuation.definition.comment {
+      color: rgba(150, 150, 150, 70%);
+    }
+  }
+}
+.chalk-dark-tweaks();
+
+
+.polaris-syntax-theme-tweaks() when (@syntax-wrap-guide-color = #282a2e) and (@syntax-background-color = #262c31) {
+  atom-text-editor, :host {
+    .wrap-guide {
+      background-color: darken(@syntax-background-color, 4%); //@syntax-indent-guide-color;
+    }
+  }
+
+  atom-text-editor.is-focused, atom-text-editor.is-focused::shadow, :host.is-focused {
+    .line.cursor-line {
+      background-color: @syntax-gutter-background-color-selected;
+
+      .indent-guide {
+        color: @syntax-background-color;
+      }
+    }
+  }
+}
+.polaris-syntax-theme-tweaks();
+
+
+.gruvbox-tweaks() when (@syntax-text-color = rgba(235, 219, 178, 0.5)) {
+  // Gruvbox uses yellow for editor text, which is unreadable in UI text boxes w/ a light UI theme
+  atom-text-editor.mini::shadow .text, atom-text-editor.mini .text{
+    color: @ui-fg; // Use the UI theme's foreground color, not syntax theme's
+  }
+}
+.gruvbox-tweaks();
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Line Highlighting
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Highlights the gutter of the current line in an orange-ish color (derived from the syntax theme's
+// warning color and background color). Optionally also highlights the line itself in a color
+// created from the syntax theme's selection color and background color.
+
+// .line-highlighting-tweaks() {
+//   atom-text-editor.is-focused,
+//   atom-text-editor.is-focused::shadow {
+//     // Comment/uncomment this line to give the line itself a subtle highlight
+//     // @selected-line-bg: fadeout(overlay(@syntax-selection-color, @syntax-background-color), 20%);
+//     @selected-line-bg: @syntax-gutter-background-color-selected; //fade(#505050, 33%);
+//
+//     .line.cursor-line,
+//     .line-number.cursor-line {
+//       background-color: @selected-line-bg;
+//     }
+//
+//     // Change the background color of the gutter (line number, etc.) of the current line
+//     .gutter .line-number.cursor-line {
+//         // @gutterbg-cursor: fadeout(hardlight(@syntax-background-color, @background-color-warning), 10%);
+//         @gutterbg-cursor: fade(#505050, 33%);
+//         background-color: #151515;
+//
+//         // Size of the gap between the highlighted bgcolor, and the text editor content
+//         @gutter-bgpadding: 1em;
+//
+//         & {
+//           background-color: @syntax-background-color;
+//
+//           // Use a linear-gradiant background-image to create background of color + transparent band
+//           background-image: linear-gradient(
+//             to left,
+//             transparent @gutter-bgpadding,
+//             @gutterbg-cursor @gutter-bgpadding);
+//           // Used when multiple lines are selected, so that the line backgrounds all connect up
+//           // background-size: auto;
+//         }
+//
+//         // When the current line doesn't have a selection...
+//         &.cursor-line-no-selection,
+//         &.foldable {
+//           background-color: @selected-line-bg;
+//           // Shrink the background image a bit veritcally, to give some margin
+//           background-size: 100% 80%;
+//         }
+//
+//         // &.linter-highlight {
+//         //   background-image: linear-gradient(to left,
+//         //     transparent,
+//         //     transparent (@gutter-bgpadding + 0.3em),
+//         //     @gutterbg-cursor (@gutter-bgpadding + 0.3em),
+//         //     @gutterbg-cursor);
+//         // }
+//       }
+//   }
+// }
+// .line-highlighting-tweaks();
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// File Icon package tweaks
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Change the icon for JavaScript files from a thin, hard-to-see outline, to a beefy block icon
+.custom-js-icon() {
+  @import "packages/file-icons/styles/icons";
+  @import "packages/file-icons/styles/items";
+
+  .js-custom-icon { .mf; content: "\f129"; font-size: large; }
+
+  @{pane-tab-override}, .icon-file-text {
+    &[data-name$=".js"]:before,
+    &[data-name$=".es6"]:before,
+    &[data-name$=".es"]:before,
+    &[data-name$=".js.erb"]:before  {
+      .js-custom-icon;
+    }
+  }
+}
+.custom-js-icon();
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Tree view tweaks
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+.tree-view-tweaks() {
+  .tree-view {
+    background: lighten(@base-background-color, 0%);
+    border-right: 1px solid @pane-item-border-color;
+
+    .selected:before {
+      background: darken(@base-background-color, 8%); //hsla(@ui-hue, @ui-saturation, 50%, .25);
+    }
+  }
+
+  .list-group li:not(.list-nested-item),
+  .list-tree li:not(.list-nested-item),
+  .list-group li.list-nested-item > .list-item,
+  .list-tree li.list-nested-item > .list-item {
+    line-height: 1.85em;
+  }
+}
+.tree-view-tweaks();
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Status bar tweaks
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+.status-bar-tweaks() {
+  status-bar  {
+    @sb-border-color: contrast(@tool-panel-background-color, darken(@base-border-color, 10%), lighten(@base-border-color, 10%));
+    @sb-border-image: linear-gradient(@tool-panel-background-color, @sb-border-color 20%, @sb-border-color 80%, @tool-panel-background-color);
+
+    // Add border between sidebar and status bar
+    // border-left: 1px solid @sb-border-color;
+
+    .status-bar-left {
+      // Add border on the right of every block in the left status bar
+      & > .inline-block,
+      & > linter-bottom-container > .inline-block {
+        margin-right: 1em;
+        padding-right: 1em;
+
+        border-width: 0 1px 0 0;
+        border-image: @sb-border-image 0 1 0 0 stretch;
+      }
+
+      // Make the linter status be the last item on the left side, by floating everything else left
+      & > div { float: left; }
+    }
+
+    .status-bar-right {
+      // Add border on the left of every block in the right status bar
+      & > .inline-block,
+      & > linter-bottom-container > .inline-block,
+      & > .git-view > .inline-block {
+        padding-left: 1em;
+        margin-left: 1em;
+
+        border-width: 0 0 0 1px;
+        border-image: @sb-border-image 0 0 0 1 stretch;
+      }
+    }
+
+    // Make the linter tabs more vertically centered
+    linter-bottom-tab { margin-bottom: 0.2em; }
+  }
+}
+.status-bar-tweaks();
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Minimap tweaks
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+.minimap-tweaks() {
+  atom-text-editor {
+    // For minimap, use slightly lighter/darker (whichever contrasts more) variant of editor bg
+    @minimap-bgcolor: contrast(@syntax-background-color,
+      darken(@syntax-background-color, 2%),
+      lighten(@syntax-background-color, 2%));
+
+    atom-text-editor-minimap {
+      background: @minimap-bgcolor;
+      border-left: 2px solid fadein(@syntax-wrap-guide-color, 15%);
+      // Put some space between the border & minimap content
+      &::shadow canvas { left: 2px; }
+    }
+
+    // Tweak colors of minimap decorations
+    .minimap {
+      // More subtle git diff highlights
+      .line {
+        .git-line-modified { background: fadeOut(@syntax-color-modified, 40%); }
+        .git-line-added    { background: fadeOut(@syntax-color-added, 30%); }
+        .git-line-removed  { background: fadeOut(@syntax-color-removed, 60%); }
+      }
+
+      // More distinct current lint highlight
+      .cursor-line { background: mix(@minimap-bgcolor, @syntax-cursor-color, 40%); }
+    }
+
+    // Hide the editor's native scrollbar, so that we can use the minimap exclusively to scroll
+    .vertical-scrollbar { display: none; }
+  }
+}
+.minimap-tweaks();
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Autocomplete+ package tweaks
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+autocomplete-suggestion-list {
+  &.select-list.popover-list {
+    .suggestion-description {
+      padding-top: 7px;
+      padding-bottom: 7px;
+      border-top: 1px solid @base-border-color;
+    }
+
+    .suggestion-description-content {
+      font-size: @font-size;
+      color: fade(@text-color-subtle, 100%);
+    }
+
+    &.suggestion-list-scroller { }
+  }
+
+  .icon.snippet { color: darken(@syntax-color-snippet, 20%); }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Additional tweaks
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+.language-markdown-tweaks() {
+  atom-text-editor .text.md {
+    .list {
+      & { color: @syntax-text-color; }
+      & > .punctuation { color: #b57b91; }
+    }
+
+    .destination.link, .underline.link {
+      color: hsl(286, 60%, 67%);
+    }
+
+    .heading {
+      font-weight: bold;
+
+      @heading-color: hsl(207, 82%, 66%);
+      & > .heading-1 { color: mix(@heading-color, @syntax-text-color, 100%); }
+      & > .heading-2 { color: mix(@heading-color, @syntax-text-color, 85%); }
+      & > .heading-3 { color: mix(@heading-color, @syntax-text-color, 70%); }
+      & > .heading-4 { color: mix(@heading-color, @syntax-text-color, 55%); }
+      & > .heading-5 { color: mix(@heading-color, @syntax-text-color, 40%); }
+      & > .heading-6 { color: mix(@heading-color, @syntax-text-color, 35%); }
+    }
+  }
+}
+.language-markdown-tweaks();
+
+
+// Enable font subpixel antialiasing
+body, *, atom-text-editor .gutter .line-number {
+  // -webkit-font-smoothing: subpixel-antialiased;
+}
