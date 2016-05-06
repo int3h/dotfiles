@@ -58,6 +58,14 @@ addGlobalCommand 'window:resize-panes-equally', ->
     # Resize the tree-view panel to fit its contents
     panel.getItem().resizeToFitContent?() for panel in atom.workspace?.getLeftPanels?()
 
+# Add command to toggle subpixel antialiasing on/off. Requires that you add this style rule to Atom
+# (e.g., in your user stylesheet):
+#   body { -webkit-font-smoothing: antialiased; }
+#   body.subpixel-antialias { -webkit-font-smoothing: subpixel-antialiased; }
+atom.config.observe 'editor.antialiasing', (newStatus) ->
+    document.querySelector('body').classList.toggle 'subpixel-antialias', (newStatus)
+addGlobalCommand 'window:toggle-antialiasing', ->
+    atom.config.set 'editor.antialiasing', not (atom.config.get 'editor.antialiasing')
 
 if atom.packages.getLoadedPackage('minimap')?
     addGlobalCommand 'minimap:toggle-package', ->

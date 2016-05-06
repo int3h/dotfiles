@@ -305,7 +305,15 @@ autocomplete-suggestion-list {
 .language-markdown-tweaks();
 
 
-// Enable font subpixel antialiasing
-body, *, atom-text-editor .gutter .line-number {
-  // -webkit-font-smoothing: subpixel-antialiased;
+// Support subpixel antialiasing for fonts (off by default)
+body {
+  &, *, atom-text-editor, atom-text-editor * {
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+body.subpixel-antialias {
+  &, *, atom-text-editor, atom-text-editor * {
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
 }
