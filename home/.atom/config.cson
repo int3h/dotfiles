@@ -77,7 +77,7 @@
     projectHome: "/Users/mtorok/Documents/Graphistry/graphistry-repos/"
     themes: [
       "one-light-ui"
-      "gruvbox-syntax"
+      "robin-hood-syntax"
     ]
   docblockr:
     deep_indent: true
@@ -87,7 +87,7 @@
     spacer_between_sections: true
   editor:
     backUpBeforeSaving: true
-    fontFamily: "InputCode"
+    fontFamily: "Hack"
     fontSize: 11
     preferredLineLength: 100
     scrollPastEnd: true
@@ -140,6 +140,7 @@
     textOpacity: 0.45
   "one-light-ui":
     fontSize: 13
+    tabSizing: "Even"
   "project-manager":
     showPath: false
   "spell-check":
