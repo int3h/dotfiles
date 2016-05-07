@@ -82,22 +82,22 @@ if atom.packages.getLoadedPackage('minimap')?
 ################################################################################
 
 # Wrapper to observe new editors, and act on them (e.g., add commands to that editor's scope)
-class UserEditorCommands
-    constructor: (@editor) ->
-        @subscriptions = new CompositeDisposable()
-        @subscriptions.add @editor.onDidDestroy => @subscriptions.dispose()
-
-        @editorView = atom.views.getView(@editor)
-
-        # @subscriptions.add atom.commands.add @editorView, 'minimap:toggle-package', =>
-        #     console.log("command activated")
-
-        # minimap = atom.packages.getActivePackage('minimap')?.mainModule
-        # if minimap?
-
-
-    deactivate: ->
-        @subscriptions.dispose()
+# class UserEditorCommands
+#     constructor: (@editor) ->
+#         @subscriptions = new CompositeDisposable()
+#         @subscriptions.add @editor.onDidDestroy => @subscriptions.dispose()
+#
+#         @editorView = atom.views.getView(@editor)
+#
+#         # @subscriptions.add atom.commands.add @editorView, 'minimap:toggle-package', =>
+#         #     console.log("command activated")
+#
+#         # minimap = atom.packages.getActivePackage('minimap')?.mainModule
+#         # if minimap?
+#
+#
+#     deactivate: ->
+#         @subscriptions.dispose()
 
 
 # atom.workspace.observeTextEditors (editor) -> new UserEditorCommands(editor)
