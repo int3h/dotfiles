@@ -86,6 +86,7 @@
     min_spaces_between_columns: 2
     spacer_between_sections: true
   editor:
+    antialiasing: true
     backUpBeforeSaving: true
     fontFamily: "Hack"
     fontSize: 11
