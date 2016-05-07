@@ -47,7 +47,8 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
 .polaris-syntax-theme-tweaks();
 
 
-.gruvbox-tweaks() when (@syntax-text-color = rgba(235, 219, 178, 0.5)) {
+// .gruvbox-tweaks() when (@syntax-text-color = rgba(235, 219, 178, 0.5)) {
+.gruvbox-tweaks() {
   // Gruvbox uses yellow for editor text, which is unreadable in UI text boxes w/ a light UI theme
   atom-text-editor.mini::shadow .text, atom-text-editor.mini .text{
     color: @ui-fg; // Use the UI theme's foreground color, not syntax theme's
