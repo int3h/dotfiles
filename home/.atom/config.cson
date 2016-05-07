@@ -141,6 +141,8 @@
   "one-light-ui":
     fontSize: 13
     tabSizing: "Even"
+  "package-generator":
+    packageSyntax: "coffeescript"
   "project-manager":
     showPath: false
   "spell-check":
