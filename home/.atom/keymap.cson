@@ -25,6 +25,10 @@
 
 'atom-workspace':
   'alt-=': 'window:resize-panes-equally'
+  
+  'cmd-alt-c': 'markdown-toc:create'
+  'cmd-alt-u': 'markdown-toc:update'
+  'cmd-alt-r': 'markdown-toc:delete'
 
 
 'atom-workspace atom-pane':
