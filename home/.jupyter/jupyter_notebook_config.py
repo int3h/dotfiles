@@ -15,11 +15,6 @@ c.NotebookApp.notebook_dir = os.path.expanduser('~/.jupyter')
 # The root directory of the file browser page (i.e., the `/tree` page)
 c.FileContentsManager.root_dir = os.path.expanduser('~')
 
-# Change the page we open the web browser to when we start the notebook. Defaults to `/tree`, which
-# is the directory listing of `~/`.
-# Done by tricking Jupyter into using a 'open web browser' command that appends the extra URL parts.
-c.NotebookApp.browser='open "%s/Documents/Jupyter_Notebooks"'
-
 # Redirect requests for the URL path `/` to this URL. Defaults to `/tree`.
 c.NotebookApp.default_url='/tree/Documents/Jupyter_Notebooks'
 
