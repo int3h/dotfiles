@@ -5,11 +5,6 @@
 # editor, rather than moving it to the tree view.
 
 
-# Add `/usr/local/bin` to the start of Atom's $PATH, so that our user tools can be found by it
-# if process.env.PATH.indexOf '/usr/local/bin' is not 0
-#     process.env.PATH = "/usr/local/bin:#{ process.env.PATH }"
-
-
 ################################################################################
 # Helper functions
 ################################################################################
@@ -58,6 +53,7 @@ addGlobalCommand 'window:resize-panes-equally', ->
     # Resize the tree-view panel to fit its contents
     panel.getItem().resizeToFitContent?() for panel in atom.workspace?.getLeftPanels?()
 
+
 # Add command to toggle subpixel antialiasing on/off. Requires that you add this style rule to Atom
 # (e.g., in your user stylesheet):
 #   body { -webkit-font-smoothing: antialiased; }
@@ -66,6 +62,7 @@ atom.config.observe 'editor.antialiasing', (newStatus) ->
     document.querySelector('body').classList.toggle 'subpixel-antialias', (newStatus)
 addGlobalCommand 'window:toggle-antialiasing', ->
     atom.config.set 'editor.antialiasing', not (atom.config.get 'editor.antialiasing')
+
 
 if atom.packages.getLoadedPackage('minimap')?
     addGlobalCommand 'minimap:toggle-package', ->
@@ -98,11 +95,4 @@ if atom.packages.getLoadedPackage('minimap')?
 #
 #     deactivate: ->
 #         @subscriptions.dispose()
-
-
 # atom.workspace.observeTextEditors (editor) -> new UserEditorCommands(editor)
-
-
-# console.debug '%c Loaded user init script ', 'font-size: 12pt; color: rgb(6,102,255); background-color: hsla(60, 75%, 74%, 1.0'
-
-# document.body.classList.add('an-old-hope-modify-ui')
