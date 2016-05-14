@@ -191,5 +191,6 @@
 ".md.text":
   editor:
     preferredLineLength: 120
-    softWrapHangingIndent: 2
+    softWrapHangingIndent: 4
+    tabLength: 4
     tabLength: 4
