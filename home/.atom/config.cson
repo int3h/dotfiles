@@ -73,6 +73,7 @@
       "*.sublime-project"
       "*.sublime-workspace"
       "node_modules"
+      "**/assets/libs/**"
     ]
     projectHome: "/Users/mtorok/Documents/Graphistry/graphistry-repos/"
     themes: [
