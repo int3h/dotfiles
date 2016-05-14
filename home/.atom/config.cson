@@ -78,7 +78,7 @@
     projectHome: "/Users/mtorok/Documents/Graphistry/graphistry-repos/"
     themes: [
       "one-light-ui"
-      "robin-hood-syntax"
+      "firewatch-syntax"
     ]
   docblockr:
     deep_indent: true
