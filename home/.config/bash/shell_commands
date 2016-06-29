@@ -19,6 +19,21 @@ delme () {
 }
 
 
+# For a list of 0 or more npm modules, creates a temp directory, `npm install`s the modules in that
+# directory, then opens Jupyter Notebook to the temp directory, so you can `require()` them.
+if type -t npm >/dev/null && type -t jupyter >/dev/null; then
+    trynpm() {
+        local TMPDIR="$(mktemp -d -t delme)"
+        cd "$TMPDIR"
+
+        if [[ $# -gt 0 ]]; then
+            npm install $@ || (printf '\n\nFatal error installing npm modules\n')
+        fi
+
+        jupyter notebook --notebook-dir="$(pwd)" --FileContentsManager.root_dir="$(pwd)" --NotebookApp.default_url='/tree'
+    }
+fi
+
 
 # Check the spelling of a word with aspell (if installed)
 if type -t aspell>/dev/null; then
