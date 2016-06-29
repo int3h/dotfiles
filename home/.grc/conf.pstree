@@ -1,0 +1,8 @@
+# Tree structure, process leader indicator, PID, username
+regexp=^([─│┬├└\s]+)(=)?\s([0-9]+)\s([^\s]+)(?=\s)
+colours=unchanged,bold white,green,cyan,yellow
+=======
+# root
+regexp=root|wheel(?=\s|$)
+colours=bold yellow
+

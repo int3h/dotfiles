@@ -120,6 +120,18 @@ ssh-forget() {
 }
 
 
+# Wrapper for using grc with `pstree`.
+# Normally, using `colourify` or `grcat` with `pstree` causes pstree to not be able to find the term
+# width, and will output unwrapped lines. This wrapper runs `pstree`'s output through `cut` first,
+# then `grcat`, and respects arguments to `pstree`.
+if type -t pstree >/dev/null && type -t grcat >/dev/null; then
+    _pstree() {
+        command pstree -g 3 $@ | cut -c -$COLUMNS | grcat conf.pstree
+    }
+    alias pstree='_pstree'
+fi
+
+
 if [[ "$OS" == "Mac" ]] && [[ -f ~/.config/bash/shell_commands.mac ]]; then
     source ~/.config/bash/shell_commands.mac
 elif [[ "$OS" == "Linux" ]]; then
