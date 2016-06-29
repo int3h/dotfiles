@@ -166,7 +166,7 @@ show_notification() {
 
     local beer_emoji='🍺'
 
-    /usr/local/bin/terminal-notifier -title "${beer_emoji} Updates Available" -message "$outdated_merged" -group "$NOTIFICATION_GROUP_ID" -activate com.googlecode.iterm2
+    /usr/local/bin/terminal-notifier -title "${beer_emoji} Updates Available" -message "$outdated_merged" -group "$NOTIFICATION_GROUP_ID" -activate com.apple.Terminal
 }
 
 
