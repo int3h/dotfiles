@@ -62,7 +62,7 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
     ## High weight (last added = highest priority)
 
     # Homebrew (overrides system tools)
-    [[ -d /usr/local/bin ]] && PATH="/usr/local/bin:$PATH"
+    [[ -d /usr/local/bin ]] && PATH="/usr/local/sbin:/usr/local/bin:$PATH"
 
     # `pip install --user` binaries
     [[ -d $HOME/.local/bin ]] && PATH="$HOME/.local/bin:$PATH"
