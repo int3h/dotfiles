@@ -20,7 +20,7 @@ set expand-tilde off
 
 # Add a character to prompt to show mode: '@' - emacs, ':' - vi command, '+' - vi insertion
 # FIXME: Doesn't work with the iTerm2 shell integrations enabled :(
-#set show-mode-in-prompt on
+set show-mode-in-prompt on
 
 ###########################################################
 # Keymaps for when we're in command mode (e.g., after hitting ESC)
