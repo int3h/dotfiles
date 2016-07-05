@@ -133,6 +133,13 @@ if [[ $OS == "Linux" ]]; then
         alias python='python27'
     fi
 
+    # If `nvm` is installed, initialize it
+    if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
+        export NVM_DIR="$HOME/.nvm"
+        export NVM_SYMLINK_CURRENT=true
+        source "$HOME/.nvm/nvm.sh"
+    fi
+
     # make less more friendly for non-text input files, see lesspipe(1)
     [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
@@ -223,6 +230,13 @@ if [[ $OS == "Mac" ]]; then
     # bash-completion (i.e. v1.x) homebrew package init
     [ -f $BREW_PREFIX/etc/bash_completion ] && . $BREW_PREFIX/etc/bash_completion
 
+    # If `nvm` is installed, initialize it
+    if [[ -s "$(brew --prefix nvm 2>/dev/null)/nvm.sh" ]]; then
+        export NVM_DIR="$HOME/.nvm"
+        export NVM_SYMLINK_CURRENT=true
+        source "$(brew --prefix nvm)/nvm.sh"
+    fi
+
     # Enable auto-completion of AWS cli tools
     type -t aws_completer >/dev/null && complete -C aws_completer aws
     # Enable auto-completion of `hman`
@@ -286,8 +300,8 @@ export npm_config_rollback='false'
 export npm_config_searchsort='-date'
 export npm_config_save_prefix='~'
 export npm_config_depth=0
-export npm_config_progress='false'
-export npm_config_spin='false'
+#export npm_config_progress='false'
+#export npm_config_spin='false'
 
 
 #################################
