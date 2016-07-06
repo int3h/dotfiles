@@ -63,7 +63,10 @@ display_www() {
     if [[ $1 =~ ^/usr/share/man/.* ]]; then
 		print_verbosely "Command is a Mac OS X standard command. Attempting to open man page on Apple's developer web portal."
 
-        local URL="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/${1#/usr/share/man/}.html"
+        # Some man files are compressed, but their URL won't actually include ".gz", so remove it
+        local manfile_name="$(basename "${1%.gz}")"
+        local manfile_section="$(basename "$(dirname "$1")")"
+        local URL="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/${manfile_section}/${manfile_name}.html"
         print_verbosely "... checking URL: $URL"
         check_url $URL
         if [[ $? -eq 0 ]]; then
