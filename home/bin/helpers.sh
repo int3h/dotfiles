@@ -112,10 +112,17 @@ check_url() {
     # Use cURL to check if file exists on Apple's web server
     #   --silent            Don't show progress meter or error messages
     #   --fail              Fail on HTTP error code
-    #   --max-time 5        Limit the maximim time for the whole operation to 5 second
-    #   --head              Only fetch the headers (saves time if the file at the URL is large)
+    #   --max-time 3        Limit the maximim time for the whole operation to 5 second
+    #   --write-out ...     Print the HTTP status code of the response to STDOUT
     #   --output /dev/null  Write output to /dev/null
-    curl --silent --fail --max-time 3 --output /dev/null "$1" 2>&1 >/dev/null
+    local http_code="$(curl --silent --fail --max-time 3 --output /dev/null --write-out "%{http_code}" "$1" 2>/dev/null)"
+    local curl_exit_code=$?
+    # Apple's dumb developer website will returb "300" if a man page isn't found, instead of 404
+    if [[ "$http_code" == "300" ]]; then
+        return 47
+    else
+        return $curl_exit_code
+    fi
 }
 
 
