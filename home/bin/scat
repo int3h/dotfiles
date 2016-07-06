@@ -7,89 +7,56 @@
 #   Linux: sudo apt-get install python-pygments jq
 
 
-# Input file
-source_file=""
-# Options to pass to pygmentize (set to sane defaults if user doesn't provide any themself)
-pyg_opts=""
 
 ################################################################################
 # Parse arguments
 ################################################################################
 
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -g | -s)
-            pyg_opts="$pyg_opts $1"
-            shift
-            ;;
-        -l | -F | -f | -O | -P | -S | -a)
-            if [[ $# -gt 1 ]]; then
-                pyg_opts="$pyg_opts $1 $2"
-                shift 2
-            else
-                # Ignore the option
-                shift
-            fi
-            ;;
-        -h | --help)
-            echo '`cat` with syntax highlighting via pygments'
-            echo 'Usage: scat [<pygmentize option>...] [<input file>]'
-            echo
-            echo 'Requires pygments to be installed for syntax highlighting. Otherwise falls back'
-            echo 'to plain old `cat`. If `jq` is installed and <input file> end in "*.json", will'
-            echo 'use `jq` for highlighting instead of pygments.'
-            echo
-            echo 'If <input file> is given, read that file, highlight it, and output to screen. If'
-            echo '<input file> is not given, or is "-", read input from stdin.'
-            echo
-            echo '<pygmentize option> is an optional list of options to pass to pygments. If none'
-            echo 'are given, uses default of "-P style=native -f terminal256 -g".'
-            exit 0
-            ;;
-        *)
-            source_file="$@"
-            break
-            ;;
-    esac
-done
-
-# If the user didn't pass any options to pygmentize, use good defaults: native color scheme, 256
-# colors, and guess input syntax.
-if [[ "$pyg_opts" == "" ]]; then
-    pyg_opts="-P style=native -f terminal256 -g"
+if [[ "$1" == '-h' ]] || [[ "$1" == '--help' ]]; then
+    echo '`cat` with syntax highlighting via pygments'
+    echo 'Usage: scat [<input file>, ...]'
+    echo
+    echo 'Requires pygments to be installed for syntax highlighting. Otherwise falls back'
+    echo 'to plain old `cat`. If `jq` is installed and <input file> end in "*.json", will'
+    echo 'use `jq` for highlighting instead of pygments.'
+    echo
+    echo 'If <input file> is given, read that file, highlight it, and output to screen. If'
+    echo '<input file> is not given, or is "-", read input from stdin.'
+    exit 0
 fi
+
+# Use good defaults: native color scheme, 256 colors, and guess input syntax.
+pyg_opts="-P style=native -f terminal256 -g"
+# Use `less` to display parsed file output.
+#     -R: support color codes, -N: number lines, -S: don't wrap lines, -XF: if input fits on one
+#     screen, just output to the terminal directly (like `cat`)
+pager='less -RNSXF'
+
+type -t pygmentize >/dev/null && pygmentize_cmd="pygmentize $pyg_opts" || pygmentize_cmd='cat'
+type -t jq >/dev/null && jq_cmd='jq -C .' || jq_cmd='cat'
+pandoc_cmd='parse_markdown'
 
 
 ################################################################################
 # Helper functions
 ################################################################################
 
-# Get the command to use to syntax highlight the input
-get_parser() {
+# Use `pandoc` (if installed) to convert Markdown to Man file, then parse with `groff`
+parse_markdown() {
     local infile="$@"
 
-    # Use `jq` for JSON file, `pygmentize` if it's installed, or `cat` if we have to.
-    if [[ "$infile" == *.json ]] && type -t jq >/dev/null; then
-        echo 'jq -C .'
-    elif type -t pygmentize >/dev/null; then
-        echo "pygmentize $pyg_opts"
+    if type -t pandoc >/dev/null; then
+        # This is the same way `man` parses man pages, as seen in `man -d ls`
+        (\
+            echo ".ll 32.7i"; \
+            echo ".nr LL 32.7i"; \
+            pandoc --from markdown --to man --standalone --metadata=title:"$(basename "${infile%.*}")" --metadata=section:0 --metadata=date:"$(date +'%B %e, %Y')" "$infile" \
+        ) \
+        | /usr/bin/tbl \
+        | /usr/bin/groff -Wall -mtty-char -Tascii -mandoc -c \
+        | less -sRFX
     else
-        echo 'cat'
-    fi
-}
-
-
-# Get the command to use to display the output
-get_viewer() {
-    local infile="$@"
-
-    # If the input is stdin, or the input file is longer than will fit in a single terminal screen,
-    # use `less` as the viewer; otherwise, use `cat`.
-    if [[ "$infile" == "" ]] || [[ "$infile" == "-" ]] || \
-            [[ $(wc -l "$infile" | awk '{print $1}') -gt $(tput lines) ]]; then
-        echo 'less -RNS'
-    else
-        echo 'cat -n'
+        $pygmentize_cmd "$infile" | $pager
     fi
 }
 
@@ -98,11 +65,28 @@ get_viewer() {
 # Main Action
 ################################################################################
 
-parser="$(get_parser "$source_file")"
-viewer="$(get_viewer "$source_file")"
-
-if [[ "$source_file" == "" ]] || [[ "$source_file" == "-" ]]; then
-    $parser <&0 | $viewer
-else
-    $parser "$source_file" | $viewer
+if [[ $# -lt 1 ]]; then
+    cat | $pygmentize_cmd | $pager
 fi
+
+while [[ $# -gt 0 ]]; do
+    source_file="$1"
+
+    case $source_file in
+        *.json)
+            $jq_cmd "$source_file" | $pager
+            ;;
+        *.md | *.markdown | *.mdown)
+            $pandoc_cmd "$source_file"
+            ;;
+        -)
+            cat | $pygmentize_cmd | $pager
+            ;;
+        *)
+            $pygmentize_cmd "$source_file" | $pager
+    esac
+    shift
+
+done
+
+
