@@ -31,7 +31,7 @@ alias ansible-playbook='ansible_notify ansible-playbook'
 # If the man page is just a reference to "Bash built-in commands" man page, use `help` instead
 man_or_help() {
     # Get the filename of the manfile
-    manfile="$(command man -w $2 "$1")"
+    local manfile="$(command man -w $2 "$1")"
     [[ $? == 0 ]] || return
 
 
