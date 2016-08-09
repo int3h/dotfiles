@@ -6,11 +6,11 @@
 # See also online Notebook help: http://jupyter-notebook.readthedocs.org/en/latest/config.html
 # See also online Jupyter umbrella project help: https://jupyter.readthedocs.org/en/latest/
 
-import os.path
+import os
 
 # Sets the cwd for Notebook app & kernels. Defaults to your shell's cwd when you launch Jupyter.
 # Setting this to a static path means we can install node_modules here that the JS kernel can load.
-c.NotebookApp.notebook_dir = os.path.expanduser('~/.jupyter')
+c.NotebookApp.notebook_dir = os.getcwd()
 
 # The root directory of the file browser page (i.e., the `/tree` page)
 c.FileContentsManager.root_dir = os.path.expanduser('~')
