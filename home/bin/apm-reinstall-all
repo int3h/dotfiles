@@ -1,0 +1,72 @@
+#!/usr/bin/env bash -e
+
+pkglist_path="$HOME/.atom/saved-package-listings"
+
+
+if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
+    printf 'Usage: %s [--exact]\n' "$0"
+    printf 'Deletes and re-installs all currently installed Atom packages\n'
+    printf '\nOptions:\n'
+    printf '  --exact   Reinstall the exact same versions of installed packages, rather\n'
+    printf '            than the latest available version of the package.'
+    exit 0
+fi
+
+
+################################################################################
+# Helper functions
+################################################################################
+
+atom_running() {
+    local script_output="$(osascript -e 'if application "Atom" is running then return "true"') 2>/dev/null"
+    if [[ "$script_output" == "true" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+
+reinstall_all() {
+    local versions="$1"
+
+    mkdir -p "$pkglist_path"
+
+     local pkglist="${pkglist_path}/my-packages-$(date +"%Y.%m.%d").txt"
+    # If the package list file already exists, append a random suffix to get an unused file name
+    [[ -e "$pkglist" ]] && pkglist="${pkglist_path}/my-packages-$(date +"%Y.%m.%d").${RANDOM}.txt"
+
+    if [[ "$versions" == "exact" ]]; then
+        apm list --installed --bare --no-links > "$pkglist"
+    else
+        apm list --installed --bare --no-links | sed -r -e 's/^([^@]+)@.+$/\1/' > "$pkglist"
+    fi
+
+    type -t trash >/dev/null || alias trash='command rm'
+    # Delete packages, leaving just files (like README.md) and links
+    find ~/.atom/packages -mindepth 1 -maxdepth 1 -type d -exec trash '{}' \;
+    # Delete apm caches
+    trash ~/.atom/.apm ~/.atom/.node-gyp ~/.atom/compile-cache/
+
+    apm install --packages-file "$pkglist"
+}
+
+
+################################################################################
+# Actions
+################################################################################
+
+if atom_running; then
+    printf 'Error: can not reinstall scripts while Atom is running. Please exit Atom and\n' >&2
+    printf 'try again.\n' >&2
+    exit 1
+fi
+
+
+if [[ "$1" == "--exact" ]]; then
+    reinstall_all "exact"
+else
+    reinstall_all "latest"
+fi
+
+unset pkglist_path
