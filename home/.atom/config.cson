@@ -232,9 +232,8 @@
       "**/build/"
     ]
   "tree-view":
+    alwaysOpenExisting: true
     autoReveal: true
-    hideIgnoredNames: true
-    hideVcsIgnoredFiles: true
     squashDirectoryNames: true
   welcome:
     showOnStartup: false
