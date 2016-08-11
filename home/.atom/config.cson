@@ -152,6 +152,9 @@
     showIconsInEditorGutter: true
   "git-plus":
     gitPath: "/usr/local/bin/git"
+  "gruvbox-plus-syntax":
+    contrast: "Hard"
+    variant: "No Dimmed Colors"
   "highlight-selected":
     minimumLength: 2
   "language-markdown":
@@ -196,11 +199,14 @@
     highlightCursorsLines: true
   "one-light-ui":
     fontSize: 13
-    tabSizing: "Even"
   "package-generator":
     packageSyntax: "coffeescript"
   "project-manager":
     showPath: false
+  "seti-ui":
+    fileIcons: false
+    font: "Default Atom Font"
+    themeColor: "Steel"
   "spell-check":
     grammars: [
       "source.asciidoc"
