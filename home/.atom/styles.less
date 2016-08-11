@@ -127,24 +127,26 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
 // Tree view tweaks
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  }
+
 .tree-view-tweaks() {
-  .tree-view {
-    background: lighten(@base-background-color, 0%);
-    border-right: 1px solid @pane-item-border-color;
-
-    .selected:before {
-      background: darken(@base-background-color, 8%); //hsla(@ui-hue, @ui-saturation, 50%, .25);
-    }
-  }
-
-  .list-group li:not(.list-nested-item),
-  .list-tree li:not(.list-nested-item),
-  .list-group li.list-nested-item > .list-item,
-  .list-tree li.list-nested-item > .list-item {
-    line-height: 1.85em;
-  }
+  // .tree-view {
+  //   background: lighten(@base-background-color, 0%);
+  //   border-right: 1px solid @pane-item-border-color;
+  //
+  //   .selected:before {
+  //     background: darken(@base-background-color, 8%); //hsla(@ui-hue, @ui-saturation, 50%, .25);
+  //   }
+  // }
+  //
+  // .list-group li:not(.list-nested-item),
+  // .list-tree li:not(.list-nested-item),
+  // .list-group li.list-nested-item > .list-item,
+  // .list-tree li.list-nested-item > .list-item {
+  //   line-height: 1.85em;
+  // }
 }
-.tree-view-tweaks();
+// .tree-view-tweaks();
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
