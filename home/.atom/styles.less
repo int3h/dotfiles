@@ -274,22 +274,28 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
     atom-text-editor-minimap {
       background: @minimap-bgcolor;
       border-left: 2px solid fadein(@syntax-wrap-guide-color, 15%);
-      // Put some space between the border & minimap content
-      &::shadow canvas { left: 2px; }
+    }
+
+    // Put some space between the border & minimap content
+    atom-text-editor-minimap::shadow {
+      canvas { left: 2px; }
+
     }
 
     // Tweak colors of minimap decorations
-    .minimap {
-      // More subtle git diff highlights
-      .line {
-        .git-line-modified { background: fadeOut(@syntax-color-modified, 40%); }
-        .git-line-added    { background: fadeOut(@syntax-color-added, 30%); }
-        .git-line-removed  { background: fadeOut(@syntax-color-removed, 60%); }
-      }
-
-      // More distinct current lint highlight
-      .cursor-line { background: mix(@minimap-bgcolor, @syntax-cursor-color, 40%); }
-    }
+    // .minimap {
+    //   // More subtle git diff highlights
+    //   .line {
+    //     .git-line-modified { background: fadeOut(@syntax-color-modified, 40%); }
+    //     .git-line-added    { background: fadeOut(@syntax-color-added, 30%); }
+    //     .git-line-removed  { background: fadeOut(@syntax-color-removed, 60%); }
+    //   }
+    //
+    //   // More distinct current lint highlight
+    //   .cursor-line {
+    //     background: mix(@minimap-bgcolor, @syntax-cursor-color, 40%);
+    //   }
+    // }
 
     // Hide the editor's native scrollbar, so that we can use the minimap exclusively to scroll
     .vertical-scrollbar { display: none; }
