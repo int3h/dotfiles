@@ -1,16 +1,64 @@
 "*":
   "atom-beautify":
+    css:
+      align_assignments: true
+      convert_quotes: "double"
+      newline_between_rules: true
+      no_lead_zero: true
     general:
       analytics: false
       beautifyEntireFileOnSave: false
     html:
+      brace_style: "expand"
+      end_with_newline: true
+      extra_liners: [
+        "head"
+        "body"
+        "/html"
+        "p"
+        "table"
+      ]
+      indent_inner_html: true
       max_preserve_newlines: 4
+      preserve_newlines: false
+      unformatted: [
+        "bdo"
+        "em"
+        "strong"
+        "dfn"
+        "samp"
+        "kbd"
+        "var"
+        "cite"
+        "abbr"
+        "acronym"
+        "q"
+        "sub"
+        "sup"
+        "tt"
+        "i"
+        "b"
+        "big"
+        "small"
+        "u"
+        "s"
+        "strike"
+        "font"
+        "ins"
+        "del"
+        "pre"
+        "address"
+        "dt"
+      ]
+      wrap_attributes_indent_size: 2
+      wrap_line_length: 100
     js:
       break_chained_methods: true
       end_with_newline: true
       max_preserve_newlines: 4
       space_before_conditional: false
     json:
+      brace_style: "expand"
       end_with_newline: true
       max_preserve_newlines: 4
       space_before_conditional: false
