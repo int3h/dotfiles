@@ -155,6 +155,9 @@
   "gruvbox-plus-syntax":
     contrast: "Hard"
     variant: "No Dimmed Colors"
+  "highlight-line":
+    hideHighlightOnSelect: true
+    underline: "dotted"
   "highlight-selected":
     minimumLength: 2
   "language-markdown":
