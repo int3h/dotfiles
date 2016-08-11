@@ -149,7 +149,13 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .tab-bar-tweaks() when (@ui-theme-name = one-light-ui) {
+  // Put a dividing line at the right side of the last tab, to separate it from the empty tab bar
+  .tab-bar li.tab:last-of-type,
+  .tab-bar .tab.active + li.tab:last-of-type {
+      border-width: 0 1px 0 1px;
+      border-image: linear-gradient(#d1d4dc, #babfca 1em) 0 1 0 1 stretch;
   }
+}
 // .tab-bar-tweaks();
 
 
