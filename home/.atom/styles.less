@@ -50,14 +50,53 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
 // .gruvbox-tweaks() when (@syntax-text-color = rgba(235, 219, 178, 0.5)) {
 .gruvbox-tweaks() {
   // Gruvbox uses yellow for editor text, which is unreadable in UI text boxes w/ a light UI theme
-  atom-text-editor.mini::shadow .text, atom-text-editor.mini .text{
-    color: @ui-fg; // Use the UI theme's foreground color, not syntax theme's
+  atom-text-editor::shadow *, atom-text-editor .text {
+    color: @ui-fg !important; // Use the UI theme's foreground color, not syntax theme's
+    text-decoration: line-through;
+  }
+
+  div.settings-view atom-text-editor::shadow[mini] {
+    .text .source, .string.unquoted.heredoc, .source .source {
+      color: @ui-fg !important;
+    }
   }
 }
-.gruvbox-tweaks();
+// .gruvbox-tweaks();
 
 
+.robin-hood-tweaks() when (@syntax-wrap-guide-color = #fabd2f) {
+  atom-text-editor atom-text-editor-minimap {
+    border-left: 3px solid fadeout(@syntax-wrap-guide-color, 60%) !important;
+  }
+}
+// .robin-hood-tweaks();
 
+
+.isotope-tweaks() {
+  html, body { font-size: 14px; }
+  .tree-view { font-size: 12px; }
+}
+// .isotope-tweaks();
+
+
+.genisis-tweaks() {
+  @tab-height: 40px;
+
+  .tab-bar .tab {
+    font-size: 12px;
+  }
+
+  @import "../../../../../.atom/packages/genesis-ui/styles/tabs";
+}
+// .genisis-tweaks();
+
+
+.native-ui-tweaks() {
+  .tree-view-resizer {
+    border-bottom: 1px solid #C7C7C7;
+  }
+}
+.native-ui-tweaks();
 
 
 
