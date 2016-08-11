@@ -1,6 +1,12 @@
 '.platform-darwin':
   'cmd-t': 'application:new-file'
 
+  # Buffer fuzzy finder is mapped to cmd-b, but we reassign that to bookmark commands below
+  'ctrl-alt-o': 'fuzzy-finder:toggle-buffer-finder'
+  'ctrl-shift-O': 'fuzzy-finder:toggle-git-status-finder'
+  # Assign plain ctrl-o to fuzzy file finder for consistency, though its default cmd-p remains
+  'ctrl-o': 'fuzzy-finder:toggle-file-finder'
+
   # This should really be "make two column layout", as in Sublime, but Atom only knows how to split
   # and close panels, so this will have to do...
   'alt-cmd-2': 'pane:split-right'
@@ -25,7 +31,7 @@
 
 'atom-workspace':
   'alt-=': 'window:resize-panes-equally'
-  
+
   'cmd-alt-c': 'markdown-toc:create'
   'cmd-alt-u': 'markdown-toc:update'
   'cmd-alt-r': 'markdown-toc:delete'
@@ -39,10 +45,18 @@
 'atom-text-editor':
   'cmd-k cmd-m': 'minimap:toggle'
   'cmd-alt-k cmd-alt-m': 'minimap:toggle-package'
+
   'alt-g g': 'git-diff:toggle-gutter-icons'
+
   # Recent versions of Atom map Home/End to jump to the beginning/end of the screen, instead of file
   'end': 'core:move-to-bottom'
   'home': 'core:move-to-top'
+
+  # Use cmd-b as base for bookmark commands, not F2 (cmd-b is normally used for fuzzy file finder)
+  'cmd-b': 'bookmarks:toggle-bookmark'
+  'shift-cmd-B': 'bookmarks:view-all'
+  'ctrl-b': 'bookmarks:jump-to-next-bookmark'
+  'shift-ctrl-B': 'bookmarks:jump-to-previous-bookmark'
 
 
 '.platform-darwin atom-text-editor[data-grammar="text md"]':
