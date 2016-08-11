@@ -222,7 +222,7 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
         border-image: @sb-border-image 0 1 0 0 stretch;
       }
 
-      // Make the linter status be the last item on the left side, by floating everything else left
+      // Make the linter status be the last item on the left side, by floating everything else left  a
       & > div { float: left; }
     }
 
@@ -239,8 +239,10 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
       }
     }
 
-    // Make the linter tabs more vertically centered
-    linter-bottom-tab { margin-bottom: 0.2em; }
+    // Fix bug where the middle button was rounded instead of the first+last
+    linter-bottom-tab { border-radius: 0 0 0 0 !important; }
+    linter-bottom-tab:first-of-type { border-radius: 4px 0 0 4px !important; }
+    linter-bottom-tab:last-of-type { border-radius: 0 4px 4px 0 !important; }
   }
 }
 .status-bar-tweaks();
