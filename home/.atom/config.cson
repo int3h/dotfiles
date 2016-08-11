@@ -260,6 +260,10 @@
 ".md.text":
   editor:
     preferredLineLength: 120
+    showIndentGuide: true
     softWrapHangingIndent: 4
     tabLength: 4
+".source.yaml":
+  editor:
+    preferredLineLength: 100
     tabLength: 4
