@@ -57,66 +57,8 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
 .gruvbox-tweaks();
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Line Highlighting
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Highlights the gutter of the current line in an orange-ish color (derived from the syntax theme's
-// warning color and background color). Optionally also highlights the line itself in a color
-// created from the syntax theme's selection color and background color.
 
-// .line-highlighting-tweaks() {
-//   atom-text-editor.is-focused,
-//   atom-text-editor.is-focused::shadow {
-//     // Comment/uncomment this line to give the line itself a subtle highlight
-//     // @selected-line-bg: fadeout(overlay(@syntax-selection-color, @syntax-background-color), 20%);
-//     @selected-line-bg: @syntax-gutter-background-color-selected; //fade(#505050, 33%);
-//
-//     .line.cursor-line,
-//     .line-number.cursor-line {
-//       background-color: @selected-line-bg;
-//     }
-//
-//     // Change the background color of the gutter (line number, etc.) of the current line
-//     .gutter .line-number.cursor-line {
-//         // @gutterbg-cursor: fadeout(hardlight(@syntax-background-color, @background-color-warning), 10%);
-//         @gutterbg-cursor: fade(#505050, 33%);
-//         background-color: #151515;
-//
-//         // Size of the gap between the highlighted bgcolor, and the text editor content
-//         @gutter-bgpadding: 1em;
-//
-//         & {
-//           background-color: @syntax-background-color;
-//
-//           // Use a linear-gradiant background-image to create background of color + transparent band
-//           background-image: linear-gradient(
-//             to left,
-//             transparent @gutter-bgpadding,
-//             @gutterbg-cursor @gutter-bgpadding);
-//           // Used when multiple lines are selected, so that the line backgrounds all connect up
-//           // background-size: auto;
-//         }
-//
-//         // When the current line doesn't have a selection...
-//         &.cursor-line-no-selection,
-//         &.foldable {
-//           background-color: @selected-line-bg;
-//           // Shrink the background image a bit veritcally, to give some margin
-//           background-size: 100% 80%;
-//         }
-//
-//         // &.linter-highlight {
-//         //   background-image: linear-gradient(to left,
-//         //     transparent,
-//         //     transparent (@gutter-bgpadding + 0.3em),
-//         //     @gutterbg-cursor (@gutter-bgpadding + 0.3em),
-//         //     @gutterbg-cursor);
-//         // }
-//       }
-//   }
-// }
-// .line-highlighting-tweaks();
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
