@@ -160,6 +160,10 @@
     underline: "dotted"
   "highlight-selected":
     minimumLength: 2
+  "language-babel":
+    allowLocalOverride: true
+    autoIndentJSX: true
+    createMap: true
   "language-markdown":
     disableLanguageGfm: false
   linter:
@@ -231,10 +235,14 @@
       "**/assets/"
       "**/build/"
     ]
+    sortAscending: false
+    sortBy: "All"
   "tree-view":
     alwaysOpenExisting: true
     autoReveal: true
     squashDirectoryNames: true
+  "vim-modeline":
+    insertPrefix: "vim"
   welcome:
     showOnStartup: false
 ".ansible.source":
