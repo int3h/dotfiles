@@ -34,8 +34,8 @@ addGlobalCommand 'window:decrease-all-font-size', ->
     incrementUIFontSizeBy -1
 
 addGlobalCommand 'git-diff:toggle-gutter-icons', ->
-    updateConfig 'git-diff.showIconsInEditorGutter', (curr) -> !curr
-
+    currentlyShowing = atom.config.get 'git-diff.showIconsInEditorGutter'
+    atom.config.set 'git-diff.showIconsInEditorGutter', not currentlyShowing
 
 # Resizes all the panes of a workspace to be of equal size
 addGlobalCommand 'window:resize-panes-equally', ->
