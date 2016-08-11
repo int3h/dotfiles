@@ -93,20 +93,13 @@
       ]
     destroyEmptyPanes: false
     disabledPackages: [
-      "linter-jshint"
-      "tree-view-open-files"
-      "select-quoted"
       "metrics"
       "autosave"
-      "merge-conflicts"
-      "autocomplete-glsl"
-      "markdown-scroll-sync"
-      "symbols-tree-view"
-      "language-javascript-better"
       "encoding-selector"
-      "line-ending-selector"
+      "indent-guide-improved"
       "minimap-linter"
-      "minimap-bookmarks"
+      "minimap-find-and-replace"
+      "react"
     ]
     followSymlinks: false
     ignoredNames: [
