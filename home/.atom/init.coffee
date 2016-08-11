@@ -55,14 +55,22 @@ addGlobalCommand 'window:toggle-antialiasing', ->
     atom.config.set 'editor.antialiasing', not (atom.config.get 'editor.antialiasing')
 
 
-if atom.packages.getLoadedPackage('minimap')?
-    addGlobalCommand 'minimap:toggle-package', ->
-        if atom.packages.isPackageDisabled('minimap')
-            atom.packages.enablePackage('minimap')
-            atom.packages.enablePackage('minimap-selection')
-        else
-            atom.packages.disablePackage('minimap')
-            atom.packages.disablePackage('minimap-selection')
+# # Get names of all available Minimap plugin packages that are enabled in `minimap`'s plugin options
+# getEnabledMinimapPlugins = ->
+#     mmpkgs = (pkg for pkg in atom.packages.getAvailablePackageNames() when pkg.startsWith 'minimap-')
+#     pkg for pkg in pkgs when atom.config.get("minimap.plugins.#{pkg.slice 8}")
+# # Get names of all enabled Minimap plugin packages (i.e., all packages named 'minimap-*')
+# getRunningMinimapPlugins = ->
+#     pkg.name for pkg in atom.packages.getLoadedPackages() when pkg.name.startsWith('minimap-')
+# # Add global command to enable/disable Minimap package + all its plugins
+# if atom.packages.getLoadedPackage('minimap')?
+#     addGlobalCommand 'minimap:toggle-package', ->
+#         if atom.packages.isPackageDisabled 'minimap'
+#             atom.packages.enablePackage 'minimap'
+#             # atom.packages.enablePackage plugin for plugin in getEnabledMinimapPlugins()
+#         else
+#             atom.packages.disablePackage 'minimap'
+#             # atom.packages.disablePackage plugin for plugin in getRunningMinimapPlugins()
 
 
 ################################################################################
