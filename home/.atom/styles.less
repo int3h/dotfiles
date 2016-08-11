@@ -244,6 +244,10 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
     linter-bottom-tab:first-of-type { border-radius: 4px 0 0 4px !important; }
     linter-bottom-tab:last-of-type { border-radius: 0 4px 4px 0 !important; }
   }
+
+  // Give cursor position bar a min-width big enough for 3 digit lines & column, to cut down on the
+  // status bar components moving around as the cursor position changes.
+  .cursor-position { min-width: 12.5em; }
 }
 .status-bar-tweaks();
 
