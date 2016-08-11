@@ -157,6 +157,7 @@
   "language-markdown":
     disableLanguageGfm: false
   linter:
+    gutterEnabled: false
     gutterPosition: "Left"
     ignoreMatchedFiles: "/**/*.min.{js,css}, /**/assets/**"
     lintOnFly: false
@@ -164,6 +165,7 @@
     showErrorPanel: false
     showErrorTabLine: true
     showErrorTabProject: false
+    showProviderName: false
     statusIconScope: "File"
   "linter-eslint":
     eslintrcPath: "/Users/mtorok/.eslintrc"
