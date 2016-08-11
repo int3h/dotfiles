@@ -82,6 +82,9 @@
       ".string"
       ".comment"
     ]
+  "base16-syntax":
+    matchUserInterfaceTheme: false
+    scheme: "Yesterday Night"
   core:
     closeEmptyWindows: false
     customFileTypes:
@@ -125,8 +128,8 @@
     ]
     projectHome: "/Users/mtorok/Documents/Graphistry/graphistry-repos/"
     themes: [
-      "one-light-ui"
-      "firewatch-syntax"
+      "native-ui"
+      "base16-syntax"
     ]
   docblockr:
     deep_indent: true
