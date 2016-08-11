@@ -174,18 +174,24 @@
     liveUpdate: false
     useGitHubStyle: true
   minimap:
+    adjustMinimapWidthToSoftWrap: false
+    devicePixelRatioRounding: false
+    minimapScrollIndicator: false
     plugins:
-      cursorline: true
-      cursorlineDecorationsZIndex: 0
+      bookmarks: true
+      bookmarksDecorationsZIndex: 0
       "find-and-replace": true
       "find-and-replaceDecorationsZIndex": 0
       "git-diff": true
       "git-diffDecorationsZIndex": 0
+      linter: true
+      linterDecorationsZIndex: 0
       selection: true
       selectionDecorationsZIndex: 0
     scrollAnimation: true
     scrollAnimationDuration: 200
-    textOpacity: 0.45
+  "minimap-selection":
+    highlightCursorsLines: true
   "one-light-ui":
     fontSize: 13
     tabSizing: "Even"
