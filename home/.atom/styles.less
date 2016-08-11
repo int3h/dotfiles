@@ -270,6 +270,8 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
     @minimap-bgcolor: contrast(@syntax-background-color,
       darken(@syntax-background-color, 2%),
       lighten(@syntax-background-color, 2%));
+    // Color used for background of "visible area" block & its borders
+    @visible-area-color: rgba(146, 146, 146, 1.0);
 
     atom-text-editor-minimap {
       background: @minimap-bgcolor;
@@ -280,6 +282,13 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
     atom-text-editor-minimap::shadow {
       canvas { left: 2px; }
 
+      // Give the "visible area" block top+bottom borders, and a more transparent bg
+      .minimap-visible-area {
+        opacity: 1;
+        background-color: fadeout(@visible-area-color, 90%);
+        border-top: 1px solid @visible-area-color;
+        border-bottom: 1px solid @visible-area-color;
+      }
     }
 
     // Tweak colors of minimap decorations
