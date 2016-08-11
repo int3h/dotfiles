@@ -91,6 +91,7 @@
       "source.json": [
         "tern-project"
       ]
+    destroyEmptyPanes: false
     disabledPackages: [
       "linter-jshint"
       "tree-view-open-files"
