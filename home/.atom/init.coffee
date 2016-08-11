@@ -1,24 +1,21 @@
 {CompositeDisposable} = require 'atom'
 
-
-# TODO: When the 'show tree view' command/shortcut is triggered, keep the focus in the current
-# editor, rather than moving it to the tree view.
-
-
 ################################################################################
 # Helper functions
 ################################################################################
-
-# Get and set a config value in a single operation. Pass in the config value's key, and a
-# function which takes the current value and returns an updated one.
-updateConfig = (key, calcValue) ->
-    if (currentValue = atom.config.get key)?
-        atom.config.set key, calcValue currentValue
 
 # Returns the name of the currently active UI theme (as opposed to the active syntax theme)
 getActiveUiThemeName = ->
     [theme1, theme2] = atom.themes.getActiveThemes()
     if theme1.metadata.theme is "ui" then theme1.name else theme2.name
+
+# Change the current UI/editor font size by a given increment
+incrementEditorFontSizeBy = (n) ->
+    atom.config.set 'editor.fontSize', (atom.config.get 'editor.fontSize') + n
+incrementUIFontSizeBy = (n) ->
+    optName = "#{ getActiveUiThemeName() }.fontSize"
+    atom.config.set optName, (atom.config.get optName ? atom.config.get 'editor.fontSize') + n
+
 
 
 ################################################################################
@@ -27,20 +24,14 @@ getActiveUiThemeName = ->
 
 addGlobalCommand = (command, handler) -> atom.commands.add 'body', command, handler
 
-
-updateEditorFontSize = (d) -> updateConfig 'editor.fontSize', (curr)-> curr + d
-updateUiFontSize = (d) -> updateConfig "#{ getActiveUiThemeName() }.fontSize", (curr)-> curr + d
-
-
-addGlobalCommand 'window:increase-ui-font-size', -> updateUiFontSize 1
-addGlobalCommand 'window:decrease-ui-font-size', -> updateUiFontSize -1
+addGlobalCommand 'window:increase-ui-font-size', -> incrementUIFontSizeBy 1
+addGlobalCommand 'window:decrease-ui-font-size', -> incrementUIFontSizeBy -1
 addGlobalCommand 'window:increase-all-font-size', ->
-    updateEditorFontSize 1
-    updateUiFontSize 1
+    incrementEditorFontSizeBy 1
+    incrementUIFontSizeBy 1
 addGlobalCommand 'window:decrease-all-font-size', ->
-    updateEditorFontSize -1
-    updateUiFontSize -1
-
+    incrementEditorFontSizeBy -1
+    incrementUIFontSizeBy -1
 
 addGlobalCommand 'git-diff:toggle-gutter-icons', ->
     updateConfig 'git-diff.showIconsInEditorGutter', (curr) -> !curr
