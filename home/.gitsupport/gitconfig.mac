@@ -1,6 +1,6 @@
 [core]
-	editor = atom --wait
 	;editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
+	editor = atom-beta --wait
 [credential]
 	helper = osxkeychain
 
