@@ -8,9 +8,13 @@
 
 import os
 
-# Sets the cwd for Notebook app & kernels. Defaults to your shell's cwd when you launch Jupyter.
-# Setting this to a static path means we can install node_modules here that the JS kernel can load.
-c.NotebookApp.notebook_dir = os.getcwd()
+# If the current directory has a "node_modules" folder...
+if os.path.isdir(os.path.join(os.getcwd(), "node_modules")):
+    # ...use current for Notebook app's CWD, so that we can load locally installed npm modules
+    c.NotebookApp.notebook_dir = os.getcwd()
+else:
+    # ...otherwise, use `~/.jupyter`, so we can have central location to install npm modules
+    c.NotebookApp.notebook_dir = os.path.join(os.path.expanduser("~"), ".jupyter")
 
 # The root directory of the file browser page (i.e., the `/tree` page)
 c.FileContentsManager.root_dir = os.path.expanduser('~')
