@@ -4,17 +4,16 @@
 # Helper functions
 ################################################################################
 
-# Returns the name of the currently active UI theme (as opposed to the active syntax theme)
-getActiveUiThemeName = ->
-    [theme1, theme2] = atom.themes.getActiveThemes()
-    if theme1.metadata.theme is "ui" then theme1.name else theme2.name
-
 # Change the current UI/editor font size by a given increment
 incrementEditorFontSizeBy = (n) ->
     atom.config.set 'editor.fontSize', (atom.config.get 'editor.fontSize') + n
 incrementUIFontSizeBy = (n) ->
-    optName = "#{ getActiveUiThemeName() }.fontSize"
-    atom.config.set optName, (atom.config.get optName ? atom.config.get 'editor.fontSize') + n
+    [uiTheme] = (theme for theme in atom.themes.getActiveThemes() when theme.metadata.theme is "ui")
+    uiFontConfig = "#{ uiTheme.name }.fontSize"
+    # If the UI font size setting isn't currently set, use the editor's font size
+    curUIFontSize = atom.config.get uiFontConfig ? atom.config.get 'editor.fontSize'
+    # Only change the UI font size for one-dark-ui/one-light-ui
+    atom.config.set uiFontConfig, curUIFontSize + n if uiTheme.name.indexOf('one-') is 0
 
 
 
