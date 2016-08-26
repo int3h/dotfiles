@@ -303,6 +303,9 @@ export npm_config_depth=0
 #export npm_config_progress='false'
 #export npm_config_spin='false'
 
+# Use `most` as system pager, if instaled (it's like `less`, but better)
+if type -p most >/dev/null; then export PAGER="$(type -p most)"; fi
+
 
 #################################
 ##### Source secondary config files
