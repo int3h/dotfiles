@@ -104,7 +104,6 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
 .native-ui-tweaks();
 
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //    ######## #### ##       ########    ####  ######   #######  ##    ##  ######
@@ -172,23 +171,35 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .tree-view-tweaks() {
-  // .tree-view {
-  //   background: lighten(@base-background-color, 0%);
-  //   border-right: 1px solid @pane-item-border-color;
-  //
-  //   .selected:before {
-  //     background: darken(@base-background-color, 8%); //hsla(@ui-hue, @ui-saturation, 50%, .25);
-  //   }
-  // }
-  //
-  // .list-group li:not(.list-nested-item),
-  // .list-tree li:not(.list-nested-item),
-  // .list-group li.list-nested-item > .list-item,
-  // .list-tree li.list-nested-item > .list-item {
-  //   line-height: 1.85em;
-  // }
+  .tree-view {
+    // background: lighten(@base-background-color, 0%);
+    // border-right: 1px solid @pane-item-border-color;
+
+    // Make the selected file's background darker than usual
+    // .selected:before {
+    //   background: darken(@base-background-color, 8%); //hsla(@ui-hue, @ui-saturation, 50%, .25);
+    // }
+
+    // Make the tree view list slightly more compact (default line-height is 24px/~2.2em)
+    .list-item { line-height: 2em !important; }
+
+    // Make the top-level folder (project roots) more distinct
+    & > li.project-root  {
+      // Make project root's font size larger
+      & > .header {
+        font-size: 1.1em;
+      }
+
+      // Put a border + margin/padding before project root (skipping the first one)
+      &:nth-child(1n+2) {
+        margin-top: 0.5em;
+        border-top: 1px solid darken(@base-background-color, 10%);
+        padding-top: 0.5em;
+      }
+    }
+  }
 }
-// .tree-view-tweaks();
+.tree-view-tweaks();
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
