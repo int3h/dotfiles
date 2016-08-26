@@ -234,7 +234,7 @@ if [[ $OS == "Mac" ]]; then
     if [[ -s "$(brew --prefix nvm 2>/dev/null)/nvm.sh" ]]; then
         export NVM_DIR="$HOME/.nvm"
         export NVM_SYMLINK_CURRENT=true
-        source "$(brew --prefix nvm)/nvm.sh"
+        #source "$(brew --prefix nvm)/nvm.sh"
     fi
 
     # Enable auto-completion of AWS cli tools
@@ -277,6 +277,7 @@ if [[ $OS == "Mac" ]]; then
         [[ -d "$ec2_libexec" ]] && export EC2_AMITOOL_HOME="$ec2_libexec"
         unset ec2_symlink ec2_abs_path ec2_libexec
     fi
+
 fi
 
 
