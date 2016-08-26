@@ -240,8 +240,8 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
     .status-bar-right {
       // Add border on the left of every block in the right status bar
       & > .inline-block,
-      & > linter-bottom-container > .inline-block,
-      & > .git-view > .inline-block {
+      // & > .git-view > .inline-block
+      & > linter-bottom-container > .inline-block {
         padding-left: 1em;
         margin-left: 1em;
 
@@ -254,6 +254,8 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
     linter-bottom-tab { border-radius: 0 0 0 0 !important; }
     linter-bottom-tab:first-of-type { border-radius: 4px 0 0 4px !important; }
     linter-bottom-tab:last-of-type { border-radius: 0 4px 4px 0 !important; }
+    // There's still a bug if the last tab (project tab) is hidden; the "file" tab then becomes the
+    // last visible tab, but it has a square border because it's still only the second tab element.
   }
 
   // Give cursor position bar a min-width big enough for 3 digit lines & column, to cut down on the
