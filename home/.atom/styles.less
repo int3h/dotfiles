@@ -260,7 +260,10 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
 
   // Give cursor position bar a min-width big enough for 3 digit lines & column, to cut down on the
   // status bar components moving around as the cursor position changes.
-  .cursor-position { min-width: 12.5em; }
+  .cursor-position {
+    min-width: 12.5em;
+    text-align: center;
+  }
 }
 .status-bar-tweaks();
 
