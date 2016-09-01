@@ -3,7 +3,6 @@
     css:
       align_assignments: true
       convert_quotes: "double"
-      newline_between_rules: true
       no_lead_zero: true
     general:
       analytics: false
@@ -66,10 +65,12 @@
       max_line_length: 100
   "atom-ternjs":
     inlineFnCompletion: false
+    inlineFnCompletionDocumentation: true
     origins: false
     urls: false
     useSnippets: true
     useSnippetsAndFunction: true
+  "auto-detect-indentation": {}
   "autocomplete-plus":
     backspaceTriggersAutocomplete: true
     builtinProviderBlacklist: ".source.gfm, .text.md"
@@ -87,10 +88,6 @@
     scheme: "Yesterday Night"
   core:
     closeEmptyWindows: false
-    customFileTypes:
-      "source.json": [
-        "tern-project"
-      ]
     destroyEmptyPanes: false
     disabledPackages: [
       "metrics"
@@ -134,7 +131,6 @@
     spacer_between_sections: true
   editor:
     antialiasing: true
-    backUpBeforeSaving: true
     fontFamily: "Hack"
     fontSize: 11
     preferredLineLength: 100
@@ -144,7 +140,7 @@
     tabLength: 4
     undoGroupingInterval: 400
   "exception-reporting":
-    userId: "762d29f8-f913-43b5-da4c-a748ccfeb729"
+    userId: "f30288a8-ada4-dbf9-218f-8a62de00c794"
   "fuzzy-finder":
     preserveLastSearch: true
     searchAllPanes: true
@@ -160,21 +156,21 @@
     underline: "dotted"
   "highlight-selected":
     minimumLength: 2
+    showInStatusBar: false
   "language-babel":
     allowLocalOverride: true
     autoIndentJSX: true
     createMap: true
   "language-markdown":
     disableLanguageGfm: false
+    removeEmptyListItems: false
   linter:
     gutterEnabled: false
     gutterPosition: "Left"
     ignoreMatchedFiles: "/**/*.min.{js,css}, /**/assets/**"
     lintOnFly: false
     showErrorInline: false
-    showErrorPanel: false
     showErrorTabLine: true
-    showErrorTabProject: false
     showProviderName: false
     statusIconScope: "File"
   "linter-eslint":
@@ -186,8 +182,6 @@
     liveUpdate: false
     useGitHubStyle: true
   minimap:
-    adjustMinimapWidthToSoftWrap: false
-    devicePixelRatioRounding: false
     minimapScrollIndicator: false
     plugins:
       bookmarks: true
@@ -204,6 +198,8 @@
     scrollAnimationDuration: 200
   "minimap-selection":
     highlightCursorsLines: true
+  "one-dark-ui":
+    fontSize: 13
   "one-light-ui":
     fontSize: 13
   "package-generator":
@@ -215,6 +211,7 @@
     font: "Default Atom Font"
     themeColor: "Steel"
   "spell-check":
+    addKnownWords: true
     grammars: [
       "source.asciidoc"
       "source.gfm"
@@ -245,25 +242,15 @@
     insertPrefix: "vim"
   welcome:
     showOnStartup: false
-".ansible.source":
+".git-commit.text":
   editor:
-    preferredLineLength: 100
+    preferredLineLength: 72
+    showIndentGuide: false
+    softWrap: true
     tabLength: 4
-".diff.source":
+".git-rebase.text":
   editor:
-    preferredLineLength: 100
-    tabLength: 4
-".gfm.source":
-  editor:
-    preferredLineLength: 120
-    softWrapHangingIndent: 2
-".md.text":
-  editor:
-    preferredLineLength: 120
-    showIndentGuide: true
-    softWrapHangingIndent: 4
-    tabLength: 4
-".source.yaml":
-  editor:
-    preferredLineLength: 100
+    preferredLineLength: 72
+    showIndentGuide: false
+    softWrap: true
     tabLength: 4
