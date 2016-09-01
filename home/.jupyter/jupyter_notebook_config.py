@@ -14,7 +14,7 @@ if os.path.isdir(os.path.join(os.getcwd(), "node_modules")):
     c.NotebookApp.notebook_dir = os.getcwd()
 else:
     # ...otherwise, use `~/.jupyter`, so we can have central location to install npm modules
-    c.NotebookApp.notebook_dir = os.path.join(os.path.expanduser("~"), ".jupyter")
+    c.NotebookApp.notebook_dir = os.path.join(os.path.expanduser("~"), "Documents", "Jupyter_Notebooks")
 
 # The root directory of the file browser page (i.e., the `/tree` page)
 c.FileContentsManager.root_dir = os.path.expanduser('~')
