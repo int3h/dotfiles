@@ -220,6 +220,9 @@
     packageSyntax: "coffeescript"
   "project-manager":
     showPath: false
+  "project-plus":
+    newWindow: true
+    showPath: true
   "seti-ui":
     fileIcons: false
     font: "Default Atom Font"
