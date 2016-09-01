@@ -97,6 +97,7 @@
       "metrics"
       "minimap-find-and-replace"
       "minimap-linter"
+      "project-manager"
       "react"
     ]
     followSymlinks: false
