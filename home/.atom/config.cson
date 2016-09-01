@@ -90,6 +90,7 @@
     closeEmptyWindows: false
     destroyEmptyPanes: false
     disabledPackages: [
+      "Sublime-Style-Column-Selection"
       "autosave"
       "encoding-selector"
       "indent-guide-improved"
