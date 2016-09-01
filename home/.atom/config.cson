@@ -90,12 +90,12 @@
     closeEmptyWindows: false
     destroyEmptyPanes: false
     disabledPackages: [
-      "metrics"
       "autosave"
       "encoding-selector"
       "indent-guide-improved"
-      "minimap-linter"
+      "metrics"
       "minimap-find-and-replace"
+      "minimap-linter"
       "react"
     ]
     followSymlinks: false
