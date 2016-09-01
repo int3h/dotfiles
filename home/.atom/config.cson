@@ -129,6 +129,7 @@
       "**/static/libs/**"
     ]
     projectHome: "/Users/mtorok/Documents/Graphistry/graphistry-repos/"
+    telemetryConsent: "limited"
     themes: [
       "native-ui"
       "base16-syntax"
