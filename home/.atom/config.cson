@@ -152,6 +152,9 @@
     undoGroupingInterval: 400
   "exception-reporting":
     userId: "f30288a8-ada4-dbf9-218f-8a62de00c794"
+  "find-and-replace":
+    closeFindPanelAfterSearch: true
+    openProjectFindResultsInRightPane: true
   "fuzzy-finder":
     preserveLastSearch: true
     searchAllPanes: true
