@@ -240,6 +240,8 @@
   "status-bar":
     cursorPositionFormat: "Line %L, Column %C"
     selectionCountFormat: "(Lines: %L, Chars: %C)"
+  tabs:
+    enableVcsColoring: true
   "todo-show":
     ignoreThesePaths: [
       "**/node_modules/"
