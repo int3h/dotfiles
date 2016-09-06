@@ -133,7 +133,7 @@
     telemetryConsent: "limited"
     themes: [
       "native-ui"
-      "firewatch-syntax"
+      "oceanic-reef-syntax"
     ]
   docblockr:
     deep_indent: true
