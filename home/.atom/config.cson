@@ -107,6 +107,7 @@
       "project-manager"
       "react"
       "todo-show"
+      "docblockr"
     ]
     followSymlinks: false
     ignoredNames: [
