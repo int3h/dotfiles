@@ -237,6 +237,12 @@
       "text.plain.null-grammar"
       "text.md"
     ]
+    knownWords: [
+      "Jupyter"
+    ]
+    locales: [
+      "en-US"
+    ]
   "status-bar":
     cursorPositionFormat: "Line %L, Column %C"
     selectionCountFormat: "(Lines: %L, Chars: %C)"
