@@ -43,19 +43,6 @@ addGlobalCommand 'window:resize-panes-equally', ->
     # Resize the tree-view panel to fit its contents
     panel.getItem().resizeToFitContent?() for panel in atom.workspace?.getLeftPanels?()
 
-# Adds config option `editor.antialiasing`, which toggles CSS class 'subpixel-antialias' on <body>
-addGlobalCommand 'window:toggle-antialiasing', ->
-    atom.config.set 'editor.antialiasing', not (atom.config.get 'editor.antialiasing')
-atom.config.observe 'editor.antialiasing', (aaEnabled) ->
-    bodyClasses = document.querySelector('body').classList
-    if aaEnabled
-        bodyClasses.remove('standard-antialiasing')
-        bodyClasses.add('subpixel-antialiasing')
-    else
-        bodyClasses.add('standard-antialiasing')
-        bodyClasses.remove('subpixel-antialiasing')
-
-
 
 # # Get names of all available Minimap plugin packages that are enabled in `minimap`'s plugin options
 # getEnabledMinimapPlugins = ->

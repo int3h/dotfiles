@@ -373,19 +373,16 @@ autocomplete-suggestion-list {
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Use regular, not subpixel, antialiasing by default
-body.standard-antialiasing atom-text-editor { -webkit-font-smoothing: antialiased; }
+.antialiasing() {
+  // On non-Retina displays, use subpixel antialiasing (makes text easy to read, but a bit "fat")
+  atom-text-editor, .tab-bar .tab .title { -webkit-font-smoothing: subpixel-antialiased; }
 
-// Subpixel AA enabled when <body> has class `subpixel-antialiasing` applied to it
-body.subpixel-antialiasing {
-  atom-text-editor,
-  .tab-bar .tab .title {
-    -webkit-font-smoothing: subpixel-antialiased;
+  // On Retina displays, use regular (non-subpixel) antialiasing (looks sharper, though thinner)
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      atom-text-editor, .tab-bar .tab .title { -webkit-font-smoothing: antialiased; }
   }
 }
-
-// Always disable subpixel AA for linter message badges; it looks bad at small size + colored BG
-linter-panel .badge { -webkit-font-smoothing: antialiased; }
+.antialiasing();
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
