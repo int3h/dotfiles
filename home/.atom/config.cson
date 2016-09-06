@@ -85,7 +85,7 @@
     ]
   "base16-syntax":
     matchUserInterfaceTheme: false
-    scheme: "Yesterday Night"
+    scheme: "OceanicNext"
   core:
     closeEmptyWindows: false
     destroyEmptyPanes: false
@@ -158,6 +158,10 @@
   "fuzzy-finder":
     preserveLastSearch: true
     searchAllPanes: true
+  "genesis-ui":
+    distractionFree:
+      hideBottom: false
+      hideFiles: false
   "git-diff":
     showIconsInEditorGutter: true
   "git-plus":
@@ -223,10 +227,6 @@
   "project-plus":
     newWindow: true
     showPath: true
-  "seti-ui":
-    fileIcons: false
-    font: "Default Atom Font"
-    themeColor: "Steel"
   "spell-check":
     addKnownWords: true
     grammars: [
