@@ -22,11 +22,14 @@
   'cmd-.': '!unset'
 
 
-'body':
+'body.platform-darwin':
   'cmd-=': 'window:increase-all-font-size'
   'cmd--': 'window:decrease-all-font-size'
   'alt-cmd-=': 'window:increase-ui-font-size'
   'alt-cmd--': 'window:decrease-ui-font-size'
+
+  'home': 'core:really-move-to-top'
+  'end': 'core:really-move-to-bottom'
 
 
 'atom-workspace':
@@ -48,9 +51,8 @@
 
   'alt-g g': 'git-diff:toggle-gutter-icons'
 
-  # Recent versions of Atom map Home/End to jump to the beginning/end of the screen, instead of file
-  'end': 'core:move-to-bottom'
-  'home': 'core:move-to-top'
+  'end' : 'unset!'
+  'home': 'unset!'
 
   # Use cmd-b as base for bookmark commands, not F2 (cmd-b is normally used for fuzzy file finder)
   'cmd-b': 'bookmarks:toggle-bookmark'
