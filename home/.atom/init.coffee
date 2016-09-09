@@ -36,21 +36,18 @@ atom.commands.add 'body', 'window:decrease-all-font-size', ->
 ################################################################################
 
 # Fix bug where "home"/"end" keys are nullified if a mouse wheel scroll happens at the same time, or
-# shortly thereafter. This breaks my BTT "three finger swipe up/down" -> "end"/"home" gestures.
-#
+# shortly thereafter. This breaks my BTT "three finger swipe" -> "end"/"home" gestures.
 # The bug seems to be caused by the facts that: there's a delay between setting the scroll position,
 # and the editor updating; and setting the wheel scroll position clears pending autoscroll requests
-# (and vice versa). My (hacky) workaround is to immediately tell the editor to update itself after
-# calling `moveToTop()`/`moveToBottom()`, before any wheel scroll events can occur & cancel the
-# autoscroll.
+# (and vice versa). 
+# My (hacky) workaround is to immediately tell the editor to update itself after calling
+# `moveToTop()`/`moveToBottom()`, before any wheel scroll events can occur & cancel the autoscroll.
 
 atom.commands.add 'atom-text-editor:not([mini])', 'core:really-move-to-top', (event) ->
     # This is what `core:move-to-top` does, so match its behavior
     event.stopPropagation()
-    # Might want/need a commitPendingScrollTopPosition() first, to finish/clear current wheel scroll
     @getModel().moveToTop()
     @getModel().presenter.commitPendingLogicalScrollTopPosition()
-    # Alternative: call `@component.updateSync()` right after the move command.
 
 atom.commands.add 'atom-text-editor:not([mini])', 'core:really-move-to-bottom', (event) ->
     event.stopPropagation()
