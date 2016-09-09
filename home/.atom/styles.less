@@ -4,6 +4,8 @@
 @ui-theme-name: unknown;
 @import (reference) "ui-variables";
 
+// Hack to allow us to bypass the `:extend` command (LESS won't extend selector variables)
+@plain-text-editor: atom-text-editor;
 // Convenience to save us from having to add a `atom-text-editor::shadow` selector for editors
 atom-text-editor::shadow:extend(atom-text-editor all) {}
 
@@ -281,27 +283,33 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .minimap-tweaks() {
-  atom-text-editor {
-    // For minimap, use slightly lighter/darker (whichever contrasts more) variant of editor bg
-    @minimap-bgcolor: contrast(@syntax-background-color,
-      darken(@syntax-background-color, 2%),
-      lighten(@syntax-background-color, 2%));
-    // Color used for background of "visible area" block & its borders
-    @visible-area-color: rgba(146, 146, 146, 1.0);
+  // For minimap, use slightly lighter/darker (whichever contrasts more) variant of editor bg
+  @minimap-bgcolor: contrast(@syntax-background-color,
+    darken(@syntax-background-color, 2%),
+    lighten(@syntax-background-color, 2%));
+  // Color of border on left-side of minimap (to separate it from the editor)
+  @border-color: contrast(@syntax-background-color,
+    darken(@syntax-wrap-guide-color, 10%),
+    lighten(@syntax-wrap-guide-color, 10%));
+  // Color used for background of "visible area" block & its borders
+  @visible-area-color: rgba(146, 146, 146, 1.0);
+
+  // Only apply the styles to editors with a minimap
+  @{plain-text-editor}[with-minimap]::shadow {
+    // Hide the editor's native scrollbar, so that we can use the minimap exclusively to scroll
+    .vertical-scrollbar { opacity: 0; width: 0; }
 
     atom-text-editor-minimap {
-      background: @minimap-bgcolor;
-      border-left: 2px solid fadein(@syntax-wrap-guide-color, 15%);
-    }
-
-    // Put some space between the border & minimap content
-    atom-text-editor-minimap::shadow {
-      canvas { left: 2px; }
+      // Set background to 1px border + chosen background color (specified via a linear gradient
+      // background image so that it doesn't affect element size, as `border: 1px ...` would).
+      background-image: linear-gradient(to right,
+        @border-color, @border-color 1px,
+        @minimap-bgcolor 1px, @minimap-bgcolor);
+      // background-color: @minimap-bgcolor;
 
       // Give the "visible area" block top+bottom borders, and a more transparent bg
-      .minimap-visible-area {
-        opacity: 1;
-        background-color: fadeout(@visible-area-color, 90%);
+      &::shadow .minimap-visible-area::after {
+        background-color: fadeout(@visible-area-color, 70%);
         border-top: 1px solid @visible-area-color;
         border-bottom: 1px solid @visible-area-color;
       }
@@ -321,9 +329,6 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
     //     background: mix(@minimap-bgcolor, @syntax-cursor-color, 40%);
     //   }
     // }
-
-    // Hide the editor's native scrollbar, so that we can use the minimap exclusively to scroll
-    .vertical-scrollbar { display: none; }
   }
 }
 .minimap-tweaks();
