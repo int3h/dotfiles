@@ -14,12 +14,12 @@
 
   # Cmd-m normally minimizes the app, but since we bind "cmd-k cmd-m" to "minimap:toggle" in a text
   # editor, if we have focus wrong, we can accidentally minimize the app. Disables cmd-m to fix.
-  'cmd-m': '!unset'
+  'cmd-m': 'unset!'
 
   'cmd-alt-,': 'application:open-your-stylesheet'
 
   # Disable the "keyboard resolver" shortcut
-  'cmd-.': '!unset'
+  'cmd-.': 'unset!'
 
 
 'body.platform-darwin':
