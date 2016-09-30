@@ -31,7 +31,7 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
     }
   }
 }
-.chalk-dark-tweaks();
+// .chalk-dark-tweaks();
 
 
 .polaris-syntax-theme-tweaks() when (@syntax-wrap-guide-color = #282a2e) and (@syntax-background-color = #262c31) {
@@ -114,6 +114,16 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
   }
 }
 .native-ui-tweaks();
+
+
+.flatwhite-tweaks() {
+    atom-text-editor {
+        .source.embedded {
+            background-color: @syntax-background-color;
+        }
+    }
+}
+// .flatwhite-tweaks();
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
