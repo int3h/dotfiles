@@ -62,6 +62,20 @@ atom.commands.add editorSelector, 'core:really-move-to-top', (event) -> moveEdit
 
 
 ################################################################################
+# Select quoted
+################################################################################
+
+atom.commands.add 'atom-text-editor', 'editor:select-quoted', (event) ->
+    editor = this.getModel()
+
+    ranges = for position in editor.getCursorBufferPositions()
+        editor.displayBuffer.bufferRangeForScopeAtPosition('.string.quoted', position)
+    # Filter out undefined values
+    quoteRanges = range for range in ranges when range?
+    editor.setSelectedBufferRanges(quoteRanges) if quoteRanges?.length > 0
+
+
+################################################################################
 # Misc. UI commands
 ################################################################################
 
