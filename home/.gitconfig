@@ -35,9 +35,14 @@
 	# Tries to minimize the size on disk of the repo by delete unused git data & compressing things
 	diet = !git reflog expire --expire=now --all && git repack && git gc --prune=now --aggressive
 	# Show which branches contain a given commit (defaults to HEAD if no commit-ish specified)
-	branches = branch --list -a --contains
+	commit-branches = branch --list -a --contains
 	# Search for a given regex in the commit logs
 	search ="!f() { git log -i --perl-regexp --all --color --graph --author-date-order --pretty=\"format:%C(yellow)%h %C(green)%cr%C(red)%d%C(reset) %s %C(blue)[%an]%C(reset)\" --grep=\"$@\" ; }; f"
+	# Fetch from all remotes
+	update = fetch --all --tags --prune
+	# Lists all local branches, and all remote branches that haven't been merged into HEAD
+	sb = "!f() { git branch --list -vv && git branch --list -r -vv --no-merged; }; f"
+
 
 # Better diff colors, for diff-so-fancy
 [color "diff-highlight"]
@@ -48,7 +53,7 @@
 
 [difftool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/araxiscompare-w.sh -2 \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/araxisgitmerge-w.sh \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\"
 	trustExitCode = true
