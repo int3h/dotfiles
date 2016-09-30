@@ -18,9 +18,23 @@ set colored-stats on
 # Don't expand '~' into the absolute path to our home directory when doing word completion
 set expand-tilde off
 
-# Add a character to prompt to show mode: '@' - emacs, ':' - vi command, '+' - vi insertion
-# FIXME: Doesn't work with the iTerm2 shell integrations enabled :(
-set show-mode-in-prompt on
+# !!!IMPORTANT: these values are currently overriden (using dynamic values) in .bash_profile.
+
+# Insert a string at the start of the line to indicate which Vi mode we're in (insert or command)
+#set show-mode-in-prompt on
+
+# Sets the string to be inserted at the start of the line for each Vi mode. 
+#
+# By inserting ANSII term color/style escape codes, we can change the style of $PS1 depending on the
+# mode. Be sure to start each string with a 'term reset' command (to clean up leftover styles set by
+# any previous term output), and that $PS1 *doesn't* do a term reset at its start (so that color
+# codes we insert with these strings won't be cleared, and will apply to $PS1's text).
+#
+# NOTE: use "\1" and "\2" instead of "\[" and "\]" to indicate 'start/end escape sequence'
+# NOTE: you can set this programatically in Bash (e.g., in your .bash_profile) using
+# `bind 'set vi-cmd-mode-string <your string here>'`. You can also re-read
+#set vi-cmd-mode-string \1\e[0m\2::: \1\e[7m\2
+#set vi-ins-mode-string \1\e>>> [0m\2
 
 ###########################################################
 # Keymaps for when we're in command mode (e.g., after hitting ESC)

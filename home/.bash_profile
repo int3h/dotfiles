@@ -384,10 +384,27 @@ case $- in
                 PROMPT_COLOR="$(tput setab ${hashedColor[0]})$(tput setaf ${hashedColor[1]})"
                 unset hashedColor
             else
-                PROMPT_COLOR="$(tput setab 33)"
+                PROMPT_COLOR="$(tput setab 33)$(tput bold)"
             fi
         fi
-        PROMPT_CLR_CMD="${COLOR_RESET}$(tput bold)$PROMPT_COLOR"
+
+        # If Bash version >= 4.4
+        if [[ $BASH_VERSINFO -ge 4 ]] && [[ $(echo $BASH_VERSION | cut -d '.' -f 2) -ge 4 ]]; then
+            # We set these readline variables here, rather than .inputrc, so we can set them
+            # dynamically, using the calculated prompt color in this script.
+            bind "set show-mode-in-prompt on"
+            # In insert mode, use the standard prompt colors and insert ">>> "
+            bind "set vi-ins-mode-string \"\\1${COLOR_RESET}\\2\""
+            # In command mode, reverse the standard prompt colors, and print "::: "
+            bind "set vi-cmd-mode-string \"\\1${COLOR_RESET}$(tput rev)\\2\""
+
+            PROMPT_CLR_CMD="$PROMPT_COLOR"
+            # Set the prompt color in the Vi mode string (inserted by readline at the start of
+            # a line) instead of $PS1, so that we can change it based off the current Vi mode.
+            export PS2="${PROMPT_COLOR}$(echo $USER | sed -e 's/./ /g')...>${COLOR_RESET} "
+        else
+            PROMPT_CLR_CMD="${COLOR_RESET}$PROMPT_COLOR"
+        fi
 
         if [[ -z $PROMPT_TEXT ]]; then
             if [[ $OS == "Mac" ]]; then
