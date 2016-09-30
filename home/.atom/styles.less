@@ -303,8 +303,8 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
 .minimap-tweaks() {
   // For minimap, use slightly lighter/darker (whichever contrasts more) variant of editor bg
   @minimap-bgcolor: contrast(@syntax-background-color,
-    darken(@syntax-background-color, 2%),
-    lighten(@syntax-background-color, 2%));
+    darken(@syntax-background-color, 4%),
+    lighten(@syntax-background-color, 4%));
   // Color of border on left-side of minimap (to separate it from the editor)
   @border-color: contrast(@syntax-background-color,
     darken(@syntax-wrap-guide-color, 10%),
