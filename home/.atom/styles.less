@@ -39,6 +39,16 @@ atom-text-editor::shadow:extend(atom-text-editor all) {}
     .wrap-guide {
       background-color: darken(@syntax-background-color, 4%); //@syntax-indent-guide-color;
     }
+
+    // // For all classes Polaris makes bold, turn off subpixel antialiasing (bold + subpixel AA looks
+    // // too heavy/blurry, even on non-Retina screens.)
+    // .punctuation.definition.bold,
+    // .entity.name.function,
+    // .entity.name.class,
+    // .entity.name.type.class,
+    // .markup.bold {
+    //   -webkit-font-smoothing: antialiased !important;
+    // }
   }
 
   atom-text-editor.is-focused, atom-text-editor.is-focused::shadow, :host.is-focused {
@@ -380,14 +390,17 @@ autocomplete-suggestion-list {
 
 .antialiasing() {
   // On non-Retina displays, use subpixel antialiasing (makes text easy to read, but a bit "fat")
-  atom-text-editor, .tab-bar .tab .title { -webkit-font-smoothing: subpixel-antialiased; }
+  atom-text-editor, .tab-bar .tab .title {
+    -webkit-font-smoothing: subpixel-antialiased;
+    // -webkit-font-smoothing: antialiased;
+  }
 
   // On Retina displays, use regular (non-subpixel) antialiasing (looks sharper, though thinner)
   @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
       atom-text-editor, .tab-bar .tab .title { -webkit-font-smoothing: antialiased; }
   }
 }
-.antialiasing();
+// .antialiasing();
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -447,3 +460,6 @@ autocomplete-suggestion-list {
   }
 }
 .language-git-commit-tweaks();
+
+
+// vim:set fileencoding=utf8 fileformat=unix filetype=less tabstop=4 expandtab:
