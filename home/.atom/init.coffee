@@ -128,6 +128,117 @@ atom.commands.add 'atom-text-editor:not([mini])', 'editor:insert-banner', (event
 
 
 ################################################################################
+# Disable subpixel AA on bold elements
+################################################################################
+
+# AntialiasCop disables subpixel antialiasing (sub-aa) for bolded text in the text editor.
+class AntialiasCop
+    # Calls `@disableSubpixelForBolded()` immediately. It then observes Atom active theme changes,
+    # calling `@disableSubpixelForBolded()` again in response.
+    constructor: ->
+        @subscriptions = new CompositeDisposable
+
+        @fixAntialiasingForCurrentTheme() if atom.themes.isInitialLoadComplete()
+        @subscriptions.add atom.themes.onDidChangeActiveThemes =>
+            @fixAntialiasingForCurrentTheme()
+
+
+    disable: ->
+        @subscriptions.dispose()
+
+
+    # Parses the sylesheet of the current syntax theme to find rules that set a bold font, then
+    # creates a stylesheet that sets those items to not use sub-aa, & adds that stylesheet to Atom.
+    fixAntialiasingForCurrentTheme: ->
+        console.debug("[AntialiasCop] Fixing subpixel antialiasing for current theme")
+
+        selectors = @findBoldSelectors()
+        stylesheet = @makeStylesheet(selectors)
+        @addStylesheet(stylesheet)
+
+
+    # Gets the syntax theme's style element, then attaches a clone
+    findBoldSelectors: ->
+        boldSelectors = []
+        for styleElement in @getSyntaxStyleElements()
+            for rule in @getRulesForStyleElement(styleElement)
+                if rule.style.fontWeight is 'bold' or rule.style.fontWeight is '700'
+                    boldSelectors.push(rule.selectorText)
+
+        return boldSelectors
+
+
+    # Get a CSSRuleList for an Atom `<style>` element.
+    #
+    # Atom's StyleElement doesn't have any CSS rules attached to it, since they're not attached to
+    # the DOM. This method clones the `<style>` element, then attaches that to the DOM under a
+    # temporary, invisible `<div>`. It grabs the initialized CSSRuleList, removes the temporary
+    # `<div>` from the page, and returns the saved CSSRuleList.
+    getRulesForStyleElement: (element) ->
+        if element?
+            parent = document.createElement('div')
+            parent.style.display = 'none';
+            shadow = parent.createShadowRoot()
+
+            clone = element.cloneNode(true)
+            shadow.appendChild(clone)
+
+            atom.views.getView(atom.workspace).appendChild?(parent)
+            rules = clone.sheet?.rules
+            parent.remove()
+
+        return rules ? []
+
+
+    # Finds the current syntax theme, and looks up its stylesheet(s) in Atom's StyleManager.
+    getSyntaxStyleElements: ->
+        [syntaxTheme] = (pkg for pkg in atom.themes.getActiveThemes() when pkg.metadata.theme is "syntax")
+
+        for sheet in (syntaxTheme?.stylesheets ? [])
+            stylePath = sheet[0]
+            atom.styles.styleElementsBySourcePath[stylePath]
+
+
+    makeStylesheet: (selectors) ->
+        disableSubAARules = if selectors.length > 0
+                """
+                #{selectors.join(", \n")} {
+                    -webkit-font-smoothing: antialiased !important;
+                }
+                """
+            else
+                ""
+
+        """
+        atom-text-editor,
+        atom-text-editor::shadow,
+        .tab-bar .tab .title {
+            -webkit-font-smoothing: subpixel-antialiased;
+        }
+
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            atom-text-editor,
+            atom-text-editor::shadow,
+            .tab-bar .tab .title {
+                -webkit-font-smoothing: antialiased;
+            }
+        }
+
+        #{disableSubAARules}
+        """
+
+
+    addStylesheet: (stylesheet) ->
+        @subscriptions.add? atom.styles.addStyleSheet(stylesheet, {
+            sourcePath: "#{atom.getUserInitScriptPath()}#AntialiasCop.dynamic.atom-text-editor.css",
+            context: 'atom-text-editor',
+            priority: 1
+        })
+
+atom.antialiasCop ?= new AntialiasCop()
+
+
+################################################################################
 # Misc. UI commands
 ################################################################################
 
