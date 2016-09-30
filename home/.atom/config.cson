@@ -80,8 +80,8 @@
     ]
     includeCompletionsFromAllBuffers: false
     scopeBlacklist: [
-      ".string"
       ".comment"
+      ".string:not(.template)"
     ]
   "base16-syntax":
     matchUserInterfaceTheme: false
