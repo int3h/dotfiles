@@ -12,6 +12,9 @@ $br update
 printf '\n%sUpgrading Packages%s\n' "$clr_headline" "$clr_reset"
 $br upgrade --all;
 
+printf '\n%sCleaning up old packages%s\n' "$clr_headline" "$clr_reset"
+$br scrub
+
 printf '\n\n%sResetting Update Notifications%s\n' "$clr_headline" "$clr_reset"
 /usr/bin/env bash $HOME/bin/mac/brew-autoupdate
 printf '\n'
