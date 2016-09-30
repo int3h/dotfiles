@@ -76,6 +76,58 @@ atom.commands.add 'atom-text-editor', 'editor:select-quoted', (event) ->
 
 
 ################################################################################
+# Insert banner
+################################################################################
+
+# Insert a "banner" line below/at the currrent line.
+#
+# A banner line comment line that is padded with a filler character to the preferred line width.
+# These are handy as a visual divider line in code, since a line full of non-whitespace filler
+# characters are more visually distinct than an empty line.
+#
+# The last character of the current grammar's "begin comment" string is used as the filler
+# character. For example, if comments start with '/*', filler char is '*'.
+atom.commands.add 'atom-text-editor:not([mini])', 'editor:insert-banner', (event) ->
+    editor = this.getModel()
+
+    editor.transact =>
+        # We want a blank line to insert the banner on. If the current line isn't blank, insert a
+        # new line below it for the banner.
+        unless editor.isBufferRowBlank(editor.getCursorBufferPosition().row)
+            editor.insertNewlineBelow()
+
+        lineRange = editor.getLastCursor().getCurrentLineBufferRange()
+
+        # Get the comment start/end strings of the line's grammar
+        scope = editor.scopeDescriptorForBufferPosition(lineRange.start)
+        commentStrings = editor.getCommentStrings(scope)
+        return unless commentStrings?.commentStartString?
+
+        if 0 < editor.preferredLineLength < 250
+            preferredLineLength = editor.preferredLineLength
+        else
+            preferredLineLength = 80
+
+        # Preserve the line's indentation by preserving leading whitespace
+        leadingWhitespace = editor.getTextInBufferRange(lineRange).match(/^\s*/)?[0] ? ""
+
+        bannerPrefix = "#{leadingWhitespace}#{commentStrings.commentStartString.trimRight()}"
+        bannerSuffix = commentStrings.commentEndString?.trimLeft?() ? ""
+
+        # The filler character: the last character of the 'comment start' string.
+        #
+        fillChar = bannerPrefix.slice(-1) or "#"
+        fillLength = preferredLineLength - (bannerPrefix.length + bannerSuffix.length)
+        return unless fillLength >= 0
+        filler = fillChar.repeat(fillLength)
+
+        banner = "#{bannerPrefix}#{filler}#{bannerSuffix}"
+        editor.setTextInBufferRange(lineRange, banner)
+        # Use this instead of appending "\n" to banner so that auto-indent triggers on the new line
+        editor.insertNewlineBelow()
+
+
+################################################################################
 # Misc. UI commands
 ################################################################################
 
