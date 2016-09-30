@@ -32,16 +32,17 @@
 	;tool = Kaleidoscope
 	;conflictstyle = diff3
 
+# `legit` support (http://www.git-legit.org)
 [alias]
-	# legit aliases
-	switch = !legit switch \"$@\"
 	branches = !legit branches
-	sprout = !legit sprout \"$@\"
-	unpublish = !legit unpublish \"$@\"
-	harvest = !legit harvest \"$@\"
-	sync = !legit sync \"$@\"
-	publish = !legit publish \"$@\"
-	graft = !legit graft \"$@\"
+	graft = !legit graft
+	harvest = !legit harvest
+	publish = !legit publish
+	unpublish = !legit unpublish
+	sprout = !legit sprout
+	sync = !legit sync
+	switch = !legit switch
+	resync = !legit resync
 
 [filter "media"]
 	clean = git media clean %f
