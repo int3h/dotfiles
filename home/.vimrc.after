@@ -281,8 +281,16 @@ endfunction
 """"""" Filetype settings {{{1
 
 "" All code files
+
 " Enable 'strip whitespace on save' functionality
-autocmd FileType c,cpp,java,php,ruby,python,javascript,sh,vim,ansible,yaml,gitconfig autocmd BufWritePre <buffer> FixWhitespace
+function! FixWhitespaceIfAllowed()
+	if exists('b:disableFixWhitspace')
+		return
+	endif
+	FixWhitespace
+endfunction
+autocmd BufWritePre * call FixWhitespaceIfAllowed()
+autocmd FileType markdown let b:disableFixWhitspace=1
 
 "" Superconductor
 au BufRead,BufNewFile *.{visualization,widget} set ft=javascript
