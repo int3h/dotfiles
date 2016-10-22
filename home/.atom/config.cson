@@ -88,6 +88,10 @@
     scheme: "OceanicNext"
   core:
     closeEmptyWindows: false
+    customFileTypes:
+      "source.js": [
+        "jsx"
+      ]
     destroyEmptyPanes: false
     disabledPackages: [
       "Sublime-Style-Column-Selection"
