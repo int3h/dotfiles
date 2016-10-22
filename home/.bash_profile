@@ -381,7 +381,7 @@ case $- in
         if [[ -z $PROMPT_COLOR ]]; then
             if type -t hashcolor >/dev/null 2>&1; then
                 hashedColor=($(hashcolor $HOSTNAME))
-                PROMPT_COLOR="$(tput setab ${hashedColor[0]})$(tput setaf ${hashedColor[1]})"
+                PROMPT_COLOR="$(tput bold)$(tput setab ${hashedColor[0]})$(tput setaf ${hashedColor[1]})"
                 unset hashedColor
             else
                 PROMPT_COLOR="$(tput setab 33)$(tput bold)"
