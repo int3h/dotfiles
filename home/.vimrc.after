@@ -77,6 +77,13 @@ augroup end
 
 " Mappings {{{2
 
+" Map "Home" and "End" to go to the top/bottom of the file, as expected
+nmap <Home> gg
+vmap <Home> gg
+nmap <End> G
+vmap <End> G
+
+
 " Open a new tab with Cmd-T (remaps Janus' mapping of Ctrl-T to :CtrlP
 map <D-t> :tabnew <CR>
 imap <D-t> <ESC>:tabnew<CR>
@@ -307,7 +314,6 @@ let javascript_ignore_javaScriptdoc=1
 "" OpenCL
 " Check OpenCL syntax using Apple's OpenCL compiler
 let g:syntastic_opencl_checkers = ['openclc']
-
 
 
 """"""" Powerline {{{1
