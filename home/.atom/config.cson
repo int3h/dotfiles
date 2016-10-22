@@ -93,6 +93,10 @@
         "js"
         "jsx"
       ]
+      "source.json": [
+        "sublime-project"
+        "sublime-workspace"
+      ]
     destroyEmptyPanes: false
     disabledPackages: [
       "Sublime-Style-Column-Selection"
