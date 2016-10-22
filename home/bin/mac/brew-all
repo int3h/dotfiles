@@ -10,7 +10,7 @@ printf '%sUpdating Package Cache%s\n' "$clr_headline" "$clr_reset"
 $br update
 
 printf '\n%sUpgrading Packages%s\n' "$clr_headline" "$clr_reset"
-$br upgrade --all;
+$br upgrade;
 
 printf '\n%sCleaning up old packages%s\n' "$clr_headline" "$clr_reset"
 $br scrub
