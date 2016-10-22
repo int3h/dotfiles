@@ -86,6 +86,8 @@
   "base16-syntax":
     matchUserInterfaceTheme: false
     scheme: "OceanicNext"
+  "command-palette":
+    preserveLastSearch: true
   core:
     closeEmptyWindows: false
     customFileTypes:
