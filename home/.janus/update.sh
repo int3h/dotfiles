@@ -63,6 +63,9 @@ fi
 printHeader "Updating Janus core"
 (cd "$HOME/.vim/" && rake) || (printf 'Fatal Error: Janus not installed\n\n' && exit 2)
 
+printHeader "Quitting Atom before changing dotfiles"
+osascript -e 'if application "/Applications/Atom Beta.app" is running then tell application "/Applications/Atom Beta.app" to quit'
+
 printHeader "Stashing dotfile repo changes while we do updates"
 # So that we can later cleanly commit the changes this script makes (and only those changes)
 git stash
