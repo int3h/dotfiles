@@ -90,6 +90,7 @@
     closeEmptyWindows: false
     customFileTypes:
       "source.js": [
+        "js"
         "jsx"
       ]
     destroyEmptyPanes: false
