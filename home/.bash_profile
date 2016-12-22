@@ -59,7 +59,7 @@ shopt -s histappend;
 # We want to avoud setting the path twice, which can happen if, e.g., we're in a tmux subshell. We
 # check to see if one our custom path components (~/bin) is in $PATH and only proceed if it isn't.
 if [[ ! $_BASHRC_DID_RUN ]]; then
-    ## High weight (last added = highest priority)
+    ## High weight (last added = lowest priority)
 
     # Homebrew (overrides system tools)
     [[ -d /usr/local/bin ]] && PATH="/usr/local/sbin:/usr/local/bin:$PATH"
@@ -212,7 +212,7 @@ show_dynamic_motd() {
 
 if [[ $OS == "Mac" ]]; then
     # Homebrew-installed programs are in the homebrew directory
-    if hash brew 2>/dev/null; then
+    if type -t brew >/dev/null; then
         BREW_PREFIX=$(brew --prefix)
     else
         # If homebrew isn't installed, set this to a value that will guarantee
