@@ -192,7 +192,7 @@ write_cache() {
     rm "$(dirname "$cached")/$(basename $1)."* 2>/dev/null
     # For each new supporting file, move it to the same directory as the cached content, and prefix
     # its name with the same name as the manfile.
-    if [[ $(command ls -A "${3}/") ]]; then
+    if [[ -n "$3" ]] && [[ $(command ls -A "${3}/") ]]; then
         local f
         for f in $3/* ; do mv $f "$(dirname "$cached")/$(basename $1).$(basename $f)"; done
     fi
