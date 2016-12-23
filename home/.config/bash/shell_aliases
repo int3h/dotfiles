@@ -43,11 +43,11 @@ alias mrsync="rsync -auvrtEz --exclude-from=$HOME/.rsync_exclude.conf --progress
 type -t n >/dev/null && alias iorepl='n io use $(n io --stable) -i'
 
 if type -t jupyter >/dev/null; then
-    alias pynote='jupyter notebook'
+    alias notebook='jupyter notebook'
 elif type -t ipython3 >/dev/null; then
-    alias pynote='ipython3 notebook'
+    alias notebook='ipython3 notebook'
 elif type -t ipython >/dev/null; then
-    alias pynote='ipython notebook'
+    alias notebook='ipython notebook'
 fi
 
 alias sshconf="$VISUAL $HOME/.ssh/config"
