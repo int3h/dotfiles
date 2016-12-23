@@ -1,10 +1,10 @@
 bin
 bin/mac
 
-.gnupg
 .config
 .bash.d
 
 .gitsupport
+.gnupg
 .matplotlib
 .atom
