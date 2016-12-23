@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Use '{}' as a placeholder for arguments to xargs
-alias xargs='xargs -0 -I{}'
+alias xargs='xargs -I{}'
 
 # Alias `grep` to automatically enable color output
 alias grep='grep --color=auto'
