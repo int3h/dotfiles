@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+umask u=rwx,g=rwx,o=
+
 AGENT_NAME="com.matthewtorok.brew-update"
 AGENT_PATH="${HOME}/Library/LaunchAgents/${AGENT_NAME}.plist"
 OUTDATED_FILE="${HOME}/.brew-outdated"
@@ -54,6 +56,8 @@ agent_install() {
 		    <string>/Users/mtorok/</string>
             <key>Nice</key>
             <integer>1</integer>
+            <key>Umask</key>
+            <integer>7</integer>
 		</dict>
 		</plist>
 	AGENTEOF
