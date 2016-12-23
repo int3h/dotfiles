@@ -6,5 +6,8 @@ syntax: glob
 .ctrlproot
 *.ipynb
 WebKitBuild
+.vscode
+typings
+.settings
 syntax: regexp
 \.sublime-(workspace|project)$
