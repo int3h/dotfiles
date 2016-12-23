@@ -67,6 +67,7 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	required = true
+	process = git-lfs filter-process
 
 [include]
 	# Include system-specific config. You must manually create this symlink to Mac or Linux config.
