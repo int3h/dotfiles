@@ -7,7 +7,9 @@ case $(uname -s) in
     Linux) export OS='Linux';;
 esac
 
-[ -f ~/.config/bash/shell_local ] && source ~/.config/bash/shell_local
+_USER_CONFIG_PATH="$HOME/.bash.d"
+
+[ -f "$_USER_CONFIG_PATH/local" ] && source "$_USER_CONFIG_PATH/local"
 
 
 #################################
@@ -44,7 +46,7 @@ HISTSIZE=5000
 HISTFILESIZE=10000
 export HISTCONTROL=ignoredups:ignorespace;
 # Change the file history commands are saved to
-export HISTFILE=~/.config/bash/shell_history
+export HISTFILE="$_USER_CONFIG_PATH/history"
 # Append to the existing history file, rather than overwriting it
 shopt -s histappend;
 # Save each command when the prompt is re-displayed, rather than only at shell exit
@@ -303,8 +305,7 @@ if type -p most >/dev/null; then export PAGER="$(type -p most)"; fi
 ##### Source secondary config files
 #################################
 
-[ -f ~/.config/bash/shell_aliases ] && source ~/.config/bash/shell_aliases
-[ -f ~/.config/bash/shell_commands ] && source ~/.config/bash/shell_commands
+[ -e "$_USER_CONFIG_PATH/__init__.sh" ] && source "$_USER_CONFIG_PATH/__init__.sh"
 
 
 #################################

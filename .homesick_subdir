@@ -3,8 +3,8 @@ bin/mac
 
 .gnupg
 .config
+.bash.d
 
 .gitsupport
 .matplotlib
-.config/bash
 .atom

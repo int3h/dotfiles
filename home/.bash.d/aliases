@@ -52,6 +52,3 @@ fi
 
 alias sshconf="$VISUAL $HOME/.ssh/config"
 
-# Source our OS-specific aliases
-[[ "$OS" == "Mac" ]] && . ~/.config/bash/shell_aliases.mac
-[[ "$OS" == "Linux" ]] && . ~/.config/bash/shell_aliases.linux

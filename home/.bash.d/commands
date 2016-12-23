@@ -68,11 +68,17 @@ bashrc() {
     # We usually add the -h option to mvim when used as $VISUAL. Edit files here w/ plain cmd.
     [[ "$VISUAL" == mvim* ]] && local rc_editor='mvim'
 
-    (
-        printf "$HOME/.bash_profile\0$HOME/.inputrc\0$HOME/.ssh/config\0"
-        command find ~/.config/bash -not -name 'shell_history' -not -type d -not -name '.DS_Store' -print0
-        printf "$HOME/.bash_completion\0$HOME/.bashrc\0$HOME/.bash_logout\0"
-    ) | command xargs -0 $rc_editor
+    if [[ "$OS" == "Mac" ]]; then
+        local os_config="$_USER_CONFIG_PATH/mac"
+    else
+        local os_config="$_USER_CONFIG_PATH/linux"
+    fi
+
+    $rc_editor "$HOME/.bash_profile" \
+        "$_USER_CONFIG_PATH/aliases" "$os_config/aliases" \
+        "$_USER_CONFIG_PATH/commands" "$os_config/commands" \
+        "$_USER_CONFIG_PATH/local" "$_USER_CONFIG_PATH/__init__.sh" \
+        "$HOME/.bash_completion" "$HOME/.inputrc" "$HOME/.bashrc" "$HOME/.bash_logout"
 }
 
 
@@ -145,12 +151,4 @@ if type -t pstree >/dev/null && type -t grcat >/dev/null; then
     }
     alias pstree='_pstree'
 fi
-
-
-if [[ "$OS" == "Mac" ]] && [[ -f ~/.config/bash/shell_commands.mac ]]; then
-    source ~/.config/bash/shell_commands.mac
-elif [[ "$OS" == "Linux" ]]; then
-    source ~/.config/bash/shell_commands.linux
-fi
-
 
