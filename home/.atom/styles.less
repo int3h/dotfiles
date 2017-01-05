@@ -197,37 +197,6 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-//    ######## #### ##       ########    ####  ######   #######  ##    ##  ######
-//    ##        ##  ##       ##           ##  ##    ## ##     ## ###   ## ##    ##
-//    ##        ##  ##       ##           ##  ##       ##     ## ####  ## ##
-//    ######    ##  ##       ######       ##  ##       ##     ## ## ## ##  ######
-//    ##        ##  ##       ##           ##  ##       ##     ## ##  ####       ##
-//    ##        ##  ##       ##           ##  ##    ## ##     ## ##   ### ##    ##
-//    ##       #### ######## ########    ####  ######   #######  ##    ##  ######
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Change the icon for JavaScript files from a thin, hard-to-see outline, to a beefy block icon
-.custom-js-icon() {
-  @import "../../../../../.atom/packages/file-icons/styles/icons";
-  @import "../../../../../.atom/packages/file-icons/styles/items";
-
-  .js-custom-icon { .mf; content: "\f129"; font-size: large; }
-
-  @{pane-tab-override}, .icon-file-text {
-    &[data-name$=".js"]:before,
-    &[data-name$=".es6"]:before,
-    &[data-name$=".es"]:before,
-    &[data-name$=".js.erb"]:before  {
-      .js-custom-icon;
-    }
-  }
-}
-.custom-js-icon();
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
 //    ########    ###    ########     ########     ###    ########
 //       ##      ## ##   ##     ##    ##     ##   ## ##   ##     ##
 //       ##     ##   ##  ##     ##    ##     ##  ##   ##  ##     ##
