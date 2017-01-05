@@ -184,11 +184,22 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Highlight Line
+//
+//    ##       #### ##    ## ########     ######   #######  ##        #######  ########
+//    ##        ##  ###   ## ##          ##    ## ##     ## ##       ##     ## ##     ##
+//    ##        ##  ####  ## ##          ##       ##     ## ##       ##     ## ##     ##
+//    ##        ##  ## ## ## ######      ##       ##     ## ##       ##     ## ########
+//    ##        ##  ##  #### ##          ##       ##     ## ##       ##     ## ##   ##
+//    ##        ##  ##   ### ##          ##    ## ##     ## ##       ##     ## ##    ##
+//    ######## #### ##    ## ########     ######   #######  ########  #######  ##     ##
+//
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .highlight-line-tweaks() {
-  atom-text-editor .line.highlight-line {
+  // Need the `.editor` selector to increase specificity, so that the rule is strong enough to
+  // override the default higihglight-line package's selector.
+  // See: http://flight-manual.atom.io/shadow-dom/sections/removing-shadow-dom-styles/#i-followed-the-guide-but-now-my-styling-is-broken
+  atom-text-editor.editor .line.highlight-line {
     background-color: @syntax-gutter-background-color-selected !important;
   }
 }
