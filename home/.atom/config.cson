@@ -67,6 +67,7 @@
     inlineFnCompletion: false
     inlineFnCompletionDocumentation: true
     origins: false
+    snippetsFirst: true
     urls: false
     useSnippets: true
     useSnippetsAndFunction: true
@@ -148,6 +149,7 @@
       "native-ui"
       "base16-syntax"
     ]
+    warnOnLargeFileLimit: 10
   docblockr:
     deep_indent: true
     indentation_spaces: 2
@@ -165,8 +167,8 @@
     undoGroupingInterval: 400
   "exception-reporting":
     userId: "f30288a8-ada4-dbf9-218f-8a62de00c794"
+  "file-icons": {}
   "find-and-replace":
-    closeFindPanelAfterSearch: true
     openProjectFindResultsInRightPane: true
   "flatwhite-syntax":
     ebmedded: "Full"
@@ -186,14 +188,12 @@
     variant: "No Dimmed Colors"
   "highlight-line":
     hideHighlightOnSelect: true
-    underline: "dotted"
   "highlight-selected":
+    highlightBackground: true
+    lightTheme: true
     minimumLength: 2
-    showInStatusBar: false
   "language-babel":
     allowLocalOverride: true
-    autoIndentJSX: true
-    createMap: true
   "language-markdown":
     disableLanguageGfm: false
     removeEmptyListItems: false
@@ -204,6 +204,7 @@
     lintOnFly: false
     showErrorInline: false
     showErrorTabLine: true
+    showErrorTabProject: false
     showProviderName: false
     statusIconScope: "File"
   "linter-eslint":
@@ -215,7 +216,7 @@
     liveUpdate: false
     useGitHubStyle: true
   minimap:
-    minimapScrollIndicator: false
+    autoToggle: false
     plugins:
       bookmarks: true
       bookmarksDecorationsZIndex: 0
@@ -257,6 +258,11 @@
   "status-bar":
     cursorPositionFormat: "Line %L, Column %C"
     selectionCountFormat: "(Lines: %L, Chars: %C)"
+  "symbols-list":
+    startUp: false
+  "symbols-tree-view":
+    defaultWidth: 150
+    zAutoHideTypes: "undefined array unknown string property constant boolean object variable function-expression"
   tabs:
     enableVcsColoring: true
   "todo-show":
@@ -272,12 +278,16 @@
     sortBy: "All"
   "tree-view":
     alwaysOpenExisting: true
-    autoReveal: true
+    focusOnReveal: false
     squashDirectoryNames: true
   "vim-modeline":
     insertPrefix: "vim"
   welcome:
     showOnStartup: false
+".babel.regexp.source":
+  editor:
+    preferredLineLength: 100
+    tabLength: 4
 ".git-commit.text":
   editor:
     preferredLineLength: 72
