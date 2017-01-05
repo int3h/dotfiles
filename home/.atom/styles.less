@@ -108,7 +108,7 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
     // }
   }
 
-  atom-text-editor.is-focused, atom-text-editor.is-focused::shadow, :host.is-focused {
+  atom-text-editor.is-focused, atom-text-editor.is-focused {
     .line.cursor-line {
       background-color: @syntax-gutter-background-color-selected;
 
@@ -118,18 +118,18 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
     }
   }
 }
-.polaris-syntax-theme-tweaks();
+// .polaris-syntax-theme-tweaks();
 
 
 // .gruvbox-tweaks() when (@syntax-text-color = rgba(235, 219, 178, 0.5)) {
 .gruvbox-tweaks() {
   // Gruvbox uses yellow for editor text, which is unreadable in UI text boxes w/ a light UI theme
-  atom-text-editor::shadow *, atom-text-editor .text {
+  atom-text-editor .text {
     color: @ui-fg !important; // Use the UI theme's foreground color, not syntax theme's
     text-decoration: line-through;
   }
 
-  div.settings-view atom-text-editor::shadow[mini] {
+  div.settings-view atom-text-editor[mini] {
     .text .source, .string.unquoted.heredoc, .source .source {
       color: @ui-fg !important;
     }
@@ -382,9 +382,9 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
   @visible-area-color: rgba(146, 146, 146, 1.0);
 
   // Only apply the styles to editors with a minimap
-  @{plain-text-editor}[with-minimap]::shadow {
+  @{plain-text-editor}[with-minimap] {
     // Hide the editor's native scrollbar, so that we can use the minimap exclusively to scroll
-    .vertical-scrollbar { opacity: 0; width: 0; }
+    // .vertical-scrollbar { opacity: 0; width: 0; }
 
     atom-text-editor-minimap {
       // Set background to 1px border + chosen background color (specified via a linear gradient
@@ -395,7 +395,7 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
       // background-color: @minimap-bgcolor;
 
       // Give the "visible area" block top+bottom borders, and a more transparent bg
-      &::shadow .minimap-visible-area::after {
+      & .minimap-visible-area::after {
         background-color: fadeout(@visible-area-color, 70%);
         border-top: 1px solid @visible-area-color;
         border-bottom: 1px solid @visible-area-color;
@@ -418,7 +418,7 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
     // }
   }
 }
-.minimap-tweaks();
+// .minimap-tweaks();
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -467,14 +467,13 @@ autocomplete-suggestion-list {
 
 .antialiasing() {
   // On non-Retina displays, use subpixel antialiasing (makes text easy to read, but a bit "fat")
-  atom-text-editor, .tab-bar .tab .title {
-    -webkit-font-smoothing: subpixel-antialiased;
-    // -webkit-font-smoothing: antialiased;
-  }
+  atom-text-editor { -webkit-font-smoothing: subpixel-antialiased; }
+  // .tab-bar .tab .title { -webkit-font-smoothing: antialiased; }
 
   // On Retina displays, use regular (non-subpixel) antialiasing (looks sharper, though thinner)
   @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-      atom-text-editor, .tab-bar .tab .title { -webkit-font-smoothing: antialiased; }
+      atom-text-editor { -webkit-font-smoothing: antialiased; }
+      // .tab-bar .tab .title { -webkit-font-smoothing: antialiased; }
   }
 }
 // .antialiasing();
