@@ -165,14 +165,6 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
 // .genisis-tweaks();
 
 
-.native-ui-tweaks() {
-  .tree-view-resizer {
-    // border-bottom: 1px solid #C7C7C7;
-  }
-}
-.native-ui-tweaks();
-
-
 .flatwhite-tweaks() {
     atom-text-editor {
         .source.embedded {
@@ -518,4 +510,39 @@ autocomplete-suggestion-list {
 .language-git-commit-tweaks();
 
 
-// vim:set fileencoding=utf8 fileformat=unix filetype=less tabstop=4 expandtab:
+
+.native-ui-revert() {
+  .command-palette .editor.mini.mini {
+    border: none;
+    background-color: transparent;
+    height: 150px;
+    // box-shadow: none !important;
+  }
+
+  .tab-bar.tab-bar {
+    background: darken(#fff, 30%); // darken(#fff, 17%);
+    // border-bottom: 1px solid #999799;
+    // height: 24px;
+    // box-shadow: none;
+
+    // .tab {
+    //   // box-shadow: none;
+    //
+    //   &:first-child,
+    //   &.active:first-child,
+    //   &:last-child {
+    //     box-shadow: none;
+    //   }
+    // }
+
+    .tab.active {
+      // box-shadow: none;
+      background: darken(#fff, 17%);
+    }
+  }
+
+  .project-root .project-root-header .icon-repo:before {
+    display: inline-block;
+  }
+}
+.native-ui-revert();
