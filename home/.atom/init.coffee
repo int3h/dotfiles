@@ -176,15 +176,15 @@ class AntialiasCop
     # `<div>` from the page, and returns the saved CSSRuleList.
     getRulesForStyleElement: (element) ->
         if element?
+            clone = element.cloneNode(true)
+
             parent = document.createElement('div')
             parent.style.display = 'none';
-            shadow = parent.createShadowRoot()
-
-            clone = element.cloneNode(true)
-            shadow.appendChild(clone)
+            parent.appendChild(clone)
 
             atom.views.getView(atom.workspace).appendChild?(parent)
             rules = clone.sheet?.rules
+
             parent.remove()
 
         return rules ? []
@@ -210,18 +210,13 @@ class AntialiasCop
                 ""
 
         """
-        atom-text-editor,
-        atom-text-editor::shadow,
-        .tab-bar .tab .title {
-            -webkit-font-smoothing: subpixel-antialiased;
-        }
+        atom-text-editor { -webkit-font-smoothing: subpixel-antialiased; }
+        /* .tab-bar .tab .title { -webkit-font-smoothing: subpixel-antialiased; } */
+
 
         @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            atom-text-editor,
-            atom-text-editor::shadow,
-            .tab-bar .tab .title {
-                -webkit-font-smoothing: antialiased;
-            }
+            atom-text-editor { -webkit-font-smoothing: antialiased; }
+            /* .tab-bar .tab .title { -webkit-font-smoothing: antialiased; } */
         }
 
         #{disableSubAARules}
