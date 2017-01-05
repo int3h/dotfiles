@@ -179,8 +179,7 @@
     distractionFree:
       hideBottom: false
       hideFiles: false
-  "git-diff":
-    showIconsInEditorGutter: true
+  "git-diff": {}
   "git-plus":
     gitPath: "/usr/local/bin/git"
   "gruvbox-plus-syntax":
