@@ -207,7 +207,7 @@
     showProviderName: false
     statusIconScope: "File"
   "linter-eslint":
-    eslintrcPath: "/Users/mtorok/.eslintrc"
+    eslintrcPath: "/Users/mtorok/.eslintrc.yml"
     globalNodePath: "/usr/local"
     useGlobalEslint: true
   "markdown-preview":
