@@ -85,7 +85,8 @@
     ]
   "base16-syntax":
     matchUserInterfaceTheme: false
-    scheme: "OceanicNext"
+    scheme: "Harmonic"
+    style: "Light"
   "command-palette":
     preserveLastSearch: true
   core:
@@ -145,7 +146,7 @@
     telemetryConsent: "limited"
     themes: [
       "native-ui"
-      "oceanic-reef-syntax"
+      "base16-syntax"
     ]
   docblockr:
     deep_indent: true
@@ -155,7 +156,7 @@
     spacer_between_sections: true
   editor:
     fontFamily: "Hack"
-    fontSize: 11
+    fontSize: 12
     preferredLineLength: 100
     scrollPastEnd: true
     showIndentGuide: true
@@ -167,6 +168,8 @@
   "find-and-replace":
     closeFindPanelAfterSearch: true
     openProjectFindResultsInRightPane: true
+  "flatwhite-syntax":
+    ebmedded: "Full"
   "fuzzy-finder":
     preserveLastSearch: true
     searchAllPanes: true
@@ -229,9 +232,10 @@
   "minimap-selection":
     highlightCursorsLines: true
   "one-dark-ui":
-    fontSize: 13
+    fontSize: 11
   "one-light-ui":
-    fontSize: 13
+    fontSize: 11
+    tabSizing: "Even"
   "package-generator":
     packageSyntax: "coffeescript"
   "project-manager":
