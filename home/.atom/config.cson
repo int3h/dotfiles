@@ -238,11 +238,6 @@
     tabSizing: "Even"
   "package-generator":
     packageSyntax: "coffeescript"
-  "project-manager":
-    showPath: false
-  "project-plus":
-    newWindow: true
-    showPath: true
   "spell-check":
     addKnownWords: true
     grammars: [
