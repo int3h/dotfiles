@@ -17,6 +17,11 @@
 	cmd = /usr/local/bin/bcomp -fv=\"Text Merge\" -mergeoutput=\"$MERGED\" -vcs1=\"$MERGED\" -title1=\"Mine\" -title2=\"Yours\" -title3=\"Common Parent\" -center=\"$BASE\" \"$LOCAL\" \"$REMOTE\"
 	trustExitCode = true
 
+[mergetool "araxis"]
+	path = /Applications/Araxis Merge.app/Contents/Utilities/compare
+[difftool "araxis"]
+	path = /Applications/Araxis Merge.app/Contents/Utilities/compare
+
 [difftool]
 	prompt = false
 [diff]
