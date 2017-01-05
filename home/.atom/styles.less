@@ -7,7 +7,64 @@
 // Hack to allow us to bypass the `:extend` command (LESS won't extend selector variables)
 @plain-text-editor: atom-text-editor;
 // Convenience to save us from having to add a `atom-text-editor::shadow` selector for editors
-atom-text-editor::shadow:extend(atom-text-editor all) {}
+// atom-text-editor::shadow:extend(atom-text-editor all) {}
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//    ##    ##  #######  ######## ########  ######
+//    ###   ## ##     ##    ##    ##       ##    ##
+//    ####  ## ##     ##    ##    ##       ##
+//    ## ## ## ##     ##    ##    ######    ######
+//    ##  #### ##     ##    ##    ##             ##
+//    ##   ### ##     ##    ##    ##       ##    ##
+//    ##    ##  #######     ##    ########  ######
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**********
+==> Atom v1.13.0+ and Editor Styling
+
+Atom v1.13.0 removed the shadow DOM from editors, which means that global page styles can now effect
+the styles in editor elements. This means that we sometimes have to fight with some ancestory style
+rule when trying to style the editor.
+
+Since `!important` can have unintended side-effects, the way to 'win' the fight and have our rules
+applied is to have a selector with greater specificity than the selector we're trying to override
+(CSS semantics state that the rule with higher specificity takes precedence over lower specificity).
+
+A cheap way to increase specificity is to just repeat a selector multiple times. So
+`atom-text-editor .text` becomes `atom-text-editor .text.text`. Or, `atom-text-editor[mini]` becomes
+`atom-text-editor[mini][mini]`. This doesn't change the selector's meaning, it just increases
+specificity harmlessly.
+
+See: http://flight-manual.atom.io/shadow-dom/sections/removing-shadow-dom-styles/#i-followed-the-guide-but-now-my-styling-is-broken
+
+**********/
+
+
+/**********
+==> Section Dividers
+
+The oversized ASCII section header comments in this file help make the section name visible in the
+minimap, so I can easily scroll to the right section. They are generated via the `figlet` package,
+using the "Banner3" style.
+
+Copy and paste the following template, replacing "Heading Name" with your heading name:
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//    Heading Name
+//
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Then select the entire line with the heading name (and only that line), then use the command pallet
+to activate the `Figlet: Convert` command, and select "Banner3" as the style.
+
+**********/
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
