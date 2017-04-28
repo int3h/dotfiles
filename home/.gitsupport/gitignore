@@ -12,3 +12,5 @@ projects/superconductor/opencl/bin
 .vscode
 typings
 .settings
+node_modules
+
