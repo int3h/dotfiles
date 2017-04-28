@@ -51,8 +51,7 @@ export HISTFILE="$_USER_CONFIG_PATH/history"
 shopt -s histappend;
 # Save each command when the prompt is re-displayed, rather than only at shell exit
 #[[ $_BASHRC_DID_RUN ]] || PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;}history -a;history -c;history -r";
-[[ $_BASHRC_DID_RUN ]] || PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;}history -a";
-
+[[ $_BASHRC_DID_RUN ]] || PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }history -a"
 
 #################################
 ##### PATH setup (dependency of most other commands)
@@ -122,7 +121,7 @@ if type -t 'npm' >/dev/null; then
         fi
     }
 
-    [[ $_BASHRC_DID_RUN ]] || export PROMPT_COMMAND="${PROMPT_COMMAND}; add_npm_to_path"
+    [[ $_BASHRC_DID_RUN ]] || PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }add_npm_to_path"
 fi
 
 
@@ -345,7 +344,7 @@ case $- in
 *i*)
     if [[ $TERM != dumb ]] && tput cols >/dev/null 2>/dev/null; then
         if [[ $_BASHRC_DID_RUN != 1 ]]; then
-            export PROMPT_COMMAND="$PROMPT_COMMAND; resize_prompt_dirtrim"
+            PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }resize_prompt_dirtrim"
         fi
         PROMPT_DIRTRIM=3
 
@@ -444,6 +443,7 @@ case $- in
             | cut -c 2- \
         )"
 
+        export PROMPT_COMMAND
         export _BASHRC_DID_RUN=1
 
         # Initialize iTerm2 integration (works on Linux over SSH, too)
