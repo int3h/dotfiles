@@ -160,43 +160,33 @@ class AntialiasCop
     # Gets the syntax theme's style element, then attaches a clone
     findBoldSelectors: ->
         boldSelectors = []
-        for styleElement in @getSyntaxStyleElements()
-            for rule in @getRulesForStyleElement(styleElement)
-                if rule.style.fontWeight is 'bold' or rule.style.fontWeight is '700'
+
+        for ruleList in @getRulesForStyleElements()
+            for rule in ruleList
+                if rule.style?.fontWeight is 'bold' or rule.style?.fontWeight is '700'
                     boldSelectors.push(rule.selectorText)
 
         return boldSelectors
 
 
-    # Get a CSSRuleList for an Atom `<style>` element.
-    #
-    # Atom's StyleElement doesn't have any CSS rules attached to it, since they're not attached to
-    # the DOM. This method clones the `<style>` element, then attaches that to the DOM under a
-    # temporary, invisible `<div>`. It grabs the initialized CSSRuleList, removes the temporary
-    # `<div>` from the page, and returns the saved CSSRuleList.
-    getRulesForStyleElement: (element) ->
-        if element?
-            clone = element.cloneNode(true)
+    getRulesForStyleElements: ->
+        syntaxTheme = @getSyntaxTheme()
+        return [] unless syntaxTheme?.stylesheetsActivated
 
-            parent = document.createElement('div')
-            parent.style.display = 'none';
-            parent.appendChild(clone)
+        stylesheetPaths = (sheet[0] for sheet in syntaxTheme.stylesheets)
 
-            atom.views.getView(atom.workspace).appendChild?(parent)
-            rules = clone.sheet?.rules
+        styleRules = for stylePath in stylesheetPaths
+            originalElement = atom.styles.styleElementsBySourcePath[stylePath]
+            activeElement = atom.stylesElement.styleElementClonesByOriginalElement.get(originalElement)
+            activeElement?.sheet?.rules
 
-            parent.remove()
-
-        return rules ? []
+        # Filter out nulls/undefineds
+        (rule for rule in styleRules when rule?)
 
 
-    # Finds the current syntax theme, and looks up its stylesheet(s) in Atom's StyleManager.
-    getSyntaxStyleElements: ->
-        [syntaxTheme] = (pkg for pkg in atom.themes.getActiveThemes() when pkg.metadata.theme is "syntax")
-
-        for sheet in (syntaxTheme?.stylesheets ? [])
-            stylePath = sheet[0]
-            atom.styles.styleElementsBySourcePath[stylePath]
+    getSyntaxTheme: ->
+        for theme in atom.themes.getActiveThemes()
+            return theme if theme.metadata.theme is "syntax"
 
 
     makeStylesheet: (selectors) ->
