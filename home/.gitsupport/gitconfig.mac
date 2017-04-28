@@ -38,20 +38,20 @@
 	;conflictstyle = diff3
 
 # `legit` support (http://www.git-legit.org)
-[alias]
-	branches = !legit branches
-	graft = !legit graft
-	harvest = !legit harvest
-	publish = !legit publish
-	unpublish = !legit unpublish
-	sprout = !legit sprout
-	sync = !legit sync
-	switch = !legit switch
-	resync = !legit resync
+;[alias]
+	;branches = !legit branches
+	;graft = !legit graft
+	;harvest = !legit harvest
+	;publish = !legit publish
+	;unpublish = !legit unpublish
+	;sprout = !legit sprout
+	;sync = !legit sync
+	;switch = !legit switch
+	;resync = !legit resync
 
-[filter "media"]
-	clean = git media clean %f
-	smudge = git media smudge %f
-	required = true
+;[filter "media"]
+	;clean = git media clean %f
+	;smudge = git media smudge %f
+	;required = true
 
 #  vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=gitconfig:
