@@ -234,9 +234,12 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 .tree-view-tweaks() {
+    atom-panel-container.left > atom-dock atom-pane > ul.tab-bar {
+        display: none;
+    }
+
   .tree-view {
-    // background: lighten(@base-background-color, 0%);
-    // border-right: 1px solid @pane-item-border-color;
+        // background: lighten(@base-background-color, 10%);
 
     // Make the selected file's background darker than usual
     // .selected:before {
@@ -247,7 +250,7 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
     .list-item { line-height: 2em !important; }
 
     // Make the top-level folder (project roots) more distinct
-    & > li.project-root  {
+        & > ol.list-tree > li.project-root  {
       // Make project root's font size larger
       & > .header {
         font-size: 1.1em;
