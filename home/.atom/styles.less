@@ -238,31 +238,35 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
         display: none;
     }
 
-  .tree-view {
+    .tree-view {
         // background: lighten(@base-background-color, 10%);
 
-    // Make the selected file's background darker than usual
-    // .selected:before {
-    //   background: darken(@base-background-color, 8%); //hsla(@ui-hue, @ui-saturation, 50%, .25);
-    // }
+        // Make the selected file's background darker than usual
+        // .selected:before {
+        //   background: darken(@base-background-color, 8%); //hsla(@ui-hue, @ui-saturation, 50%, .25);
+        // }
 
-    // Make the tree view list slightly more compact (default line-height is 24px/~2.2em)
-    .list-item { line-height: 2em !important; }
+        // Make the tree view list slightly more compact (default line-height is 24px/~2.2em)
+        .list-item { line-height: 2em !important; }
 
-    // Make the top-level folder (project roots) more distinct
+        // Make the top-level folder (project roots) more distinct
         & > ol.list-tree > li.project-root  {
-      // Make project root's font size larger
-      & > .header {
-        font-size: 1.1em;
-      }
+            // Make project root's font size larger
+            & > .header {
+            font-size: 1.1em;
+        }
 
-      // Put a border + margin/padding before project root (skipping the first one)
-      &:nth-child(1n+2) {
-        margin-top: 0.5em;
-        border-top: 1px solid darken(@base-background-color, 10%);
-        padding-top: 0.5em;
-      }
+        // Put a border + margin/padding before project root (skipping the first one)
+        &:nth-child(1n+2) {
+            margin-top: 0.5em;
+            border-top: 1px solid darken(@base-background-color, 10%);
+            padding-top: 0.5em;
+        }
     }
+}
+
+  atom-dock.left > div > .atom-dock-toggle-button {
+      display: none;
   }
 }
 .tree-view-tweaks();
@@ -401,7 +405,7 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
 //       ###    ##     ## ########  #######   ######   #######  ##     ## ########  ##       ######## ######## ########
 //      ## ##   ##     ##    ##    ##     ## ##    ## ##     ## ###   ### ##     ## ##       ##          ##    ##
 //     ##   ##  ##     ##    ##    ##     ## ##       ##     ## #### #### ##     ## ##       ##          ##    ##
-//    ##     ## ##     ##    ##    ##     ## ##       ##     ## ## ### ## ########  ##       ######      ##    ######
+//     ######   #######  ##     ## ########  ##       ######## ######## ########
 //    ######### ##     ##    ##    ##     ## ##       ##     ## ##     ## ##        ##       ##          ##    ##
 //    ##     ## ##     ##    ##    ##     ## ##    ## ##     ## ##     ## ##        ##       ##          ##    ##
 //    ##     ##  #######     ##     #######   ######   #######  ##     ## ##        ######## ########    ##    ########
@@ -529,14 +533,14 @@ autocomplete-suggestion-list {
     // box-shadow: none;
 
     // .tab {
-    //   // box-shadow: none;
-    //
+  //   //     box-shadow: none;
+  //
     //   &:first-child,
     //   &.active:first-child,
     //   &:last-child {
     //     box-shadow: none;
-    //   }
-    // }
+  //   }
+  // }
 
     .tab.active {
       // box-shadow: none;
