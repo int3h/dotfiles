@@ -301,6 +301,9 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
 
         border-width: 0 1px 0 0;
         border-image: @sb-border-image 0 1 0 0 stretch;
+        // Even though we're using an image, we need to set this for the border to be visible. The
+        // default style is 'none', so if we don't set it, the border will be hidden.
+        border-style: solid;
       }
 
       // Make the linter status be the last item on the left side, by floating everything else left  a
@@ -315,6 +318,7 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
 
         border-width: 0 0 0 1px;
         border-image: @sb-border-image 0 0 0 1 stretch;
+        border-style: solid;
       }
     }
 
