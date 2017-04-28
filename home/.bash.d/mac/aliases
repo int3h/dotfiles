@@ -19,11 +19,11 @@ type -t mvim >/dev/null && alias v='mvim'
 alias chmod='chmod -hvv'
 
 # Detailed file listing; show hidden files; append a '/' to directories; use human-readable sizes
-alias ls='CLICOLOR_FORCE=1 grc ls -lAOphG'
+alias ls='CLICOLOR_FORCE=1 grc /bin/ls -lAOphG'
 # Like our regular detailed `ls`, but also show extended attributes
-alias lsx='CLICOLOR_FORCE=1 grc ls -lAOpheG@e'
+alias lsx='CLICOLOR_FORCE=1 grc /bin/ls -lAOpheG@e'
 # Simplified `ls`: don't show hidden files
-alias lsd='CLICOLOR_FORCE=1 grc ls -lOphG'
+alias lsd='CLICOLOR_FORCE=1 grc /bin/ls -lOphG'
 
 # Run n make processes in parallel, where n = (number of CPUs) + 1
 alias make="make -j$(( $(sysctl -n hw.ncpu) + 1 ))"
