@@ -286,48 +286,104 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
 
 .status-bar-tweaks() {
   status-bar  {
-    @sb-border-color: contrast(@tool-panel-background-color, darken(@base-border-color, 10%), lighten(@base-border-color, 10%));
-    @sb-border-image: linear-gradient(@tool-panel-background-color, @sb-border-color 20%, @sb-border-color 80%, @tool-panel-background-color);
+    // We add a divider between status bar items, consisting of a gradient from a lighter top, to a
+    // slightly darker bottom, using darkened standard UI colors as a base.
+    .get-divider-color() {
+      // These variable definitions are encapsulated in a mixin so that we can override them later
+      // on a per-theme basic. The first mixin has no guard, and acts as a default.
+      @divider-color-bottom: darken(@tab-background-color-active, 10%);
+      @divider-color-top: darken(@tool-panel-background-color, 10%);
+    }
+    .get-divider-color() when (@tab-background-color-active = #d3d3d3) {
+      // Divider color override for the native-ui theme.
+      @divider-color-bottom: darken(@tab-background-color-active, 10%);
+      @divider-color-top: darken(#EDEBED, 10%);
+    }
+    .get-divider-color();
 
-    // Add border between sidebar and status bar
-    // border-left: 1px solid @sb-border-color;
+
+    .status-block-divider() {
+      // Should be overriden after calling this mixin, to set the left or right margin to 1px
+      border-width: 0 0 0 0;
+
+      border-image-source: linear-gradient(
+        to top,
+        @divider-color-bottom,
+        @divider-color-top
+      );
+
+      border-image-slice: 0 1 0 1;
+      border-image-repeat: stretch;
+
+      // Even though we're using an image, we need to set this for the border to be visible. The
+      // default style is 'none', so if we don't set it, the border will be hidden.
+      border-style: solid;
+    }
+
 
     .status-bar-left {
-      // Add border on the right of every block in the left status bar
-      & > .inline-block,
-      & > linter-bottom-container > .inline-block {
-        margin-right: 1em;
-        padding-right: 1em;
-
-        border-width: 0 1px 0 0;
-        border-image: @sb-border-image 0 1 0 0 stretch;
-        // Even though we're using an image, we need to set this for the border to be visible. The
-        // default style is 'none', so if we don't set it, the border will be hidden.
-        border-style: solid;
+      & > .inline-block:not(.linter-status-count) {
+        .status-block-divider();
+        border-right-width: 1px;
       }
 
       // Make the linter status be the last item on the left side, by floating everything else left  a
-      & > div { float: left; }
-    }
+      & > :not(.linter-status-count) { float: left; }
 
-    .status-bar-right {
-      // Add border on the left of every block in the right status bar
-      & > .inline-block {
-        padding-left: 1em;
-        margin-left: 1em;
-
-        border-width: 0 0 0 1px;
-        border-image: @sb-border-image 0 0 0 1 stretch;
-        border-style: solid;
+      // Fix the positioning of the icons (they're too low when using the `native-ui` theme)
+      .linter-status-count .icon {
+        &:before { top: 0; }
+        color: @text-color;
       }
     }
 
-    // Fix bug where the middle button was rounded instead of the first+last
-    linter-bottom-tab { border-radius: 0 0 0 0 !important; }
-    linter-bottom-tab:first-of-type { border-radius: 4px 0 0 4px !important; }
-    linter-bottom-tab:nth-of-type(1n+2) { border-radius: 0 4px 4px 0 !important; }
-    // There's still a bug if the last tab (project tab) is hidden; the "file" tab then becomes the
-    // last visible tab, but it has a square border because it's still only the second tab element.
+
+    .status-bar-right {
+      & > .inline-block,
+      & > .github-StatusBarTileController {
+        .status-block-divider();
+        border-left-width: 1px;
+      }
+
+      & > .github-StatusBarTileController {
+        & {
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+        & > span .inline-block {
+          .status-block-divider();
+          border-right-width: 1px;
+          padding-right: 10px;
+
+          // Use a smaller, more subtle gradient (shrunk 60%, with the top/bottom 20% transparent)
+          border-image-source: linear-gradient(to top,
+            rgba(0,0,0,0%) 20%,
+            @divider-color-bottom 20%,
+            @divider-color-top 80%,
+            rgba(0,0,0,0%) 80%
+          );
+        }
+      }
+
+      // Set the "busy signal" block to be the same height as other status blocks, so the dividing
+      // line we add to it matches the height of the other diving lines.
+      & > busy-signal.inline-block { height: 20px; }
+      // Fixes a bug where our dividing line border causes the icon to be off-center
+      & > busy-signal.idle::before,
+      & > busy-signal.busy::before {
+        left: 50%;
+        margin-left: -3px;
+      }
+
+      // Make the git status item and busy icon appear to the left of all the other items
+      & > :not(.github-StatusBarTileController):not(busy-signal) {
+        float: right;
+      }
+    }
+
+    // Add border between sidebar and status bar
+    // border-left: 1px solid @sb-border-color;
   }
 
   // Give cursor position bar a min-width big enough for 3 digit lines & column, to cut down on the
@@ -335,6 +391,14 @@ to activate the `Figlet: Convert` command, and select "Banner3" as the style.
   .cursor-position {
     min-width: 12.5em;
     text-align: center;
+  }
+
+
+
+  // Hide the red/orange dot in the gutter when linter's line decoration is enabled (offending text
+  // is still underlined with a red/orange squiggly line).
+  div.gutter[gutter-name="linter-ui-default"] {
+      display: none;
   }
 }
 .status-bar-tweaks();
