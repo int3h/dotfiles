@@ -63,6 +63,16 @@
       space_before_conditional: false
     python:
       max_line_length: 100
+    xml:
+      extra_liners: [
+        "head"
+        "body"
+        "/html"
+        "outline"
+        "/outline"
+      ]
+      preserve_newlines: false
+      wrap_line_length: 100
   "atom-ternjs":
     inlineFnCompletion: false
     inlineFnCompletionDocumentation: true
@@ -76,7 +86,6 @@
     backspaceTriggersAutocomplete: true
     builtinProviderBlacklist: ".source.gfm, .text.md"
     fileBlacklist: [
-      ".*"
       "*.md"
     ]
     includeCompletionsFromAllBuffers: false
@@ -86,12 +95,11 @@
     ]
   "base16-syntax":
     matchUserInterfaceTheme: false
-    scheme: "Harmonic"
+    scheme: "Atelier Sulphurpool"
     style: "Light"
   "command-palette":
     preserveLastSearch: true
   core:
-    closeEmptyWindows: false
     customFileTypes:
       "source.js": [
         "js"
@@ -101,27 +109,31 @@
         "sublime-project"
         "sublime-workspace"
       ]
-    destroyEmptyPanes: false
     disabledPackages: [
       "Sublime-Style-Column-Selection"
-      "autosave"
       "editorconfig"
       "encoding-selector"
       "git-plus"
       "indent-guide-improved"
       "language-javascript-jsx"
       "language-typescript-grammars-only"
-      "metrics"
       "minimap-find-and-replace"
       "minimap-git-diff"
       "minimap-linter"
       "react"
       "todo-show"
+      "file-settings"
       "language-babel"
       "symbols-list"
       "select-quoted"
       "minimap"
       "symbols-tree-view"
+      "merge-conflicts"
+      "minimap-bookmarks"
+      "minimap-selection"
+      "grammar-path-overrides"
+      "antialiser"
+      "autosave"
     ]
     followSymlinks: false
     ignoredNames: [
@@ -144,21 +156,20 @@
       "**/static/libs/**"
     ]
     projectHome: "/Users/mtorok/Documents/Graphistry/graphistry-repos/"
+    restorePreviousWindowsOnStart: "always"
     telemetryConsent: "limited"
     themes: [
       "native-ui"
       "base16-syntax"
     ]
-    warnOnLargeFileLimit: 10
   docblockr:
     deep_indent: true
     indentation_spaces: 2
     indentation_spaces_same_para: 4
     min_spaces_between_columns: 2
-    spacer_between_sections: true
   editor:
     fontFamily: "Hack"
-    fontSize: 12
+    fontSize: 10
     preferredLineLength: 100
     scrollPastEnd: true
     showIndentGuide: true
@@ -167,9 +178,10 @@
     undoGroupingInterval: 400
   "exception-reporting":
     userId: "f30288a8-ada4-dbf9-218f-8a62de00c794"
-  "file-icons": {}
+  "file-icons":
+    strategies: {}
   "find-and-replace":
-    openProjectFindResultsInRightPane: true
+    projectSearchResultsPaneSplitDirection: "right"
   "flatwhite-syntax":
     ebmedded: "Full"
   "fuzzy-finder":
@@ -179,9 +191,11 @@
     distractionFree:
       hideBottom: false
       hideFiles: false
-  "git-diff": {}
+  "git-diff":
+    showIconsInEditorGutter: true
   "git-plus":
     gitPath: "/usr/local/bin/git"
+  "grammar-selector": {}
   "gruvbox-plus-syntax":
     contrast: "Hard"
     variant: "No Dimmed Colors"
@@ -197,23 +211,24 @@
     disableLanguageGfm: false
     removeEmptyListItems: false
   linter:
-    gutterEnabled: false
-    gutterPosition: "Left"
-    ignoreMatchedFiles: "/**/*.min.{js,css}, /**/assets/**"
-    lintOnFly: false
-    showErrorInline: false
-    showErrorTabLine: true
-    showErrorTabProject: false
-    showProviderName: false
-    statusIconScope: "File"
+    ignoreGlob: "**/*.min.{js,css}, /**/assets/**, **/www/**"
+    lintOnChange: false
   "linter-eslint":
     eslintrcPath: "/Users/mtorok/.eslintrc.yml"
     globalNodePath: "/usr/local"
     useGlobalEslint: true
+  "linter-ui-default":
+    gutterPosition: "Left"
+    panelHeight: 69
+    statusBarRepresents: "Current File"
+  "linter-write-good":
+    severityLevel: "Warning"
   "markdown-preview":
     breakOnSingleNewline: true
     liveUpdate: false
     useGitHubStyle: true
+  "merge-conflicts":
+    gitPath: "/usr/local/bin/git"
   minimap:
     autoToggle: false
     plugins:
@@ -231,12 +246,15 @@
     scrollAnimationDuration: 200
   "minimap-selection":
     highlightCursorsLines: true
+  notifications:
+    showErrorsInDevMode: true
   "one-dark-ui":
     fontSize: 11
   "one-light-ui":
     fontSize: 11
     tabSizing: "Even"
   "package-generator":
+    createInDevMode: true
     packageSyntax: "coffeescript"
   "spell-check":
     addKnownWords: true
@@ -277,12 +295,16 @@
     sortBy: "All"
   "tree-view":
     alwaysOpenExisting: true
+    autoReveal: true
     focusOnReveal: false
     squashDirectoryNames: true
   "vim-modeline":
     insertPrefix: "vim"
   welcome:
     showOnStartup: false
+".ansible.source":
+  editor:
+    tabLength: 2
 ".babel.regexp.source":
   editor:
     preferredLineLength: 100
