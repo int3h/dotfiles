@@ -60,24 +60,6 @@ get_name() {
 display_www() {
     # If the manfile is a built-in Mac OS X man file, open it on the Apple website instead of
     # generating a new HTML file locally.
-    if [[ $1 =~ ^/usr/share/man/.* ]]; then
-		print_verbosely "Command is a Mac OS X standard command. Attempting to open man page on Apple's developer web portal."
-
-        # Some man files are compressed, but their URL won't actually include ".gz", so remove it
-        local manfile_name="$(basename "${1%.gz}")"
-        local manfile_section="$(basename "$(dirname "$1")")"
-        local URL="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/${manfile_section}/${manfile_name}.html"
-        print_verbosely "... checking URL: $URL"
-        check_url $URL
-        if [[ $? -eq 0 ]]; then
-			print_verbosely "Man page found on Apple's developer portal. Opening."
-            open "$URL"
-            return 0
-		else
-			print_verbosely "Man page NOT found on Apple's developer portal. Will try to generate HTML man page locally."
-			return 2
-        fi
-	fi
 
     if [[ $1 =~ git(-[^\/]+)?\.[0-9]+ ]]; then
 		print_verbosely "Command is a git command. Attempting to open man page on the Git website."
