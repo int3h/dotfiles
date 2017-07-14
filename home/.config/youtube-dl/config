@@ -1,0 +1,25 @@
+# Just download the single video, not the entire playlist, if the link is to a video in a playlist
+--no-playlist
+
+# Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames
+--restrict-filenames
+
+# Do not overwrite files
+--no-overwrites
+
+--format 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'
+# When files need to be merged (e.g. when youtube-dl downloads separate audio and video files so
+# that it can use the highest quality format for each), use `.mp4` as the output file format
+--merge-output-format mp4
+
+# Write video description, thumbnail, and video info to files when downloading video
+#--write-description
+#--write-info-json
+#--write-thumbnail
+
+# Write metadata to the video file
+--add-metadata
+# Write metadata to the video file's xattrs (using dublin core and xdg standards)
+--xattrs
+
+--verbose
