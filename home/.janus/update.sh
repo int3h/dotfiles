@@ -63,8 +63,10 @@ fi
 printHeader "Updating Janus core"
 (cd "$HOME/.vim/" && rake) || (printf 'Fatal Error: Janus not installed\n\n' && exit 2)
 
-printHeader "Quitting Atom before changing dotfiles"
-osascript -l JavaScript -e 'var Atom = Application("/Applications/Atom Beta.app");' -e 'if(Atom.running()) { Atom.quit(); }'
+if type -t osascript >/dev/null 2>/dev/null; then
+	printHeader "Quitting Atom before changing dotfiles"
+	osascript -l JavaScript -e 'var Atom = Application("/Applications/Atom Beta.app");' -e 'if(Atom.running()) { Atom.quit(); }'
+fi
 
 printHeader "Stashing dotfile repo changes while we do updates"
 # So that we can later cleanly commit the changes this script makes (and only those changes)
@@ -76,7 +78,7 @@ git submodule sync --recursive
 
 # Fetch as a separate step, instead of during `update`, so we can take advantage of `--jobs=n`
 printHeader "Fetching submodules"
-git fetch --recurse-submodules --jobs=16
+git fetch --recurse-submodules
 
 if [[ $install_only != 1 ]]; then
 	printHeader "Updating submodules to latest versions"
@@ -97,5 +99,11 @@ git stash pop -q
 if ! [[ -e home/.janus/YouCompleteMe/third_party/ycmd/ycm_core.so ]] || \
      [[ "$ycm_version_prev" != "$(getRev "home/.janus/YouCompleteMe/third_party/ycmd")" ]]; then
 	printHeader "Rebuilding YouCompleteMe"
-	(cd home/.janus/YouCompleteMe && ./install.py --tern-completer --clang-completer)
+
+	YCM_ARGS='--clang-completer'
+	if type -t node >/dev/null 2>/dev/null && type -t npm >/dev/null 2>/dev/null; then
+		YCM_ARGS="$YCM_ARGS --tern-completer"
+	fi
+
+	(cd home/.janus/YouCompleteMe && python3 ./install.py $YCM_ARGS)
 fi
