@@ -22,10 +22,10 @@ function printHeader {
 }
 
 function print_help() {
-	printf 'Usage: %s [install]\n\n' "$(basename "$0")"
+	printf 'Usage: %s [--no-upgrades]\n\n' "$(basename "$0")"
 	printf 'Install and/or update Vim Janus plugin submodules.\n\n'
 	printf 'Options:\n'
-	printf "  install     don't update submodules to latest version; install as-is\n\n"
+	printf "  --no-upgrades   Don't upgrade plugins, just install the version specified in the current commit\n\n"
 }
 
 
@@ -38,7 +38,7 @@ case "$1" in
 		print_help
 		exit 0
 		;;
-	"install")
+	"--no-upgrades")
 		install_only=1
 		;;
 	"")
