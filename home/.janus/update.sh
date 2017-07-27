@@ -68,47 +68,57 @@ fi
 printHeader "Updating Janus core"
 (cd "$HOME/.vim/" && rake) || (printf 'Fatal Error: Janus not installed\n\n' && exit 2)
 
-if type -t osascript >/dev/null 2>/dev/null; then
-	printHeader "Quitting Atom before changing dotfiles"
-	osascript -l JavaScript -e 'var Atom = Application("/Applications/Atom Beta.app");' -e 'if(Atom.running()) { Atom.quit(); }'
-fi
-
-printHeader "Stashing dotfile repo changes while we do updates"
-# So that we can later cleanly commit the changes this script makes (and only those changes)
-git stash
 ycm_version_prev="$(getRev "home/.janus/YouCompleteMe/third_party/ycmd")"
 
 printHeader "Syncing configured submodule URLs to match .gitmodules"
 git submodule sync --recursive
 
-# Fetch as a separate step, instead of during `update`, so we can take advantage of `--jobs=n`
-printHeader "Fetching submodules"
-git fetch --recurse-submodules
+if [[ $install_only -eq 1 ]]; then
+    # Fetch as a separate step, instead of during `update`, so we can take advantage of `--jobs=n`
+    #printHeader "Fetching submodules"
+    #git fetch --recurse-submodules
 
-if [[ $install_only != 1 ]]; then
+    printHeader "Checking out submodules and their dependencies"
+    git submodule update --checkout --force --init --recursive
+
+else
+    if type -t osascript >/dev/null 2>/dev/null; then
+        printHeader "Quitting Atom before changing dotfiles"
+        osascript -l JavaScript -e 'var Atom = Application("/Applications/Atom Beta.app");' -e 'if(Atom.running()) { Atom.quit(); }'
+    fi
+
+    # So that we can later cleanly commit the changes this script makes (and only those changes)
+    printHeader "Stashing dotfile repo changes while we do updates"
+
+    # Note the current stash's hash, so we can determine if `git stash save` created a new stash
+    prev_stash="$(git rev-parse stash@{0} 2>/dev/null)"
+    git stash save '[Vim Updater] Automatically stashed by "~/.janus/update.sh" so that Vim submodules can be updated'
+    curr_stash="$(git rev-parse stash@{0} 2>/dev/null)"
+
 	printHeader "Updating submodules to latest versions"
-	git submodule update --checkout --force --init --remote --no-fetch
+	git submodule update --checkout --force --init --remote
 
 	printHeader "Automatically committing submodule updates"
 	git commit --all --message "Vim: update plugins in ~/.janus to latest versions"
+
+    # If our previous `git stash save` stashed changes, unstash them now
+    if [[ "$prev_stash" != "$curr_stash" ]]; then
+        # Re-apply the user's existing changes (stashed at the beginning of this script)\
+        printHeader "Unstashing dotfile repo changes"
+        git stash pop --quiet
+    fi
 fi
 
-printHeader "Checking out submodules and their dependencies"
-git submodule update --checkout --force --init --recursive
-
-# Re-apply the user's existing changes (stashed at the beginning of this script)\
-printHeader "Unstashing dotfile repo changes"
-git stash pop -q
 
 # If YCM's native module hasn't been built yet, or has been updated above, (re-)build it
-if ! [[ -e home/.janus/YouCompleteMe/third_party/ycmd/ycm_core.so ]] || \
-     [[ "$ycm_version_prev" != "$(getRev "home/.janus/YouCompleteMe/third_party/ycmd")" ]]; then
+if ! [[ -e home/.janus/YouCompleteMe/third_party/ycmd/ycm_core.so ]] || [[ "$ycm_version_prev" != "$(getRev "home/.janus/YouCompleteMe/third_party/ycmd")" ]]; then
 	printHeader "Rebuilding YouCompleteMe"
 
-	YCM_ARGS='--clang-completer'
-	if type -t node >/dev/null 2>/dev/null && type -t npm >/dev/null 2>/dev/null; then
-		YCM_ARGS="$YCM_ARGS --tern-completer"
+    # If `node` and `npm` are installed, enable Tern.js-based completion in YCM
+	ycm_addl_args=''
+	if type -t node >/dev/null && type -t npm >/dev/null; then
+		ycm_addl_args='--tern-completer'
 	fi
 
-	(cd home/.janus/YouCompleteMe && python3 ./install.py $YCM_ARGS)
+	(cd home/.janus/YouCompleteMe && python3 ./install.py --clang-completer $ycm_addl_args)
 fi
