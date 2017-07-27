@@ -12,7 +12,12 @@ function getRev {
 }
 
 function printHeader {
-	printf '%b%s==>%s %s%s\n' "$header_prefix" "$(tput bold)$(tput setaf 4)" "$(tput setaf 15)" "$@" "$(tput sgr0)"
+    # Only use color if $TERM is set, and not "dumb"
+    if [[ -n $TERM ]] && [[ "$TERM" != "dumb" ]]; then
+        printf '%b%s==>%s %s%s\n' "$header_prefix" "$(tput bold)$(tput setaf 4)" "$(tput setaf 15)" "$@" "$(tput sgr0)"
+    else
+        printf '%s==> %s\n' "$header_prefix" "$@"
+    fi
 	header_prefix="\n"
 }
 
