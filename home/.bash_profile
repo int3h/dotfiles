@@ -100,6 +100,9 @@ fi
 # Example: in ~/Documents/my-js-project, do `npm install jshint`. `jshint` will be available in your
 # path while you're in this dir or a subdir. When you leave, the bin will be removed from your path.
 if type -t 'npm' >/dev/null; then
+    # Ensure $NPM_TOKEN is always set, even if to an empty string, so that using this env variable
+    # in ~/.npmrc won't throw an error about being unable to find the var to replace the token.
+    export NPM_TOKEN="$NPM_TOKEN"
     __npm_local_bin_path=""
 
     add_npm_to_path() {
