@@ -30,16 +30,23 @@ alias ansible-playbook='ansible_notify ansible-playbook'
 
 # If the man page is just a reference to "Bash built-in commands" man page, use `help` instead
 man_or_help() {
-    # Get the filename of the manfile
-    local manfile="$(command man -w $2 "$1")"
-    [[ $? == 0 ]] || return
+    if [[ $# -lt 1 ]] || [[ -z $1 ]]; then
+        printf 'What manual page or help topic do you want?\n' >&2
+        return 1
+    fi
 
+    # Get the filename of the manfile
+    local manfile="$(command man -w "$@" 2>&-)"
+    if [[ $? != 0 ]] || [[ -z $manfile ]]; then
+        printf 'No manual or help entry for %s\n' "$*"
+        return 2
+    fi
 
     # If the command is a Bash builtin, display `help` instead of a HTML manpage
-    if [[ "$(basename $manfile)" == 'builtin.1' ]]; then
-        help "$1"
+    if [[ "$(basename "$manfile")" == 'builtin.1' ]]; then
+        command help "$@"
     else
-        command man $@
+        command man "$@"
     fi
 }
 alias man="man_or_help"
