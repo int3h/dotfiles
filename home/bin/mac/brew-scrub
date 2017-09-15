@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+br="$(which brew)"
+
+$br cleanup --force -s
+rm -rf "$($br --cache)"
+
+$br prune
+
+#$br unlinkapps
+#$br linkapps --local
