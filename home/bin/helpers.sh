@@ -69,37 +69,6 @@ printerror() {
 alias onoe=printerror
 
 
-# Given a filename, prints a version which does not conflict with any existing files by appending
-# a number to the filename. If the original filename doesn't conflict to begin with, returns the
-# original filename unchanged.
-unique_filename() {
-	local filename="$1"
-	# If the filename doesn't conflict as-is, just return that
-	if [[ ! -a $filename ]]; then
-		echo "$filename"
-		return 0
-	fi
-
-	# Split the filename into parts
-	local olfIFS="$IFS"
-	IFS=$'\n'
-	local filename_split=($(split_path "$filename"))
-	IFS="$olfIFS"
-	local file_path="${filename_split[0]}"
-	local file_base="${filename_split[1]}"
-	local file_extension="${filename_split[2]}"
-
-	local suffix=1
-	local new_filename="$filename"
-	while [[ -a "$new_filename" ]]; do
-		suffix=$(($suffix + 1))
-		new_filename="${file_path}/${file_base}_${suffix}${file_extension}"
-	done
-
-	echo "$new_filename"
-}
-
-
 # Checks if the URL passed in $1 can be fetched (with cURL) without errors. Returns 0 if so,
 # and a non-zero cURL return code otherwise (see `man curl` for meaning of specific values.)
 check_url() {
