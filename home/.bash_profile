@@ -7,7 +7,8 @@ case $(uname -s) in
     Linux) export OS='Linux';;
 esac
 
-_USER_CONFIG_PATH="$HOME/.bash.d"
+_USER_CONFIG_PATH="${_USER_CONFIG_PATH:-${HOME}/.bash.d}"
+_USER_BIN_DIR="${_USER_BIN_DIR:-${HOME}/.bin}"
 
 [ -f "$_USER_CONFIG_PATH/local" ] && source "$_USER_CONFIG_PATH/local"
 
@@ -79,15 +80,15 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
         # In Linux, `npm install -g` normally requires `sudo`. We set the global path to
         # ~/.npm_global and add its bin directory to our $PATH.
         [[ -d ~/.npm_global ]] && PATH="$HOME/.npm_global/bin:$PATH"
-        [[ -d "$HOME/bin/linux" ]] && PATH="$HOME/bin/linux:$PATH"
+        [[ -d "${_USER_BIN_DIR}/linux" ]] && PATH="${_USER_BIN_DIR}/linux:$PATH"
     elif [[ "$OS" == "Mac" ]]; then
-        [[ -d "$HOME/bin/mac" ]] && PATH="$HOME/bin/mac:$PATH"
+        [[ -d "${_USER_BIN_DIR}/mac" ]] && PATH="${_USER_BIN_DIR}/mac:$PATH"
         # Araxis Merge command line utilities (if they're installed)
         [[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && PATH="$PATH:/Applications/Araxis Merge.app/Contents/Utilities"
     fi
 
     # My own user bin directory (highest priority)
-    [[ -d "$HOME/bin" ]] && PATH="$HOME/bin:$PATH"
+    [[ -d "${_USER_BIN_DIR}" ]] && PATH="${_USER_BIN_DIR}:$PATH"
 
     ## Low weight (last added = lowest priority)
 
