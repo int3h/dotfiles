@@ -8,7 +8,7 @@ case $(uname -s) in
 esac
 
 _USER_CONFIG_PATH="${_USER_CONFIG_PATH:-${HOME}/.bash.d}"
-_USER_BIN_DIR="${_USER_BIN_DIR:-${HOME}/.bin}"
+_USER_BIN_DIR="${_USER_BIN_DIR:-${HOME}/bin}"
 
 [ -f "$_USER_CONFIG_PATH/local" ] && source "$_USER_CONFIG_PATH/local"
 
