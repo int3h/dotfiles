@@ -1,0 +1,48 @@
+#!/usr/bin/env bash -e
+
+if [[ $UID != 0 ]]; then
+    echo 'Error: this script must be run as root via `sudo`' >&2
+    exit 1
+fi
+
+[[ "$(type -t chown)" == "alias" ]] && unalias chown
+[[ "$(type -t chmod)" == "alias" ]] && unalias chmod
+[[ "$(type -t find)" == "alias" ]] && unalias find
+
+
+header_prespace=''
+heading() {
+  printf '%s%s==> %s%s\n' "$header_prespace" "$(tput bold)$(tput setab 27)$(tput setaf 15)" "$@" "$(tput sgr0)"
+  header_prespace="
+
+"
+}
+
+
+logpath="$HOME/Library/Logs/Homebrew/brew-perms"
+mkdir -p "$logpath"
+chown -R "$SUDO_USER" "$logpath"
+
+logfile="$(printf '%s/brew-perms.%s.log' "$logpath" "$(date -j +'%F_%H-%M')")"
+touch "$logfile"
+chown -R "$SUDO_USER" "$logfile"
+chmod ugo=rw "$logfile"
+
+printf '# Running "%s" at %s\n\n' "$(basename "$BASH_SOURCE")" "$(date)" >> "$logfile"
+
+
+heading "Setting owner"
+find /usr/local \( -depth 1 -prune \) -type d -not -name remotedesktop -not -name MacGPG2 -exec chown -R mtorok:admin {} + | tee -a "$logfile"
+
+
+heading "Setting permissions of regular files"
+echo >> "$logfile"
+find /usr/local \( -depth 1 -prune \) -type d -not -name remotedesktop -not -name MacGPG2 -exec chmod -Rvv g=u {} + | tee -a "$logfile"
+
+
+heading "Setting permissions of links"
+echo >> "$logfile"
+find /usr/local -not \( \( -name remotedesktop -or -name MacGPG2 \) \) -type l -exec chmod -hvv g=u {} + | tee -a "$logfile"
+
+
+heading "Done fixing permissions of Homebrew directory"
