@@ -87,6 +87,10 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
         [[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && PATH="$PATH:/Applications/Araxis Merge.app/Contents/Utilities"
     fi
 
+    if type -t go >/dev/null && [[ -d "$(go env GOPATH)/bin" ]]; then
+        PATH="$(go env GOPATH)/bin:$PATH"
+    fi
+
     # My own user bin directory (highest priority)
     [[ -d "${_USER_BIN_DIR}" ]] && PATH="${_USER_BIN_DIR}:$PATH"
 
