@@ -300,6 +300,10 @@ export GIT_SSH_COMMAND="ssh -o PermitLocalCommand=no -o ServerAliveInterval=0"
 # Enable "The Fuck" (https://github.com/nvbn/thefuck)
 type -t thefuck >/dev/null && alias fuck='$(thefuck $(fc -ln -1))'
 
+[ -f "$HOME/.nvm" ] && export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 # Tell `less` to ignore case when searching, unless search term has an uppercase letter; to output
 # ANSI color escape codes correctly; scroll, not wrap, long lines; and, if there is only one
 # screen's worth of output, to print that, and exit.
