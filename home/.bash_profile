@@ -175,7 +175,7 @@ if [[ $OS == "Linux" ]]; then
 	fi
 
 	# Tell X apps to use (virtual) display 0 (these fail under SSH when they can't find a display)
-	export DISPLAY=:0
+	[[ -n "$SSH_CLIENT" ]] && export DISPLAY=:0
 
 	# Setup CUDA tools
 	if [[ ! $_BASHRC_DID_RUN ]] && [[ -d /usr/local/cuda ]]; then
