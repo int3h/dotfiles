@@ -298,7 +298,7 @@ type -t npm >/dev/null && . <(npm completion)
 export GIT_SSH_COMMAND="ssh -o PermitLocalCommand=no -o ServerAliveInterval=0"
 
 # Enable "The Fuck" (https://github.com/nvbn/thefuck)
-type -t thefuck >/dev/null && alias fuck='$(thefuck $(fc -ln -1))'
+type -t thefuck >/dev/null && eval $(thefuck --alias)
 
 [ -f "$HOME/.nvm" ] && export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
