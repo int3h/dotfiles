@@ -142,7 +142,7 @@ if [[ $OS == "Linux" ]]; then
     if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
         export NVM_DIR="$HOME/.nvm"
         export NVM_SYMLINK_CURRENT=true
-        source "$HOME/.nvm/nvm.sh"
+        source "$HOME/.nvm/nvm.sh" 2>/dev/null
     fi
 
     # make less more friendly for non-text input files, see lesspipe(1)
