@@ -71,7 +71,7 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
 
     # `gem install --user-install` binaries
     if which ruby >/dev/null && which gem >/dev/null; then
-        PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+        PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
     fi
 
 	if [[ "$OS" == "Linux" ]]; then
