@@ -71,7 +71,7 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
 
     # `gem install --user-install` binaries
     if which ruby >/dev/null && which gem >/dev/null; then
-        PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+        PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
     fi
 
 	if [[ "$OS" == "Linux" ]]; then
@@ -142,7 +142,7 @@ if [[ $OS == "Linux" ]]; then
     if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
         export NVM_DIR="$HOME/.nvm"
         export NVM_SYMLINK_CURRENT=true
-        source "$HOME/.nvm/nvm.sh"
+        source "$HOME/.nvm/nvm.sh" 2>/dev/null
     fi
 
     # make less more friendly for non-text input files, see lesspipe(1)
@@ -175,7 +175,7 @@ if [[ $OS == "Linux" ]]; then
 	fi
 
 	# Tell X apps to use (virtual) display 0 (these fail under SSH when they can't find a display)
-	export DISPLAY=:0
+	[[ -n "$SSH_CLIENT" ]] && export DISPLAY=:0
 
 	# Setup CUDA tools
 	if [[ ! $_BASHRC_DID_RUN ]] && [[ -d /usr/local/cuda ]]; then
@@ -470,7 +470,7 @@ case $- in
         ########## Launch tmux by default
         if type -t tmux 2>&1 >/dev/null && [[ -n "$SSH_CLIENT" ]]; then
             if test -z "$TMUX"; then
-                tmux new-session -A -s "$USER"
+                tmux new-session -A -s "${USER//./}"
             else
                 show_dynamic_motd
             fi

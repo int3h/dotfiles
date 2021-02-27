@@ -68,5 +68,5 @@ colors, and prints them to stdout (separated by a space).""".format(os.path.base
         print("15 0")
     else:
         name = " ".join(sys.argv[1:])
-        bg, fg = nameToColor(name)
+        bg, fg = nameToColor(name.encode('utf-8'))
         print("{0} {1}".format(bg, fg))
