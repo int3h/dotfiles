@@ -2,10 +2,8 @@
 
 br="$(which brew)"
 
-$br cleanup --force -s
+$br cleanup -s --prune=all --verbose
 rm -rf "$($br --cache)"
-
-$br prune
 
 #$br unlinkapps
 #$br linkapps --local
