@@ -470,7 +470,7 @@ case $- in
         ########## Launch tmux by default
         if type -t tmux 2>&1 >/dev/null && [[ -n "$SSH_CLIENT" ]]; then
             if test -z "$TMUX"; then
-                tmux new-session -A -s "$USER"
+                tmux new-session -A -s "${USER//./}"
             else
                 show_dynamic_motd
             fi
