@@ -1,5 +1,5 @@
-tap 'homebrew/versions'
-tap 'homebrew/dupes'
+#tap 'homebrew/versions'
+#tap 'homebrew/dupes'
 
 
 # ------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ brew 'cmake', args: ['with-completion']
 brew 'bash'
 brew 'coreutils'
 brew 'moreutils'
-brew 'homebrew/dupes/grep', args: ['with-default-names']
+brew 'grep', args: ['with-default-names']
 brew 'gnu-sed', args: ['with-default-names']
 brew 'gnu-tar'
 brew 'gawk'
@@ -34,10 +34,10 @@ brew 'openssl'
 # ------------------------------------------------------------------------------
 
 brew 'python'
-brew 'python3'
+#brew 'python3'
 # Disabled in favor of `nvm` for the moment
 # brew 'n'
-brew 'nvm'
+#brew 'nvm'
 
 
 # ------------------------------------------------------------------------------
@@ -67,10 +67,10 @@ brew 'ack'
 brew 'jq'
 
 # Create cheesy graph visualizations from a simple text description
-brew 'graphviz', args: ['with-app', 'with-bindings', 'with-librsvg']
+#brew 'graphviz', args: ['with-app', 'with-bindings', 'with-librsvg']
 
 # Generate many cheesy UML-style diagrams (like sequence diagrams )from a simple text description
-brew 'plantuml'
+#brew 'plantuml'
 
 # Version of Emacs specialized and polished for OS X
 # tap 'railwaycat/homebrew-emacsmacport'
@@ -81,10 +81,10 @@ brew 'plantuml'
 # Company code dependencies
 # ------------------------------------------------------------------------------
 
-brew 'aws-elasticbeanstalk'
-brew 'awscli'
-brew 'pigz'
-brew 'homebrew/versions/ansible19'
+#brew 'aws-elasticbeanstalk'
+#brew 'awscli'
+#brew 'pigz'
+#brew 'homebrew/versions/ansible19'
 
 # Is this still a dependency of our code?
 # brew 'glew'
@@ -97,7 +97,7 @@ brew 'homebrew/versions/ansible19'
 # Default `bash-completion` formula is stuck on v1, because v2 requires Bash v4. Since OS X's
 #  built-in version of Bash is stuck at v3.x for legal reasons, Homebrew doesn't want to make
 #  `bash-completion` v2 the default. Since we manually install Bash 4.x via Homebrew, we want v2.
-brew 'homebrew/versions/bash-completion2'
+brew 'bash-completion@2'
 
 # Creates a new command, `j`, that can be used in place of `cd`. Unlike `cd`, `j` allows you to give
 #  only a snippet of a path, rather than a real path. The snippet is compared to a list of every
@@ -115,7 +115,7 @@ brew 'terminal-notifier'
 brew 'gnu-getopt'
 
 # Dependency of my custom `hman` script
-brew 'homebrew/dupes/groff', args: ['with-grohtml']
+brew 'groff', args: ['with-grohtml']
 
 # Dependency of my `spell` Bash command
 brew 'aspell', args: ['with-lang-en']
@@ -160,7 +160,7 @@ tap 'caskroom/cask'
 # Adds a Quick Look plugin for previewing generic text-like files. Will just show a simple, plain
 # text view of the file, but without this plugin, OS X won't show any preview at all for any file
 # type it doesn't explicitly know about, even if the file is really just a simple text file.
-cask 'qlstephen'
+#cask 'qlstephen'
 
 # Adds Quick Look plugin for previewing JSON files (doesn't work great, though, esp. with big files)
 cask 'quickjson'

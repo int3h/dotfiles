@@ -71,7 +71,7 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
 
     # `gem install --user-install` binaries
     if which ruby >/dev/null && which gem >/dev/null; then
-        PATH="$(ruby -rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+        PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
     fi
 
 	if [[ "$OS" == "Linux" ]]; then
@@ -85,6 +85,10 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
         [[ -d "${_USER_BIN_DIR}/mac" ]] && PATH="${_USER_BIN_DIR}/mac:$PATH"
         # Araxis Merge command line utilities (if they're installed)
         [[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && PATH="$PATH:/Applications/Araxis Merge.app/Contents/Utilities"
+    fi
+
+    if type -t go >/dev/null && [[ -d "$(go env GOPATH)/bin" ]]; then
+        PATH="$(go env GOPATH)/bin:$PATH"
     fi
 
     # My own user bin directory (highest priority)
@@ -142,7 +146,7 @@ if [[ $OS == "Linux" ]]; then
     if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
         export NVM_DIR="$HOME/.nvm"
         export NVM_SYMLINK_CURRENT=true
-        source "$HOME/.nvm/nvm.sh"
+        source "$HOME/.nvm/nvm.sh" 2>/dev/null
     fi
 
     # make less more friendly for non-text input files, see lesspipe(1)
@@ -175,7 +179,7 @@ if [[ $OS == "Linux" ]]; then
 	fi
 
 	# Tell X apps to use (virtual) display 0 (these fail under SSH when they can't find a display)
-	export DISPLAY=:0
+	[[ -n "$SSH_CLIENT" ]] && export DISPLAY=:0
 
 	# Setup CUDA tools
 	if [[ ! $_BASHRC_DID_RUN ]] && [[ -d /usr/local/cuda ]]; then
@@ -298,7 +302,11 @@ type -t npm >/dev/null && . <(npm completion)
 export GIT_SSH_COMMAND="ssh -o PermitLocalCommand=no -o ServerAliveInterval=0"
 
 # Enable "The Fuck" (https://github.com/nvbn/thefuck)
-type -t thefuck >/dev/null && alias fuck='$(thefuck $(fc -ln -1))'
+type -t thefuck >/dev/null && eval $(thefuck --alias)
+
+[ -f "$HOME/.nvm" ] && export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Tell `less` to ignore case when searching, unless search term has an uppercase letter; to output
 # ANSI color escape codes correctly; scroll, not wrap, long lines; and, if there is only one
@@ -470,7 +478,7 @@ case $- in
         ########## Launch tmux by default
         if type -t tmux 2>&1 >/dev/null && [[ -n "$SSH_CLIENT" ]]; then
             if test -z "$TMUX"; then
-                tmux new-session -A -s "$USER"
+                tmux new-session -A -s "${USER//./}"
             else
                 show_dynamic_motd
             fi
