@@ -304,7 +304,7 @@ export GIT_SSH_COMMAND="ssh -o PermitLocalCommand=no -o ServerAliveInterval=0"
 # Enable "The Fuck" (https://github.com/nvbn/thefuck)
 type -t thefuck >/dev/null && eval $(thefuck --alias)
 
-[ -f "$HOME/.nvm" ] && export NVM_DIR="$HOME/.nvm"
+[ -e "$HOME/.nvm" ] && export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
