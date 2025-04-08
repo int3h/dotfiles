@@ -66,6 +66,9 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
     # Homebrew (overrides system tools)
     [[ -d /usr/local/bin ]] && PATH="/usr/local/sbin:/usr/local/bin:$PATH"
 
+    # Apple Silicon homebrew
+    [[ -e /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+
     # `pip install --user` binaries
     [[ -d $HOME/.local/bin ]] && PATH="$HOME/.local/bin:$PATH"
 
@@ -221,12 +224,12 @@ show_dynamic_motd() {
 
 if [[ $OS == "Mac" ]]; then
     # Homebrew-installed programs are in the homebrew directory
-    if type -t brew >/dev/null; then
-        BREW_PREFIX=$(brew --prefix)
+    if type -t brew >/dev/null && [[ -z "$HOMEBREW_PREFIX" ]]; then
+        HOMEBREW_PREFIX=$(brew --prefix)
     else
         # If homebrew isn't installed, set this to a value that will guarantee
         # failure when checking if a homebrew-installed program exists
-        BREW_PREFIX=/dev/null/brew
+        HOMEBREW_PREFIX=/dev/null/brew
     fi
 
     if type -t mvim >/dev/null; then
@@ -235,9 +238,9 @@ if [[ $OS == "Mac" ]]; then
     fi
 
     # bash-completion2 homebrew package init
-    [ -f $BREW_PREFIX/share/bash-completion/bash_completion ] && . $BREW_PREFIX/share/bash-completion/bash_completion
+    [ -f $HOMEBREW_PREFIX/share/bash-completion/bash_completion ] && . $HOMEBREW_PREFIX/share/bash-completion/bash_completion
     # bash-completion (i.e. v1.x) homebrew package init
-    [ -f $BREW_PREFIX/etc/bash_completion ] && . $BREW_PREFIX/etc/bash_completion
+    [ -f $HOMEBREW_PREFIX/etc/bash_completion ] && . $HOMEBREW_PREFIX/etc/bash_completion
 
     # If `nvm` is installed, initialize it
     if [[ -s "$(brew --prefix nvm 2>/dev/null)/nvm.sh" ]]; then
@@ -256,7 +259,7 @@ if [[ $OS == "Mac" ]]; then
     type -t rbenv>/dev/null && export RBENV_ROOT=/usr/local/var/rbenv && eval "$(rbenv init -)"
 
     # Initialize 'autojump' utility
-    [[ -s $BREW_PREFIX/etc/profile.d/autojump.sh ]] && . $BREW_PREFIX/etc/profile.d/autojump.sh
+    [[ -s $HOMEBREW_PREFIX/etc/profile.d/autojump.sh ]] && . $HOMEBREW_PREFIX/etc/profile.d/autojump.sh
 
     # If Java is installed, export the JRE path as $JAVA_HOME, which apps like ec2-cli use.
     # The `java_home` utility is a standard part of OS X, and will either print Java's home path, if
@@ -450,9 +453,9 @@ case $- in
             # Terminal.app via $PROMPT_COMMAND, which sets the file breadcrumb in the title bar.
             PS1="\\[\\e]1;\\W\\a\\]${PS1}"
 
-            if [[ -s $BREW_PREFIX/etc/grc.bashrc ]]; then
+            if [[ -s $HOMEBREW_PREFIX/etc/grc.bashrc ]]; then
                 # Initialize the 'Generic Colouriser' utility
-                . $BREW_PREFIX/etc/grc.bashrc
+                . $HOMEBREW_PREFIX/etc/grc.bashrc
                 # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
                 alias make="colourify make -j $(( $(sysctl -n hw.ncpu) + 1 ))"
             fi
