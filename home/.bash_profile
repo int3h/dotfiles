@@ -479,7 +479,7 @@ case $- in
         [[ -f ~/.iterm2_shell_integration.bash ]] && [[ "$TERM_PROGRAM" != "Apple_Terminal" ]] && \
             source ~/.iterm2_shell_integration.bash
 
-        [[ "$OS" == "Mac" ]] && type -t archey >/dev/null && archey -c 2>/dev/null
+        [[ "$OS" == "Mac" ]] && type -t archey >/dev/null && archey 2>/dev/null
 
         ########## Launch tmux by default
         if type -t tmux 2>&1 >/dev/null && [[ -n "$SSH_CLIENT" ]]; then
