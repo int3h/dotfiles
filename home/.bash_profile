@@ -400,7 +400,7 @@ case $- in
         fi
 
         # If Bash version >= 4.4
-        if [[ $BASH_VERSINFO -ge 4 ]] && [[ $(echo $BASH_VERSION | cut -d '.' -f 2) -ge 4 ]]; then
+        if [[ $BASH_VERSINFO -ge 5 ]]; then
             # We set these readline variables here, rather than .inputrc, so we can set them
             # dynamically, using the calculated prompt color in this script.
             bind "set show-mode-in-prompt on"
