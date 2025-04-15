@@ -447,9 +447,10 @@ case $- in
             # Terminal.app via $PROMPT_COMMAND, which sets the file breadcrumb in the title bar.
             PS1="\\[\\e]1;\\W\\a\\]${PS1}"
 
-            if [[ -s $HOMEBREW_PREFIX/etc/grc.bashrc ]]; then
+            if [[ -s $HOMEBREW_PREFIX/etc/grc.sh ]]; then
+                GRC_ALIASES=true
                 # Initialize the 'Generic Colouriser' utility
-                . $HOMEBREW_PREFIX/etc/grc.bashrc
+                . $HOMEBREW_PREFIX/etc/grc.sh
                 # Since grc overwrites our existing 'make' alias, fix it up to include both grc & our changes
                 alias make="colourify make -j $(( $(sysctl -n hw.ncpu) + 1 ))"
             fi
