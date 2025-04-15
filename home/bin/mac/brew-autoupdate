@@ -82,11 +82,11 @@ agent_uninstall() {
 
 # Retrieves the list of packages which are currently outdated from brew
 get_outdated() {
-    local outdated="$(/usr/local/bin/brew outdated --verbose)"
+    local outdated="$(/opt/homebrew/bin/brew outdated --verbose)"
 
     # Remove any pinned packages (packages the user has asked brew not to upgrade) from the list of
     # ostensibly outdated packages.
-    local pinned="$(/usr/local/bin/brew ls --pinned)"
+    local pinned="$(/opt/homebrew/bin/brew ls --pinned)"
 
     # `brew ls --pinned` (when piped) prints a package name per line. We change $IFS to be \n so we
     # can easily loop over this with a `for` loop
@@ -196,14 +196,14 @@ update_outdated() {
     fi
 
     # We probably aren't running in normal bash shell, so source my ~/.bash_profile
-    export PATH="/usr/local/bin:$PATH"
+    export PATH="/opt/homebrew/bin:$PATH"
 
     # Find existing list of outdated packages, if it exists
     local old_outdated=''
     [[ -f "$OUTDATED_FILE" ]] && old_outdated="$(cat "$OUTDATED_FILE")"
 
     # Update package list
-    /usr/local/bin/brew update 2>/dev/null >/dev/null
+    /opt/homebrew/bin/brew update 2>/dev/null >/dev/null
     local outdated_formulas=$(get_outdated)
 
     if [[ -n "$outdated_formulas" ]]; then
