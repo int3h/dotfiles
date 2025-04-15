@@ -237,6 +237,9 @@ if [[ $OS == "Mac" ]]; then
         export VISUAL='mvim -f'
     fi
 
+    [[ -d ${HOMEBREW_PREFIX}/opt/grep/libexec/gnubin ]] && PATH="${HOMEBREW_PREFIX}/opt/grep/libexec/gnubin:$PATH"
+    [[ -d ${HOMEBREW_PREFIX}/opt/gnu-sed/libexec/gnubin ]] && PATH="${HOMEBREW_PREFIX}/opt/gnu-sed/libexec/gnubin:$PATH"
+
     # bash-completion2 homebrew package init
     [ -f $HOMEBREW_PREFIX/share/bash-completion/bash_completion ] && . $HOMEBREW_PREFIX/share/bash-completion/bash_completion
     # bash-completion (i.e. v1.x) homebrew package init
