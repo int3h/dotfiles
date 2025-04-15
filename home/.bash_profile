@@ -223,15 +223,6 @@ show_dynamic_motd() {
 #################################
 
 if [[ $OS == "Mac" ]]; then
-    # Homebrew-installed programs are in the homebrew directory
-    if type -t brew >/dev/null && [[ -z "$HOMEBREW_PREFIX" ]]; then
-        HOMEBREW_PREFIX=$(brew --prefix)
-    else
-        # If homebrew isn't installed, set this to a value that will guarantee
-        # failure when checking if a homebrew-installed program exists
-        HOMEBREW_PREFIX=/dev/null/brew
-    fi
-
     if type -t mvim >/dev/null; then
         export EDITOR='mvim -f'
         export VISUAL='mvim -f'
