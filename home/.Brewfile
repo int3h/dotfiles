@@ -18,8 +18,8 @@ brew 'cmake', args: ['with-completion']
 brew 'bash'
 brew 'coreutils'
 brew 'moreutils'
-brew 'grep', args: ['with-default-names']
-brew 'gnu-sed', args: ['with-default-names']
+brew 'grep'
+brew 'gnu-sed'
 brew 'gnu-tar'
 brew 'gawk'
 brew 'findutils'
@@ -49,7 +49,7 @@ brew 'ssh-copy-id'
 brew 'diff-so-fancy'
 brew 'git-lfs'
 brew 'hub'
-brew 'mercurial'
+#brew 'mercurial'
 
 
 # ------------------------------------------------------------------------------
@@ -109,16 +109,16 @@ brew 'autojump'
 brew 'grc'
 
 # Cute, little ASCII Apple logo + system stats, displayed at shell login
-brew 'archey'
+brew 'archey4'
 
-brew 'terminal-notifier'
+#brew 'terminal-notifier'
 brew 'gnu-getopt'
 
 # Dependency of my custom `hman` script
-brew 'groff', args: ['with-grohtml']
+brew 'groff' #, args: ['with-grohtml']
 
 # Dependency of my `spell` Bash command
-brew 'aspell', args: ['with-lang-en']
+brew 'aspell'
 
 
 # ------------------------------------------------------------------------------
@@ -155,7 +155,7 @@ brew 'duti'
 # Casks
 ################################################################################
 
-tap 'caskroom/cask'
+#tap 'caskroom/cask'
 
 # Adds a Quick Look plugin for previewing generic text-like files. Will just show a simple, plain
 # text view of the file, but without this plugin, OS X won't show any preview at all for any file
@@ -163,7 +163,7 @@ tap 'caskroom/cask'
 #cask 'qlstephen'
 
 # Adds Quick Look plugin for previewing JSON files (doesn't work great, though, esp. with big files)
-cask 'quickjson'
+#cask 'quickjson'
 
 # One way to install the "Hack" font, but I found this version to have bugs (other sources did not)
 # tap 'caskroom/fonts'
