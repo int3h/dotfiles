@@ -38,18 +38,17 @@ brew 'python'
 # Disabled in favor of `nvm` for the moment
 # brew 'n'
 #brew 'nvm'
+brew 'node'
 
 
 # ------------------------------------------------------------------------------
 # Version control
 # ------------------------------------------------------------------------------
 
-brew 'git', args: ['with-blk-sha1', 'with-gettext', 'with-pcre', 'with-persistent-https']
+brew 'git'
 brew 'ssh-copy-id'
 brew 'diff-so-fancy'
 brew 'git-lfs'
-brew 'hub'
-#brew 'mercurial'
 
 
 # ------------------------------------------------------------------------------
@@ -68,26 +67,6 @@ brew 'jq'
 
 # Create cheesy graph visualizations from a simple text description
 #brew 'graphviz', args: ['with-app', 'with-bindings', 'with-librsvg']
-
-# Generate many cheesy UML-style diagrams (like sequence diagrams )from a simple text description
-#brew 'plantuml'
-
-# Version of Emacs specialized and polished for OS X
-# tap 'railwaycat/homebrew-emacsmacport'
-# brew 'railwaycat/emacsmacport/emacs-mac', args: ['with-spacemacs-icon']
-
-
-# ------------------------------------------------------------------------------
-# Company code dependencies
-# ------------------------------------------------------------------------------
-
-#brew 'aws-elasticbeanstalk'
-#brew 'awscli'
-#brew 'pigz'
-#brew 'homebrew/versions/ansible19'
-
-# Is this still a dependency of our code?
-# brew 'glew'
 
 
 # ------------------------------------------------------------------------------
@@ -144,12 +123,6 @@ brew 'duti'
 # Like 'ssh', but better. Needs to be installed on server, and doesn't play nice with `tmux` though
 # brew 'mobile-shell', args: ['HEAD']
 
-# Utility for benchmarking a whole bunch of public DNS servers (faster DNS == faster internet)
-# brew 'namebench'
-
-# Utility to `cat` files/pipes to Slack chat
-# brew 'slackcat'
-
 
 ################################################################################
 # Casks
@@ -171,3 +144,4 @@ brew 'duti'
 
 # This is where programs like Open Resty live
 # tap 'homebrew/nginx'
+cask "font-jetbrains-mono"
