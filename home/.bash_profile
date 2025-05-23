@@ -94,6 +94,10 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
         PATH="$(go env GOPATH)/bin:$PATH"
     fi
 
+    if type -t rustup >/dev/null && [[ -d "$(brew --prefix rustup)/bin" ]]; then
+        PATH="$(brew --prefix rustup)/bin:$PATH"
+    fi
+
     # My own user bin directory (highest priority)
     [[ -d "${_USER_BIN_DIR}" ]] && PATH="${_USER_BIN_DIR}:$PATH"
 
