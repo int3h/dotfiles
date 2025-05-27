@@ -27,7 +27,8 @@
 			],
 			"sensors_excluded_subfeatures": [
 			],
-			"use_fahrenheit": false
+			"use_fahrenheit": false,
+            "disabled": true
 		},
 		{
 			"type": "CPU",
