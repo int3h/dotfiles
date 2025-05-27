@@ -2,12 +2,7 @@
 .DS_Store
 *.pyc
 .+\.sublime-(workspace|project)$
-projects/superconductor/webcl/node_modules
 .ctrlproot
-doc/tags
-projects/superconductor/opencl/bin
-*.ipynb
-.webkitwebcl.conf
 .idea
 .vscode
 typings
