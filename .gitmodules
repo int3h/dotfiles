@@ -66,3 +66,7 @@
 	path = home/.janus/vim-ansible-yaml
 	url = git@github.com:chase/vim-ansible-yaml.git
 	ignore = dirty
+[submodule "dotbot"]
+	path = dotbot
+	url = https://github.com/anishathalye/dotbot
+	ignore = dirty
