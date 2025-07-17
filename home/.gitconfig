@@ -15,7 +15,7 @@
 [commit]
 	cleanup = strip
 [push]
-	default = simple
+	# default = simple
 
 [alias]
 	# Shows log in pretty, one-line-per-commit format
@@ -56,31 +56,11 @@
 	newNormal = green bold
 	newHighlight = green bold 22
 
-[difftool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/araxiscompare-w.sh -2 \"$LOCAL\" \"$REMOTE\"
-	path =
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/araxisgitmerge-w.sh \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\"
-	trustExitCode = true
-
-# Added by GitHub's app and/or SourceTree
-;[filter "lfs"]
-	;clean = git-lfs clean -- %f
-	;smudge = git-lfs smudge -- %f
-	;required = true
-	;process = git-lfs filter-process
-
 [include]
 	# Include system-specific config. You must manually create this symlink to Mac or Linux config.
 	path = ~/.gitsupport/gitconfig.active
 	# Include sensitive config options (this file not stored in dotfiles repo)
 	path = ~/.gitsupport/gitconfig.private
 
-[difftool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/araxiscompare-w.sh -2 \"$LOCAL\" \"$REMOTE\"
-	path =
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/araxisgitmerge-w.sh \"$REMOTE\" \"$BASE\" \"$LOCAL\" \"$MERGED\"
-	trustExitCode = true
 
 #  vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=gitconfig:

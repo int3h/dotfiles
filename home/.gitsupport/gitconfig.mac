@@ -4,31 +4,11 @@
 [credential]
 	helper = osxkeychain
 
-[difftool "Kaleidoscope"]
-	cmd = ~/bin/mac/ksdiff-fixed --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-[mergetool "Kaleidoscope"]
-	cmd = ~/bin/mac/ksdiff-fixed --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-	trustExitCode = true
-
-[difftool "bcomp"]
-	cmd = /usr/local/bin/bcomp -fv=\"Text Compare\" -ro1 -vcs1=\"$REMOTE\" \"$LOCAL\" \"$REMOTE\"
-	path =
-[mergetool "bcomp"]
-	cmd = /usr/local/bin/bcomp -fv=\"Text Merge\" -mergeoutput=\"$MERGED\" -vcs1=\"$MERGED\" -title1=\"Mine\" -title2=\"Yours\" -title3=\"Common Parent\" -center=\"$BASE\" \"$LOCAL\" \"$REMOTE\"
-	trustExitCode = true
-
-[mergetool "araxis"]
-	path = /Applications/Araxis Merge.app/Contents/Utilities/compare
-[difftool "araxis"]
-	path = /Applications/Araxis Merge.app/Contents/Utilities/compare
-
 [difftool]
 	prompt = false
 [diff]
 	# During diff, detect copies and renames of files
 	renames = copies
-	tool = araxis
-	;tool = Kaleidoscope
 
 [mergetool]
 	keepBackup = true
@@ -36,18 +16,6 @@
 	tool = araxis
 	;tool = Kaleidoscope
 	;conflictstyle = diff3
-
-# `legit` support (http://www.git-legit.org)
-;[alias]
-	;branches = !legit branches
-	;graft = !legit graft
-	;harvest = !legit harvest
-	;publish = !legit publish
-	;unpublish = !legit unpublish
-	;sprout = !legit sprout
-	;sync = !legit sync
-	;switch = !legit switch
-	;resync = !legit resync
 
 ;[filter "media"]
 	;clean = git media clean %f
