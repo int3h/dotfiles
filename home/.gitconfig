@@ -46,6 +46,7 @@
 	# Does equivalent of `git pull --ff-only` in some other branch without having to switch to that
 	# branch first. See: http://stackoverflow.com/a/17722977/577440 .
 	pull-branch = "!f() { git checkout --quiet --detach && git fetch \"$(git config --local --get \"branch.$@.remote\")\" \"$(git config --local --get \"branch.$@.merge\"):$@\" && git checkout - ; }; f"
+	update-submodules = "!f() { DID_STASH=\"$(git stash)\"; git pull --recurse-submodules; git submodule sync --recursive; git submodule update --recursive; [[ \"$DID_STASH\" != \"No local changes to save\" ]] && git stash pop; }; f"
 
 
 # Better diff colors, for diff-so-fancy
