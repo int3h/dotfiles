@@ -98,6 +98,16 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
         PATH="$(brew --prefix rustup)/bin:$PATH"
     fi
 
+    if [[ -d "$HOME/Library/pnpm" ]]; then
+        # pnpm
+        export PNPM_HOME="$HOME/Library/pnpm"
+        case ":$PATH:" in
+            *":$PNPM_HOME:"*) ;;
+            *) export PATH="$PATH:$PNPM_HOME" ;;
+        esac
+        # pnpm end
+    fi
+
     # My own user bin directory (highest priority)
     [[ -d "${_USER_BIN_DIR}" ]] && PATH="${_USER_BIN_DIR}:$PATH"
 
