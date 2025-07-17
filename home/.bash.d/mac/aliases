@@ -54,11 +54,6 @@ defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/Std
 defaults read /System/Library/CoreServices/backupd.bundle/Contents/Resources/StdExclusions.plist PathsExcluded | grep -oP --color=never -e '^\\W*\"\\K[^\"]+';"
 
 
-# Check an OpenCL file for compilation errors. (Preprocesses, compiles, and assembles the file, with
-# all warnings, and discards the generated file.)
-alias opencl-check='/System/Library/Frameworks/OpenCL.framework/Versions/A/Libraries/openclc -c -x cl -cl-std=CL1.1 -Weverything -o /dev/null'
-
-
 # Toggles WiFi on or off
 alias wifi='networksetup -getairportpower en0 | grep "On\$" >/dev/null && networksetup -setairportpower en0 off || networksetup -setairportpower en0 on'
 

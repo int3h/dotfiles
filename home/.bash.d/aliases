@@ -29,7 +29,7 @@ alias sudo='sudo '
 
 alias g='git'
 # Wrap `git` in GitHub helper, `hub`, wrapper, if installed
-type -t hub >/dev/null && alias git='hub'
+# type -t hub >/dev/null && alias git='hub'
 
 # Command to load the latest history from all terminals into this terminal's history buffer
 alias histup='history -a && history -c && history -r'
@@ -38,17 +38,6 @@ alias histup='history -a && history -c && history -r'
 # the destination (update mode), verbose, recurse, preserve timestamp, preserve +x flag, compress
 # transfer, use ~/.rsync_eclude.conf to set excluded files
 alias mrsync="rsync -auvrtEz --exclude-from=$HOME/.rsync_exclude.conf --progress --rsh=ssh"
-
-
-type -t n >/dev/null && alias iorepl='n io use $(n io --stable) -i'
-
-if type -t jupyter >/dev/null; then
-    alias notebook='jupyter notebook'
-elif type -t ipython3 >/dev/null; then
-    alias notebook='ipython3 notebook'
-elif type -t ipython >/dev/null; then
-    alias notebook='ipython notebook'
-fi
 
 alias sshconf="$VISUAL $HOME/.ssh/config"
 
