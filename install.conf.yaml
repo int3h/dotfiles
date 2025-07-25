@@ -41,10 +41,11 @@
         command: '[[ "$(uname)" == "Darwin" ]] && chflags hidden ~/bin'
         description: Hiding ~/bin
 
+- install-brew: true
+- brewfile:
+    - Brewfile
 # TODO:
 #   - Add Janus as a submodule
 #       - Find way to manually bump the version (commit) of tlib submodule, to fix bug
 #       - Maybe: experiment with bumping version of all submodules to HEAD of `main`
-#   - Maybe: auto-run homebrew with .Brewfile
-#       - Might want to not link .Brewfile to ~/
 #   - Maybe: automatically compile YouCompleteMe & update other Vim plugins
