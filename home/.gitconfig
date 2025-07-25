@@ -1,6 +1,6 @@
 [user]
-	name = Matt Torok
-	email = git@mail.overblown.net
+	name = Matt
+	email = 567398+int3h@users.noreply.github.com
 [github]
 	user = int3h
 [core]
@@ -58,9 +58,9 @@
 
 [include]
 	# Include system-specific config. You must manually create this symlink to Mac or Linux config.
-	path = ~/.gitsupport/gitconfig.active
+	path = ~/.gitconfig.mac
 	# Include sensitive config options (this file not stored in dotfiles repo)
-	path = ~/.gitsupport/gitconfig.private
+	path = ~/.gitconfig.private
 
 
 #  vim: set tabstop=4 shiftwidth=4 textwidth=100 noexpandtab foldmethod=manual filetype=gitconfig:

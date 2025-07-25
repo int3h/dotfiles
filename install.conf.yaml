@@ -22,7 +22,9 @@
         path: bin/**
     ~/.bash.d: .bash.d
     ~/.config: .config
-    ~/.gitsupport: .gitsupport
+    ~/.gitconfig.mac:
+        if: '[[ "$(uname)" == "Darwin" ]]'
+        path: other/gitconfig.mac
 
 # Hack to symlink files in home/ that *don't* start with a '.'. Since a glob generally only allows
 # you to select with or without a dot, but not both; and beacuse two '~/' keys in a dict will
@@ -37,7 +39,6 @@
 #       - Find way to manually bump the version (commit) of tlib submodule, to fix bug
 #       - Maybe: experiment with bumping version of all submodules to HEAD of `main`
 #   - Run command to hide ~/bin
-#   - Symlink correct git config file for the OS
 #   - Maybe: auto-run homebrew with .Brewfile
 #       - Might want to not link .Brewfile to ~/
 #   - Maybe: automatically compile YouCompleteMe & update other Vim plugins
