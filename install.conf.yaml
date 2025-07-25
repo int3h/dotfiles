@@ -22,12 +22,16 @@
 - link:
     ~/bin/:
         glob: true
-        path: bin/**
-    ~/.bash.d: .bash.d
-    ~/.config: .config
+        path: other-links/bin/**
+    ~/.bash.d:
+        glob: true
+        path: other-links/.bash.d/*
+    ~/.config:
+        glob: true
+        path: other-links/.config/*
     ~/.gitconfig.mac:
         if: '[[ "$(uname)" == "Darwin" ]]'
-        path: other/gitconfig.mac
+        path: other-links/gitconfig.mac
 
 
 # TODO:
