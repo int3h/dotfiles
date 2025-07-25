@@ -36,13 +36,14 @@
         if: '[[ "$(uname)" == "Darwin" ]]'
         path: store/gitconfig.mac
 
+- install-brew: true
+- brewfile:
+    - Brewfile
+
 - shell:
     -
         command: '[[ "$(uname)" == "Darwin" ]] && chflags hidden ~/bin'
         description: Hiding ~/bin
 
-- install-brew: true
-- brewfile:
-    - Brewfile
 # TODO:
 #   - Maybe: automatically compile YouCompleteMe & update other Vim plugins
