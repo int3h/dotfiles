@@ -106,7 +106,7 @@ fi
 
 
 # If YCM's native module hasn't been built yet, or has been updated above, (re-)build it
-if ! [[ -e home/.janus/YouCompleteMe/third_party/ycmd/ycm_core.so ]] || [[ "$ycm_version_prev" != "$(getRev "home/.janus/YouCompleteMe/third_party/ycmd")" ]]; then
+if ! [[ -e $HOME/.janus/YouCompleteMe/third_party/ycmd/ycm_core.so ]] || [[ "$ycm_version_prev" != "$(getRev "$HOME/.janus/YouCompleteMe/third_party/ycmd")" ]]; then
 	printHeader "Rebuilding YouCompleteMe"
 
     # If `node` and `npm` are installed, enable Tern.js-based completion in YCM
@@ -115,5 +115,5 @@ if ! [[ -e home/.janus/YouCompleteMe/third_party/ycmd/ycm_core.so ]] || [[ "$ycm
 		ycm_addl_args='--tern-completer'
 	fi
 
-	(cd home/.janus/YouCompleteMe && python3 ./install.py --clang-completer $ycm_addl_args)
+	(cd $HOME/.janus/YouCompleteMe && python3 ./install.py --clang-completer $ycm_addl_args)
 fi
