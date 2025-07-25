@@ -45,6 +45,9 @@
         description: Hiding ~/bin
         command: '[[ "$(uname)" == "Darwin" ]] && chflags hidden ~/bin'
     -
+        description: Moving existing bash history
+        command: '[[ -e ~/.bash_history ]] && cat ~/.bash_history >> ~/.bash.d/history && rm ~/.bash_history'
+    -
         description: Updating base Janus install
         command: cd ~/.vim && rake
     -
