@@ -1,6 +1,6 @@
 [core]
 	editor = mvim -f --nomru -c \"au VimLeave * !open -a Terminal\"
-	;editor = atom-beta --wait
+
 [credential]
 	helper = osxkeychain
 
@@ -12,8 +12,8 @@
 
 [mergetool]
 	keepBackup = true
-[merge]
-	tool = araxis
+;[merge]
+	;tool = araxis
 	;tool = Kaleidoscope
 	;conflictstyle = diff3
 
