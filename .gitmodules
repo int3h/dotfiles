@@ -1,62 +1,62 @@
 [submodule "home/.janus/YouCompleteMe"]
 	path = store/home/.janus/YouCompleteMe
-	url = git@github.com:Valloric/YouCompleteMe.git
+	url = https://github.com/Valloric/YouCompleteMe.git
 	ignore = dirty
 [submodule "home/.janus/editorconfig-vim"]
 	path = store/home/.janus/editorconfig-vim
-	url = git@github.com:editorconfig/editorconfig-vim.git
+	url = https://github.com/editorconfig/editorconfig-vim.git
 	ignore = dirty
 [submodule "home/.janus/numbers.vim"]
 	path = store/home/.janus/numbers.vim
-	url = git@github.com:int3h/numbers.vim.git
+	url = https://github.com/int3h/numbers.vim.git
 	ignore = dirty
 [submodule "home/.janus/sudo.vim"]
 	path = store/home/.janus/sudo.vim
-	url = git@github.com:vim-scripts/sudo.vim.git
+	url = https://github.com/vim-scripts/sudo.vim.git
 	ignore = dirty
 [submodule "home/.janus/tabular"]
 	path = store/home/.janus/tabular
-	url = git@github.com:godlygeek/tabular.git
+	url = https://github.com/godlygeek/tabular.git
 	ignore = dirty
 [submodule "home/.janus/ultisnips"]
 	path = store/home/.janus/ultisnips
-	url = git@github.com:SirVer/ultisnips.git
+	url = https://github.com/SirVer/ultisnips.git
 	ignore = dirty
 [submodule "home/.janus/vim-session"]
 	path = store/home/.janus/vim-session
-	url = git@github.com:xolox/vim-session.git
+	url = https://github.com/xolox/vim-session.git
 	ignore = dirty
 [submodule "home/.janus/vim-surround"]
 	path = store/home/.janus/vim-surround
-	url = git@github.com:tpope/vim-surround.git
+	url = https://github.com/tpope/vim-surround.git
 	ignore = dirty
 [submodule "home/.janus/vim-rename"]
 	path = store/home/.janus/vim-rename
-	url = git@github.com:wojtekmach/vim-rename.git
+	url = https://github.com/wojtekmach/vim-rename.git
 	ignore = dirty
 [submodule "home/.janus/IndentConsistencyCop"]
 	path = store/home/.janus/IndentConsistencyCop
-	url = git@github.com:vim-scripts/IndentConsistencyCop.git
+	url = https://github.com/vim-scripts/IndentConsistencyCop.git
 	ignore = dirty
 [submodule "home/.janus/vim-nerdtree-tabs"]
 	path = store/home/.janus/vim-nerdtree-tabs
-	url = git@github.com:jistr/vim-nerdtree-tabs.git
+	url = https://github.com/jistr/vim-nerdtree-tabs.git
 	ignore = dirty
 [submodule "home/.janus/vim-misc"]
 	path = store/home/.janus/vim-misc
-	url = git@github.com:xolox/vim-misc.git
+	url = https://github.com/xolox/vim-misc.git
 	ignore = dirty
 [submodule "home/.janus/vim-opencl"]
 	path = store/home/.janus/vim-opencl
-	url = git@github.com:int3h/vim-opencl.git
+	url = https://github.com/int3h/vim-opencl.git
 	ignore = dirty
 [submodule "home/.janus/vim-indent-guides"]
 	path = store/home/.janus/vim-indent-guides
-	url = git@github.com:nathanaelkane/vim-indent-guides.git
+	url = https://github.com/nathanaelkane/vim-indent-guides.git
 	ignore = dirty
 [submodule "home/.janus/auto-pairs"]
 	path = store/home/.janus/auto-pairs
-	url = git@github.com:jiangmiao/auto-pairs.git
+	url = https://github.com/jiangmiao/auto-pairs.git
 	ignore = dirty
 [submodule "home/.janus/vim-latex"]
 	path = home/.janus/vim-latex
@@ -64,7 +64,7 @@
 	ignore = dirty
 [submodule "home/.janus/vim-ansible-yaml"]
 	path = store/home/.janus/vim-ansible-yaml
-	url = git@github.com:chase/vim-ansible-yaml.git
+	url = https://github.com/chase/vim-ansible-yaml.git
 	ignore = dirty
 [submodule "dotbot"]
 	path = dotbot
@@ -75,4 +75,4 @@
 	url = https://github.com/wren/dotbot-brew.git
 [submodule "store/home/.vim"]
 	path = store/home/.vim
-	url = git@github.com:int3h/janus.git
+	url = https://github.com/int3h/janus.git
