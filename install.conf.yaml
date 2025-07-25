@@ -33,12 +33,15 @@
         if: '[[ "$(uname)" == "Darwin" ]]'
         path: store/gitconfig.mac
 
+- shell:
+    -
+        command: '[[ "$(uname)" == "Darwin" ]] && chflags hidden ~/bin'
+        description: Hiding ~/bin
 
 # TODO:
 #   - Add Janus as a submodule
 #       - Find way to manually bump the version (commit) of tlib submodule, to fix bug
 #       - Maybe: experiment with bumping version of all submodules to HEAD of `main`
-#   - Run command to hide ~/bin
 #   - Maybe: auto-run homebrew with .Brewfile
 #       - Might want to not link .Brewfile to ~/
 #   - Maybe: automatically compile YouCompleteMe & update other Vim plugins
