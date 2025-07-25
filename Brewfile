@@ -8,7 +8,7 @@
 
 brew 'autoconf'
 brew 'automake'
-brew 'cmake' #, args: ['with-completion']
+brew 'cmake'
 
 
 # ------------------------------------------------------------------------------
@@ -34,14 +34,9 @@ brew 'openssl'
 # ------------------------------------------------------------------------------
 
 brew 'python'
-#brew 'python3'
-# Disabled in favor of `nvm` for the moment
-# brew 'n'
-#brew 'nvm'
 brew 'node'
 brew 'ruby'
 brew 'sqlite'
-
 
 # ------------------------------------------------------------------------------
 # Version control
@@ -50,25 +45,13 @@ brew 'sqlite'
 brew 'git'
 brew 'ssh-copy-id'
 brew 'diff-so-fancy'
-# brew 'git-lfs'
-
 
 # ------------------------------------------------------------------------------
 # Coding tools
 # ------------------------------------------------------------------------------
 
-brew 'macvim' #, args: ['with-override-system-vim']
-# Used by some Vim plugins for auto-completion
-# brew 'ctags'
-
-# Like `grep`, but custom-built for searching source code
-# brew 'ack'
-
-# CLI utility for reading/searching/manipulating JSON data
+brew 'macvim'
 brew 'jq'
-
-# Create cheesy graph visualizations from a simple text description
-#brew 'graphviz', args: ['with-app', 'with-bindings', 'with-librsvg']
 
 
 # ------------------------------------------------------------------------------
@@ -80,26 +63,16 @@ brew 'jq'
 #  `bash-completion` v2 the default. Since we manually install Bash 4.x via Homebrew, we want v2.
 brew 'bash-completion@2'
 
-# Creates a new command, `j`, that can be used in place of `cd`. Unlike `cd`, `j` allows you to give
-#  only a snippet of a path, rather than a real path. The snippet is compared to a list of every
-#  directory you've previously `cd`ed to, ranked by how frequently you `cd` to them. The top-ranked
-#  match is chosen, and `j` will then `cd` to that match's real path.
-# brew 'autojump'
-
 # "The Generic Colouriser": auto-colorizes the output of certain commands (like `ps`)
 brew 'grc'
 
 # Cute, little ASCII Apple logo + system stats, displayed at shell login
 brew 'archey4'
 
-#brew 'terminal-notifier'
 brew 'gnu-getopt'
 
 # Dependency of my custom `hman` script
-brew 'groff' #, args: ['with-grohtml']
-
-# Dependency of my `spell` Bash command
-# brew 'aspell'
+brew 'groff'
 
 
 # ------------------------------------------------------------------------------
@@ -112,38 +85,63 @@ brew 'most'
 brew 'trash'
 brew 'tree'
 brew 'wget'
-# brew 'rename'
-
-
-# ------------------------------------------------------------------------------
-# Misc. other programs
-# ------------------------------------------------------------------------------
-
-# CLI/structured interface for reading & setting file associations in OS X
-brew 'duti'
-
-# Like 'ssh', but better. Needs to be installed on server, and doesn't play nice with `tmux` though
-# brew 'mobile-shell', args: ['HEAD']
 
 
 ################################################################################
 # Casks
 ################################################################################
 
-#tap 'caskroom/cask'
+cask "font-jetbrains-mono"
 
-# Adds a Quick Look plugin for previewing generic text-like files. Will just show a simple, plain
-# text view of the file, but without this plugin, OS X won't show any preview at all for any file
-# type it doesn't explicitly know about, even if the file is really just a simple text file.
-#cask 'qlstephen'
 
-# Adds Quick Look plugin for previewing JSON files (doesn't work great, though, esp. with big files)
-#cask 'quickjson'
+################################################################################
+# Old
+################################################################################
+# # Disabled in favor of `nvm` for the moment
+# brew 'n'
+# brew 'nvm'
+# brew 'git-lfs'
 
-# One way to install the "Hack" font, but I found this version to have bugs (other sources did not)
+# # Used by some Vim plugins for auto-completion
+# brew 'ctags'
+
+# # Create cheesy graph visualizations from a simple text description
+# brew 'graphviz', args: ['with-app', 'with-bindings', 'with-librsvg']
+
+# # Like `grep`, but custom-built for searching source code
+# brew 'ack'
+
+# # Creates a new command, `j`, that can be used in place of `cd`. Unlike `cd`, `j` allows you to give
+# #  only a snippet of a path, rather than a real path. The snippet is compared to a list of every
+# #  directory you've previously `cd`ed to, ranked by how frequently you `cd` to them. The top-ranked
+# #  match is chosen, and `j` will then `cd` to that match's real path.
+# brew 'autojump'
+
+# # Dependency of my `spell` Bash command
+# brew 'aspell'
+
+# brew 'rename'
+
+# # Like 'ssh', but better. Needs to be installed on server, and doesn't play nice with `tmux` though
+# brew 'mobile-shell', args: ['HEAD']
+
+# tap 'caskroom/cask'
+
+# # Adds a Quick Look plugin for previewing generic text-like files. Will just show a simple, plain
+# # text view of the file, but without this plugin, OS X won't show any preview at all for any file
+# # type it doesn't explicitly know about, even if the file is really just a simple text file.
+# cask 'qlstephen'
+
+# # Adds Quick Look plugin for previewing JSON files (doesn't work great, though, esp. with big files)
+# cask 'quickjson'
+
+# # One way to install the "Hack" font, but I found this version to have bugs (other sources did not)
 # tap 'caskroom/fonts'
 
-
-# This is where programs like Open Resty live
+# # This is where programs like Open Resty live
 # tap 'homebrew/nginx'
-cask "font-jetbrains-mono"
+
+# brew 'terminal-notifier'
+
+# # CLI/structured interface for reading & setting file associations in OS X
+# brew 'duti'
