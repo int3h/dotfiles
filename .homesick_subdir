@@ -5,7 +5,3 @@ bin/mac
 .bash.d
 
 .gitsupport
-.gnupg
-.matplotlib
-.atom
-.config/archey4
