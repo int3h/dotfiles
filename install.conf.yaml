@@ -3,20 +3,23 @@
         create: true
         relink: true
         relative: true
+        canonicalize: false
         exclude: [ '**/.DS_Store', '.DS_Store' ]
 
-# - clean:
-#   ~/:
-#   ~/.janus:
-#     recursive: true
-
+# Only symlinks files/dirs in home/ that start with a "." . Limitaton of dotbot to only do one or 
+# the other at a time.
 - link:
-    # WARNING: This will NOT link any file that doesn't start with a '.' There's another 'link'
-    # directive below with its own '~/' entry that globs files without a dot. You can also add
-    # those files as their own, individual entries in this dict.
     "~/":
         glob: true
         path: home/.*
+# Only symlinks files/dirs in home/ that DON'T start with a "." . This needs to be its own separate
+# `link` directive or else the `~/` key would shadow that key for the dot version.
+- link:
+    "~/":
+        glob: true
+        path: home/*
+# All other links (can be all in the same `link` directive)
+- link:
     ~/bin/:
         glob: true
         path: bin/**
@@ -26,13 +29,6 @@
         if: '[[ "$(uname)" == "Darwin" ]]'
         path: other/gitconfig.mac
 
-# Hack to symlink files in home/ that *don't* start with a '.'. Since a glob generally only allows
-# you to select with or without a dot, but not both; and beacuse two '~/' keys in a dict will
-# conflict, putting a second `link` command down here with its own `~/` entry works.
-- link:
-    "~/":
-        glob: true
-        path: home/*
 
 # TODO:
 #   - Add Janus as a submodule
