@@ -1,12 +1,15 @@
 " Set font
-set guifont=SFMonoForPowerline-Regular:h10
+"set guifont=SFMonoForPowerline-Regular:h10
 "set guifont=Hack:h10
+set guifont=JetBrainsMono-Regular:h12
 
-colorscheme jellybeans+
+colorscheme dejavu
+
+"colorscheme jellybeans+
 " jellybeans doesn't set highlighting of concealed elements, so link them to keyword highlighting
 " (we use `hi` instead of `hi!` so that the link won't be made if Conceal already has highlighting)
-hi clear Conceal
-hi! link Conceal Underlined
+"hi clear Conceal
+"hi! link Conceal Underlined
 "hi Conceal gui=bold,underline ctermfg=103 guifg=#8197bf
 "	guibg=#2A2733
 
