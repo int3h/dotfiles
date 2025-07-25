@@ -82,11 +82,6 @@ if [[ $install_only -eq 1 ]]; then
     git submodule update --checkout --force --init --recursive
 
 else
-    if type -t osascript >/dev/null 2>/dev/null; then
-        printHeader "Quitting Atom before changing dotfiles"
-        osascript -l JavaScript -e 'var Atom = Application("/Applications/Atom Beta.app");' -e 'if(Atom.running()) { Atom.quit(); }'
-    fi
-
     # So that we can later cleanly commit the changes this script makes (and only those changes)
     printHeader "Stashing dotfile repo changes while we do updates"
 

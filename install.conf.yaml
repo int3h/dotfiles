@@ -42,8 +42,12 @@
 
 - shell:
     -
-        command: '[[ "$(uname)" == "Darwin" ]] && chflags hidden ~/bin'
         description: Hiding ~/bin
+        command: '[[ "$(uname)" == "Darwin" ]] && chflags hidden ~/bin'
+    -
+        description: Updating base Janus install
+        command: cd ~/.vim && rake
+    -
+        description: Updating my Janus plugins
+        command: cd ~/.janus && ./update.sh
 
-# TODO:
-#   - Maybe: automatically compile YouCompleteMe & update other Vim plugins
