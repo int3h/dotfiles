@@ -8,7 +8,7 @@
 
 brew 'autoconf'
 brew 'automake'
-brew 'cmake', args: ['with-completion']
+brew 'cmake' #, args: ['with-completion']
 
 
 # ------------------------------------------------------------------------------
@@ -39,6 +39,8 @@ brew 'python'
 # brew 'n'
 #brew 'nvm'
 brew 'node'
+brew 'ruby'
+brew 'sqlite'
 
 
 # ------------------------------------------------------------------------------
@@ -48,19 +50,19 @@ brew 'node'
 brew 'git'
 brew 'ssh-copy-id'
 brew 'diff-so-fancy'
-brew 'git-lfs'
+# brew 'git-lfs'
 
 
 # ------------------------------------------------------------------------------
 # Coding tools
 # ------------------------------------------------------------------------------
 
-brew 'macvim', args: ['with-override-system-vim']
+brew 'macvim' #, args: ['with-override-system-vim']
 # Used by some Vim plugins for auto-completion
-brew 'ctags'
+# brew 'ctags'
 
 # Like `grep`, but custom-built for searching source code
-brew 'ack'
+# brew 'ack'
 
 # CLI utility for reading/searching/manipulating JSON data
 brew 'jq'
@@ -82,7 +84,7 @@ brew 'bash-completion@2'
 #  only a snippet of a path, rather than a real path. The snippet is compared to a list of every
 #  directory you've previously `cd`ed to, ranked by how frequently you `cd` to them. The top-ranked
 #  match is chosen, and `j` will then `cd` to that match's real path.
-brew 'autojump'
+# brew 'autojump'
 
 # "The Generic Colouriser": auto-colorizes the output of certain commands (like `ps`)
 brew 'grc'
@@ -97,7 +99,7 @@ brew 'gnu-getopt'
 brew 'groff' #, args: ['with-grohtml']
 
 # Dependency of my `spell` Bash command
-brew 'aspell'
+# brew 'aspell'
 
 
 # ------------------------------------------------------------------------------
