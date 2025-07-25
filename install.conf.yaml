@@ -48,7 +48,7 @@
 - shell:
     -
         description: Hiding ~/bin
-        command: '[[ "$(uname)" == "Darwin" ]] && chflags hidden ~/bin'
+        command: '[[ "$(uname)" == "Darwin" ]] && chflags hidden ~/bin || true'
     -
         description: Moving existing bash history
         command: '[[ -e ~/.bash_history ]] && cat ~/.bash_history >> ~/.bash.d/history && rm ~/.bash_history || true'
