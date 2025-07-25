@@ -4,7 +4,7 @@
 [github]
 	user = int3h
 [core]
-	excludesfile = ~/.gitsupport/gitignore
+	excludesfile = ~/.gitignore
 [color]
 	ui = auto
 [log]
