@@ -1,6 +1,7 @@
 - plugins:
     - dotbot-plugins/dotbot-brew
 
+
 - defaults:
     link:
         create: true
@@ -8,21 +9,21 @@
         relative: true
         canonicalize: false
         exclude: [ '**/.DS_Store', '.DS_Store' ]
+        # force: true
+
 
 # Only symlinks files/dirs in home/ that start with a "." . Limitaton of dotbot to only do one or 
 # the other at a time.
 - link:
     "~/":
         glob: true
-        path: home/.*
-# Only symlinks files/dirs in home/ that DON'T start with a "." . This needs to be its own separate
-# `link` directive or else the `~/` key would shadow that key for the dot version.
+        path: store/home/.*
 - link:
+    # Only symlinks files/dirs in home/ that DON'T start with a "." . This needs to be its own
+    # separate `link` directive or else the `~/` key would shadow that key for the dot version.
     "~/":
         glob: true
-        path: home/*
-# All other links (can be all in the same `link` directive)
-- link:
+        path: store/home/*
     ~/bin/:
         glob: true
         path: store/bin/**
@@ -36,9 +37,11 @@
         if: '[[ "$(uname)" == "Darwin" ]]'
         path: store/gitconfig.mac
 
+
 - install-brew: true
 - brewfile:
     - Brewfile
+
 
 - shell:
     -
