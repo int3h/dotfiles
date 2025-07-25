@@ -1,5 +1,6 @@
 - plugins:
     - dotbot-plugins/dotbot-brew
+    - dotbot-plugins/dotbot-conditional
 
 
 - defaults:
@@ -36,11 +37,12 @@
     ~/.gitconfig.mac:
         if: '[[ "$(uname)" == "Darwin" ]]'
         path: store/gitconfig.mac
-
-
-- install-brew: true
-- brewfile:
-    - Brewfile
+- conditional:
+    if: '[[ "$(uname)" == "Darwin" ]]'
+    then:
+        - install-brew: true
+        - brewfile:
+            - Brewfile
 
 
 - shell:

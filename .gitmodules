@@ -76,3 +76,6 @@
 [submodule "store/home/.vim"]
 	path = store/home/.vim
 	url = https://github.com/int3h/janus.git
+[submodule "dotbot-plugins/dotbot-conditional"]
+	path = dotbot-plugins/dotbot-conditional
+	url = https://gitlab.com/gnfzdz/dotbot-conditional.git
