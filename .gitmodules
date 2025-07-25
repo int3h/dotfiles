@@ -70,3 +70,6 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
+[submodule "dotbot-brew"]
+	path = dotbot-plugins/dotbot-brew
+	url = https://github.com/wren/dotbot-brew.git

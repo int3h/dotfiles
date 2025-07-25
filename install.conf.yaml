@@ -1,3 +1,6 @@
+- plugins:
+    - dotbot-plugins/dotbot-brew
+
 - defaults:
     link:
         create: true
