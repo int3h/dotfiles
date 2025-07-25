@@ -73,3 +73,6 @@
 [submodule "dotbot-brew"]
 	path = dotbot-plugins/dotbot-brew
 	url = https://github.com/wren/dotbot-brew.git
+[submodule "store/home/.vim"]
+	path = store/home/.vim
+	url = git@github.com:int3h/janus.git
