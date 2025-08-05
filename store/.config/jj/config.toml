@@ -1,0 +1,6 @@
+"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+[aliases]
+pull = ["util", "exec", "--", "bash", "-c", """
+jj rebase -s 'all:last_pull+ ~ ::trunk()' -d 'trunk()' && jj bookmark move --from last_pull --to 'trunk()'
+"""]
