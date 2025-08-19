@@ -141,11 +141,7 @@ nmap <silent> Q <Nop>
 
 
 function VimEditRC(bBang)
-	if a:bBang != "!"
-		" If the command is not proceeded by a '!', open a new MacVim instance and execute commands
-		" to load the vimrc files into tabs on startup.
-		exec "silent !mvim -c 'edit ~/.vimrc.before' -c 'tabedit ~/.vimrc.after' -c 'tabedit ~/.gvimrc.before' -c 'tabedit ~/.gvimrc.after' -c 'tabnext 2'"
-	else
+	if a:bBang == "!"
 		" If the command is proceeded by a '!', create new tabs directly in
 		" this instance of Vim with the vimrc files.
 
@@ -162,6 +158,11 @@ function VimEditRC(bBang)
 		exec "tabedit ~/.gvimrc.before"
 		exec "tabedit ~/.gvimrc.after"
 		exec "tabnext " . l:vimrcafter
+	else
+		" If the command is not proceeded by a '!', open a new MacVim instance
+		" and execute commands
+		" to load the vimrc files into tabs on startup.
+		exec "silent !mvim -c 'edit ~/.vimrc.before' -c 'tabedit ~/.vimrc.after' -c 'tabedit ~/.gvimrc.before' -c 'tabedit ~/.gvimrc.after' -c 'tabnext 2'"
 	endif
 endfunction
 
