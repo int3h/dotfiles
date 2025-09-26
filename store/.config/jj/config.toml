@@ -9,3 +9,6 @@ log = "present(trunk()..@) | (author_date(after:\"31 days ago\") & ancestors(imm
 pull = ["util", "exec", "--", "bash", "-c", """
 jj git fetch && jj rebase -s 'last_pull+ ~ ::trunk() ~ immutable()' -d 'trunk()' && jj bookmark move --from last_pull --to 'trunk()'
 """]
+
+[ui]
+default-command = ["log", "--revisions", ".."]
