@@ -1,5 +1,10 @@
 "$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
 
+[revsets]
+# By default, `jj log` will show the commits between main and the current rev, and all the
+# local-only branches that have been updated in the last month, and the 4 ancestors of main
+log = "present(trunk()..@) | (author_date(after:\"31 days ago\") & ancestors(immutable_heads().., 3)) | ancestors(present(trunk()), 4)"
+
 [aliases]
 pull = ["util", "exec", "--", "bash", "-c", """
 jj git fetch && jj rebase -s 'last_pull+ ~ ::trunk() ~ immutable()' -d 'trunk()' && jj bookmark move --from last_pull --to 'trunk()'
