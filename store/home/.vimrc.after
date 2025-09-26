@@ -327,6 +327,7 @@ let g:syntastic_opencl_checkers = ['openclc']
 "" Jujutsu commit messages
 " Turn off line wrapping, it's annoying
 au FileType jjdescription setlocal formatoptions-=l
+au FileType jjdescription setlocal formatoptions-=t
 
 """"""" Powerline {{{1
 if has("python3")
