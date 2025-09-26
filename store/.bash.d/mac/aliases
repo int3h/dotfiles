@@ -5,6 +5,7 @@ if [[ "$OS" == "Linux" ]]; then
 fi
 
 alias b='brew'
+complete -o bashdefault -o default -F _brew b
 
 # Require confirmation when deleting a file (or for each dir); recursively delete dirs; be verbose.
 if type -t grm >/dev/null 2>&1; then
