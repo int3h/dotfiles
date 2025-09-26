@@ -15,9 +15,6 @@ alias lesw='less -S'
 alias sudp='sudo'
 alias la='ls'
 
-# Shortcut to cd to my current homesick castle directory
-type -t homesick >/dev/null && alias castle='cd $(homesick show_path)'
-
 # `tm` will open (and create, if necessary) a tmux session named for the current user
 type -t tmux >/dev/null && alias tm="tmux new-session -A -s \"${USER//./}\""
 
