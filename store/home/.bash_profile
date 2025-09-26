@@ -5,6 +5,10 @@
 case $(uname -s) in
     Darwin) export OS='Mac';;
     Linux) export OS='Linux';;
+    *)
+        export OS='Unknown'
+        echo "[~/.bash_profile] Warning: unknown OS detected. A lot of config will be skipped." >&2
+        ;;
 esac
 
 _USER_CONFIG_PATH="${_USER_CONFIG_PATH:-${HOME}/.bash.d}"
