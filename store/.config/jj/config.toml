@@ -12,3 +12,12 @@ jj git fetch && jj rebase -s 'last_pull+ ~ ::trunk() ~ immutable()' -d 'trunk()'
 
 [ui]
 default-command = ["log", "--revisions", ".."]
+diff-editor = "/usr/bin/opendiff"
+merge-editor = "filemerge"
+
+[merge-tools.filemerge]
+program = "/usr/bin/open"
+merge-args = ["-a", "FileMerge", "-n", "-W", "--args", "-left", "$left", "-right", "$right", "-ancestor", "$base", "-merge", "$output"]
+
+[templates]
+
