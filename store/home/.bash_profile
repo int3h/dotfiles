@@ -55,8 +55,8 @@ export HISTFILE="$_USER_CONFIG_PATH/history"
 # Append to the existing history file, rather than overwriting it
 shopt -s histappend;
 # Save each command when the prompt is re-displayed, rather than only at shell exit
-#[[ $_BASHRC_DID_RUN ]] || PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;}history -a;history -c;history -r";
-[[ $_BASHRC_DID_RUN ]] || PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }history -a"
+# [[ "$PROMPT_COMMAND" != *"history -a"* ]] &&  PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND/%;*( )/} ;}history -a;history -c;history -r";
+[[ "$PROMPT_COMMAND" != *"history -a"* ]] && PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }history -a"
 
 #################################
 ##### PATH setup (dependency of most other commands)
@@ -123,7 +123,7 @@ if type -t 'npm' >/dev/null; then
         fi
     }
 
-    [[ $_BASHRC_DID_RUN ]] || PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }add_npm_to_path"
+    [[ "$PROMPT_COMMAND" != *"add_npm_to_path"* ]] && PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }add_npm_to_path"
 fi
 
 
@@ -176,7 +176,7 @@ if [[ $OS == "Linux" ]]; then
 	[[ -n "$SSH_CLIENT" ]] && export DISPLAY=:0
 
 	# Setup CUDA tools
-	if [[ ! $_BASHRC_DID_RUN ]] && [[ -d /usr/local/cuda ]]; then
+	if [[ "$PATH" != *"/usr/local/cuda/bin"* ]] && [[ -d /usr/local/cuda ]]; then
 		export PATH="/usr/local/cuda/bin:$PATH"
 		export LD_LIBRARY_PATH="${LD_LIBRARY_PATH+:}/usr/local/cuda/lib64"
 		export LIBRARY_PATH="${LIBRARY_PATH+:}/usr/local/cuda/lib64"
@@ -351,7 +351,7 @@ $HOME/\~\/}"
 case $- in
 *i*)
     if [[ $TERM != dumb ]] && tput cols >/dev/null 2>/dev/null; then
-        if [[ $_BASHRC_DID_RUN != 1 ]]; then
+        if [[ "$PROMPT_COMMAND" != *"resize_prompt_dirtrim"* ]]; then
             PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND; }resize_prompt_dirtrim"
         fi
         PROMPT_DIRTRIM=3
@@ -446,7 +446,6 @@ case $- in
 
         export PATH
         export PROMPT_COMMAND
-        export _BASHRC_DID_RUN=1
 
         # Initialize iTerm2 integration (works on Linux over SSH, too)
         [[ -f ~/.iterm2_shell_integration.bash ]] && [[ "$TERM_PROGRAM" != "Apple_Terminal" ]] && \
@@ -465,6 +464,3 @@ case $- in
     fi
     ;;
 esac
-
-
-export _BASHRC_DID_RUN=1
