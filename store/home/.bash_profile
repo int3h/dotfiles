@@ -219,9 +219,6 @@ if [[ $OS == "Mac" ]]; then
         export VISUAL='mvim -f'
     fi
 
-    [[ -d ${HOMEBREW_PREFIX}/opt/grep/libexec/gnubin ]] && PATH="${HOMEBREW_PREFIX}/opt/grep/libexec/gnubin:$PATH"
-    [[ -d ${HOMEBREW_PREFIX}/opt/gnu-sed/libexec/gnubin ]] && PATH="${HOMEBREW_PREFIX}/opt/gnu-sed/libexec/gnubin:$PATH"
-
     # bash-completion2 homebrew package init
     [ -f $HOMEBREW_PREFIX/share/bash-completion/bash_completion ] && . $HOMEBREW_PREFIX/share/bash-completion/bash_completion
     # bash-completion (i.e. v1.x) homebrew package init
@@ -447,14 +444,7 @@ case $- in
             fi
         fi
 
-        # Remove duplicate entries from $PATH. Maintains current $PATH component ordering, using
-        # first occurrence
-        export PATH="$(echo "$PATH" \
-            | sed -e 's/:\(:\|$\)/:.\1/g' \
-            | awk 'BEGIN { RS=":";   } { path=$0; if($0 == "" || $0 == "\n") {path="."} n[path]++; if(n[path] < 2) { printf(":%s", $0);  }   }' \
-            | cut -c 2- \
-        )"
-
+        export PATH
         export PROMPT_COMMAND
         export _BASHRC_DID_RUN=1
 
