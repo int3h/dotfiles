@@ -37,20 +37,4 @@ using() {
     sudo lsof | awk -v path="$search_path" '{if($9 ~ path) print;}'
 }
 
-
-# This function is defined by OS X default `/etc/bashrc_Apple_Terminal`. However, there is a bug
-# when `find` is GNU find. We redefine it here, and fix the bug by referencing OS X's built-in find.
-shell_session_delete_expired() {
-	if ([ ! -e "$SHELL_SESSION_TIMESTAMP_FILE" ] || [ -z $(/usr/bin/find "$SHELL_SESSION_TIMESTAMP_FILE" -mtime -1d) ]); then
-	    local expiration_lock_file="$SHELL_SESSION_DIR/_expiration_lockfile"
-	    if shlock -f "$expiration_lock_file" -p $$; then
-		echo -n 'Deleting expired sessions...'
-		local delete_count=$(/usr/bin/find "$SHELL_SESSION_DIR" -type f -mtime +2w -print -delete | wc -l)
-		[ "$delete_count" -gt 0 ] && echo $delete_count' completed.' || echo 'none found.'
-		touch "$SHELL_SESSION_TIMESTAMP_FILE"
-		rm "$expiration_lock_file"
-	    fi
-	fi
-}
-
 # vim: set tabstop=4 shiftwidth=4 textwidth=100 expandtab foldmethod=manual filetype=sh:

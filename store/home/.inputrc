@@ -23,7 +23,7 @@ set expand-tilde off
 # Insert a string at the start of the line to indicate which Vi mode we're in (insert or command)
 #set show-mode-in-prompt on
 
-# Sets the string to be inserted at the start of the line for each Vi mode. 
+# Sets the string to be inserted at the start of the line for each Vi mode.
 #
 # By inserting ANSII term color/style escape codes, we can change the style of $PS1 depending on the
 # mode. Be sure to start each string with a 'term reset' command (to clean up leftover styles set by
