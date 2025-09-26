@@ -58,17 +58,14 @@ shopt -s histappend;
 ##### PATH setup (dependency of most other commands)
 #################################
 
-# We want to avoud setting the path twice, which can happen if, e.g., we're in a tmux subshell. We
-# check to see if one our custom path components (~/bin) is in $PATH and only proceed if it isn't.
-if [[ ! $_BASHRC_DID_RUN ]]; then
-    ## High weight (last added = lowest priority)
-
-    # Homebrew (overrides system tools)
-    [[ -d /usr/local/bin ]] && PATH="/usr/local/sbin:/usr/local/bin:$PATH"
-
-    # Apple Silicon homebrew
-    [[ -e /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
-
+if [[ "$OS" == "Mac" ]]; then
+    # On Mac, we have a big, custom script for setting up paths
+    if [[ -e "$HOME/.bash.d/paths.sh" ]]; then
+        source "$HOME/.bash.d/paths.sh"
+    else
+        echo "[Custom ~/.bash_profile] Warning: Mac path setup script could not be found at '$HOME/.bash.d/paths.sh'. Not setting \$PATH" >&2
+    fi
+elif [[ "$OS" == "Linux" ]]; then
     # `pip install --user` binaries
     [[ -d $HOME/.local/bin ]] && PATH="$HOME/.local/bin:$PATH"
 
@@ -77,41 +74,17 @@ if [[ ! $_BASHRC_DID_RUN ]]; then
         PATH="$(ruby -rrubygems -e 'puts Gem.user_dir')/bin:$PATH"
     fi
 
-	if [[ "$OS" == "Linux" ]]; then
-        [[ -d /opt/splunkforwarder/bin ]] && PATH="/opt/splunkforwarder/bin:$PATH"
-        [[ -d /opt/splunk/bin ]] && PATH="/opt/splunk/bin:$PATH"
-        # In Linux, `npm install -g` normally requires `sudo`. We set the global path to
-        # ~/.npm_global and add its bin directory to our $PATH.
-        [[ -d ~/.npm_global ]] && PATH="$HOME/.npm_global/bin:$PATH"
-        [[ -d "${_USER_BIN_DIR}/linux" ]] && PATH="${_USER_BIN_DIR}/linux:$PATH"
-    elif [[ "$OS" == "Mac" ]]; then
-        [[ -d "${_USER_BIN_DIR}/mac" ]] && PATH="${_USER_BIN_DIR}/mac:$PATH"
-        # Araxis Merge command line utilities (if they're installed)
-        [[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && PATH="$PATH:/Applications/Araxis Merge.app/Contents/Utilities"
-    fi
+    # In Linux, `npm install -g` normally requires `sudo`. We set the global path to
+    # ~/.npm_global and add its bin directory to our $PATH.
+    [[ -d ~/.npm_global ]] && PATH="$HOME/.npm_global/bin:$PATH"
+    [[ -d "${_USER_BIN_DIR}/linux" ]] && PATH="${_USER_BIN_DIR}/linux:$PATH"
 
     if type -t go >/dev/null && [[ -d "$(go env GOPATH)/bin" ]]; then
         PATH="$(go env GOPATH)/bin:$PATH"
     fi
 
-    if type -t rustup >/dev/null && [[ -d "$(brew --prefix rustup)/bin" ]]; then
-        PATH="$(brew --prefix rustup)/bin:$PATH"
-    fi
-
-    if [[ -d "$HOME/Library/pnpm" ]]; then
-        # pnpm
-        export PNPM_HOME="$HOME/Library/pnpm"
-        case ":$PATH:" in
-            *":$PNPM_HOME:"*) ;;
-            *) export PATH="$PATH:$PNPM_HOME" ;;
-        esac
-        # pnpm end
-    fi
-
     # My own user bin directory (highest priority)
     [[ -d "${_USER_BIN_DIR}" ]] && PATH="${_USER_BIN_DIR}:$PATH"
-
-    ## Low weight (last added = lowest priority)
 
     # Binaries in the CWD
     export PATH="$PATH:."
