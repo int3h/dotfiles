@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Given two PATH-like strings, this finds any path components that exist in $2 but not in $1, and
-# prints them out in PATH-like format (`:/foo/bar:/missing/path:`). Does not print anything if
+# prints them out in PATH-like format (`/foo/bar:/missing/path:`). Does not print anything if
 # there are no missing components. Warning: does not preserve ordering of missing parts.
 __print_missing_paths() {
     local NEW_PATH="$1"
@@ -10,16 +10,15 @@ __print_missing_paths() {
     # (Comments up here because I can't do them inline without breaking things...)
     # `printf` so that there's no trailing newline
     # `comm` finds the differences between two strings, line-by-line
-    # comm wants files, so we do some bash magic to make these commands look like files.
-    # These commands split the PATH parts into sorted lines.
-    # Recombine the lines into a path-like string
+    # Do some bash magic to turn commands output (which split PATH into lines) into fd
+    # Finally, recombine the lines into a path-like string
     local DIFFED_PATH="$(printf \
         "$(comm -13 \
             <(echo $NEW_PATH | sed -e "s/:/\n/g" | sort ) \
             <(echo "$OLD_PATH" | sed -e "s/:/\n/g" | sort))" \
         | tr '\n' ':')"
 
-    [[ -n "$DIFFED_PATH" ]] && printf ":${DIFFED_PATH}:"
+    [[ -n "$DIFFED_PATH" ]] && printf "${DIFFED_PATH}:"
 }
 
 __setup_mac_paths() {
@@ -72,7 +71,8 @@ __setup_mac_paths() {
     eval "$(/opt/homebrew/bin/brew shellenv)"
 
     local MISSING_PATHS="$(__print_missing_paths "${CUSTOM_PATH}:$PATH:." "$OLD_PATH")"
-    PATH="${CUSTOM_PATH}${MISSING_PATHS}$PATH:."
+    PATH="$(echo "${CUSTOM_PATH}:${MISSING_PATHS}$PATH:." \
+        | sed -e 's/::/:/g' -e 's/^://g' -e 's/:$//g')"
 
     export PATH
 }
