@@ -55,6 +55,7 @@ __setup_mac_paths() {
     fi
     # PNPM
     if [[ -d "$HOME/Library/pnpm" ]] && [ -z "${PNPM_HOME}" ]; then
+        export PNPM_HOME="$HOME/Library/pnpm"
         CUSTOM_PATH="${CUSTOM_PATH}:${PNPM_HOME}"
     fi
 
