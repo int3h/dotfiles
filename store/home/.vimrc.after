@@ -325,9 +325,18 @@ let javascript_ignore_javaScriptdoc=1
 let g:syntastic_opencl_checkers = ['openclc']
 
 "" Jujutsu commit messages
-" Turn off line wrapping, it's annoying
-au FileType jjdescription setlocal formatoptions-=l
+" Turn off hard auto-wrappiing of lines to `textwidth`
 au FileType jjdescription setlocal formatoptions-=t
+" Turn off auto-formatting of paragraphs (also does hard line wrapping, sigh)
+au FileType jjdescription setlocal formatoptions-=a
+" Turn on soft line wrapping at screen width
+au FileType jjdescription setlocal wrap
+" When soft-wrapping, only break lines on a word boundary
+au FileType jjdescription setlocal linebreak
+
+
+
+
 
 """"""" Powerline {{{1
 if has("python3")
@@ -341,6 +350,7 @@ else
 		python del powerline_setup
 	endif
 endif
+
 
 
 """"""" NERDTree {{{1
