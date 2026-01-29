@@ -210,7 +210,7 @@ show_dynamic_motd() {
 }
 
 #################################
-##### OS X setup
+##### macOS setup
 #################################
 
 if [[ $OS == "Mac" ]]; then
@@ -272,6 +272,10 @@ if [[ $OS == "Mac" ]]; then
         unset ec2_symlink ec2_abs_path ec2_libexec
     fi
 
+    # OrbStack (Docker Desktop for Mac alternative)
+    if [[ -d "/Applications/OrbStack.app/Contents/Resources/completions/bash" ]] && [[ -n "$BASH_COMPLETION" ]]; then
+        source /Applications/OrbStack.app/Contents/Resources/completions/bash/*.bash 2>/dev/null || :
+    fi
 fi
 
 
@@ -464,3 +468,4 @@ case $- in
     fi
     ;;
 esac
+

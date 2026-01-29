@@ -58,6 +58,11 @@ __setup_mac_paths() {
         CUSTOM_PATH="${CUSTOM_PATH}:${PNPM_HOME}"
     fi
 
+    # OrbStack (Docker Desktop for Mac alternative)
+    if [[ -d "$HOME/.orbstack/bin" ]]; then
+        CUSTOM_PATH="${CUSTOM_PATH}:$HOME/.orbstack/bin"
+    fi
+
 
     # My own user bin directory (highest priority)
     [[ -d "${_USER_BIN_DIR}" ]] && CUSTOM_PATH="${_USER_BIN_DIR}:${CUSTOM_PATH}"
