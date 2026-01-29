@@ -12,8 +12,9 @@ dumpall() {
 	else
 		local printinvalid=
 	fi
-	local lsregister=$(mdfind -name 'lsregister' -onlyin /System/Library/)
-	local utis=$(${lsregister} -dump | grep '[[:space:]]uti:' | awk '{ print $2 }' | sort | uniq)
+	# local lsregister=$(mdfind -name 'lsregister' -onlyin /System/Library/)
+	local lsregister="/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"
+	local utis="$(${lsregister} -dump | grep '^uti:\s' | awk '{ print $2 }' | sort | uniq)"
 
 	local padding=$(printf '%0.1s' " "{1..80})
 	local padlength=80
@@ -39,7 +40,7 @@ dumpall() {
 	done
 
 	printf '\n# File extension associations\n'
-	local extensions=$(${lsregister} -dump | grep '[[:space:]]tags:' | grep -o -P "[[:space:]]\K\.[^,\'\*]+" | sort | uniq)
+	local extensions="$(${lsregister} -dump | grep '^tags:\s' | grep -o -P "[[:space:]]\K\.[^,\'\*]+" | sort | uniq)"
 	local report
 	for extension in $extensions; do
 		report=$(duti -x "${extension}" 2>/dev/null)
@@ -58,7 +59,7 @@ dumpall() {
 	done
 
 	printf '\n# MIME type associations\n'
-	local mimes=$(${lsregister} -dump | grep '[[:space:]]bindings:' | grep -o -P '[[:space:]](?!bindings)\K[A-Za-z][^,\*\n:]+(?=:)' | sort | uniq)
+	local mimes="$(${lsregister} -dump | grep '^bindings:\s' | grep -o -P '[[:space:]](?!bindings)\K[A-Za-z][^,\*\n:]+(?=:)' | sort | uniq)"
 	for mime in $mimes; do
 		handler=$(duti -d "$mime" 2>/dev/null)
 		local retval="$?"
@@ -74,7 +75,7 @@ dumpall() {
 			fi
 		fi
 	done
-	
+
 }
 
 ################################################################################
