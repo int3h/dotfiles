@@ -8,16 +8,23 @@ log = "present(trunk()..@) | (author_date(after:\"31 days ago\") & ancestors(imm
 [aliases]
 pull = ["util", "exec", "--", "bash", "-c", """
 jj git fetch && jj rebase -s 'last_pull+ ~ ::trunk() ~ immutable()' -d 'trunk()' && jj bookmark move --from last_pull --to 'trunk()'
-"""]
-
-[ui]
-default-command = ["log", "--revisions", ".."]
-diff-editor = "/usr/bin/opendiff"
-merge-editor = "filemerge"
+""", ""]
+insert = ["new", "-B", "@", "--no-edit"]
 
 [merge-tools.filemerge]
 program = "/usr/bin/open"
 merge-args = ["-a", "FileMerge", "-n", "-W", "--args", "-left", "$left", "-right", "$right", "-ancestor", "$base", "-merge", "$output"]
+
+[merge-tools.meld]
+program = "/opt/homebrew/bin/meld"
+edit-args = ["--newtab", "$left", "$right"]
+merge-args = ["$left", "$base", "$right", "-o", "$output", "--auto-merge"]
+
+[ui]
+default-command = ["log", "--revisions", ".."]
+#diff-editor = "/usr/bin/opendiff"
+diff-editor = "meld-3"
+merge-editor = "meld"
 
 [templates]
 
