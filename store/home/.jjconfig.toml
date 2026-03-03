@@ -28,3 +28,6 @@ merge-editor = "meld"
 
 [templates]
 
+[remotes.origin]
+auto-track-bookmarks = "glob:mtorok/*"
+
