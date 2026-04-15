@@ -1,9 +1,19 @@
 "$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
 
 [revsets]
-# By default, `jj log` will show the commits between main and the current rev, and all the
-# local-only branches that have been updated in the last month, and the 4 ancestors of main
-log = "present(trunk()..@) | (author_date(after:\"31 days ago\") & ancestors(immutable_heads().., 3)) | ancestors(present(trunk()), 4)"
+# `jj log` will show the:
+#   1. commits between main and the current rev
+#   2. all the local-only branches that have been updated in the last month
+#   3. all of my branches that have been updated in my last moth, both local and remote
+#   4. the 4 ancestors of main
+log = """
+    present(trunk()..@) | \
+    ancestors( \
+        author_date(after:\"31 days ago\") & \
+        (immutable_heads().. | (immutable_heads() & mine())), \
+    3) | \
+    ancestors(present(trunk()), 4) \
+"""
 
 [aliases]
 pull = ["util", "exec", "--", "bash", "-c", """
