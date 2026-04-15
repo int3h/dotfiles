@@ -17,6 +17,11 @@ log = """
 
 [revset-aliases]
 "immutable_heads()" = "builtin_immutable_heads() | (trunk().. & remote_bookmarks())"
+
+[git]
+# Prevent pushing work in progress or anything explicitly labeled "private"
+private-commits = "description('[wip]*') | description('[private]*') | description('[personal]*')"
+
 [aliases]
 pull = ["util", "exec", "--", "bash", "-c", """
 jj git fetch && jj rebase -s 'last_pull+ ~ ::trunk() ~ immutable()' -d 'trunk()' && jj bookmark move --from last_pull --to 'trunk()'
