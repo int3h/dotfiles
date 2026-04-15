@@ -54,6 +54,14 @@ set keymap vi-command
 "\e\e[A": history-search-backward
 "\e\e[B": history-search-forward
 
+# These are the raw "option+up/option+down" ANSI CSI control codes, without having to set a special
+# keymap shortcut in my terminal emulator.
+# `\e[A` and `\e[B` are the ANSI control codes for cursor up/down. The `1;3` part are the arguments:
+# the `1` means "one line" (implied when the \e[A form is used), and `;3` is a modifier meaning the
+# alt key is pressed.
+"\e[1;3A": history-search-backward
+"\e[1;3B": history-search-forward
+
 ###########################################################
 # Keymaps for when we're in insert (i.e., typing stuff in) mode
 set keymap vi-insert
@@ -67,6 +75,9 @@ TAB: menu-complete
 # Option-up/option-down should also apply to insert mode
 "\e\e[A": history-search-backward
 "\e\e[B": history-search-forward
+
+"\e[1;3A": history-search-backward
+"\e[1;3B": history-search-forward
 
 # Needed to negate the binding of 'p' we do in command mode above
 "p": self-insert

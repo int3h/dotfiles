@@ -2,6 +2,10 @@
 ##### Check which OS we're running and set global flags
 #################################
 
+if [ -n "${GHOSTTY_RESOURCES_DIR}" ]; then
+    builtin source "${GHOSTTY_RESOURCES_DIR}/shell-integration/bash/ghostty.bash"
+fi
+
 case $(uname -s) in
     Darwin) export OS='Mac';;
     Linux) export OS='Linux';;
