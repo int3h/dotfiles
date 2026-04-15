@@ -27,6 +27,7 @@ pull = ["util", "exec", "--", "bash", "-c", """
 jj git fetch && jj rebase -s 'last_pull+ ~ ::trunk() ~ immutable()' -d 'trunk()' && jj bookmark move --from last_pull --to 'trunk()'
 """, ""]
 insert = ["new", "-B", "@", "--no-edit"]
+update = ["util", "exec", "--", "bash", "-c", """jj git fetch; [[ $(jj diff --summary | wc -l) -eq 0 ]] && jj new main"""]
 
 [merge-tools.filemerge]
 program = "/usr/bin/open"
