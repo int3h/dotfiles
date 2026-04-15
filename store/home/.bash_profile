@@ -315,6 +315,11 @@ export LESS_TERMCAP_so=$(printf "\e[1;44;33m")
 export LESS_TERMCAP_ue=$(printf "\e[0m")
 export LESS_TERMCAP_us=$(printf "\e[1;37m")
 
+# VSCode Python Environment support
+if [ -n "$VSCODE_BASH_ACTIVATE" ] && [ "$TERM_PROGRAM" = "vscode" ]; then
+    eval "$VSCODE_BASH_ACTIVATE" || true
+fi
+
 
 #################################
 ##### Source secondary config files
